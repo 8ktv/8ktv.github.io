@@ -1,7 +1,46 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Plasma</title>
+  <link href="code/TypeWriter.css" rel="stylesheet" type="text/css"/>
+  <link href="code/style.css" rel="stylesheet" type="text/css"/>
+  <audio src="audio/Dead.mp3" autoplay loop></audio>
+  <img src="favicon.ico" alt="Logo" hidden>
+</head>
+
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+  <canvas id="visual"></canvas>
+  <script src="script.js"></script></script>
 </body>
+  
+<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="navbar">
+  <div data-role="navbar">
+  <center><img src="images/PlasmaLogo.png" alt="what image shows"></center>
+  </ul>
+</div>
+<body>
+
+  <!-- TypeWriter text Anim -->
+
+  <body>
+    <div class="container">
+      <h1>$ <span class="auto-type"></span></h1>
+    </div>
+
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+
+    <script>
+      var typed = new Typed(".auto-type", {
+        strings: [
+          "Money twerk $$$$", "Money twerk $$$", "Money twerk $$", "Money twerk $", "Money twerk "],
+        typeSpeed: 100,
+        backSpeed: 100,
+        loop: true
+      })
+    </script>
+  </body>
 </html>

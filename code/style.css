@@ -1,0 +1,45 @@
+/* Main Body */
+html, body 
+{
+  background-color: black;
+}
+ /* The navigation bar */
+.navbar 
+{
+  background-color: #070707;
+  position: fixed;
+  top: 35%;
+  left: 39.2%;
+  width: 22%;
+  border-radius: 0px;
+  outline-style: solid;
+  outline-color: #ffffff;
+  outline-width: 1px;
+}
+
+/* Links inside the navbar */
+.navbar a 
+{
+  float: fixed;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change background on mouse-over */
+.navbar a:hover 
+{
+  background: #ffffff;
+  color: #111111;
+  border-radius: 20px;  
+}
+
+.navbar img 
+{
+  width:50%;
+  height: 250px;
+  text-align: center;
+  display: block;
+}
