@@ -24,18 +24,15 @@
 </div>
 <body>
 
-  <!-- TypeWriter text Anim -->
-
+<!-- TypeWriter text Anim -->
 <body>
   <div class="container">
     <h1><span class="auto-type"></span></h1>
   </div>
 
-  <!-- Add the Typed.js library -->
   <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
 
   <script>
-    // Function to shuffle an array
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -43,13 +40,9 @@
       }
     }
 
-    // Array of strings
     var stringsArray = ["Money twerk $$$$", "hycological/warfare", "Schizophrenic black cat", "Boo!"];
-
-    // Shuffle the array
     shuffleArray(stringsArray);
 
-    // Initialize Typed.js with the shuffled strings
     var typed = new Typed(".auto-type", {
       strings: stringsArray,
       typeSpeed: 100,
