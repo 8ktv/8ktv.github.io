@@ -1,5 +1,5 @@
 msg = "";
-msg = "handicraf.t                 " + msg; position = 0;
+msg = "__plasma                " + msg; position = 0;
 
 function scrolltitle() {
   document.title = msg.substring(position, msg.length) + msg.substring(0, position); position++;
