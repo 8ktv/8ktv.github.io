@@ -1,51 +1,67 @@
-/* Main Body */
+/* Main Body & Background Canvas */
 html, body {
   background-color: black;
-  color: white; /* Set default text color to white for better readability */
-  font-family: 'Poppins', sans-serif; /* A good place to set a default font */
-  margin: 0; /* Remove default browser margin */
-  padding: 0; /* Remove default browser padding */
-  height: 100%; /* Ensure body takes full height */
+  color: white;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevents scrollbars */
 }
 
-/* New: Flexbox container to center the navbar */
-/* We apply this directly to the body to center its direct child */
+#visual {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Puts the canvas behind all other content */
+}
+
+/* Flexbox Centering on the Body */
 body {
   display: flex;
-  justify-content: center; /* Horizontally center */
-  align-items: center;    /* Vertically center */
+  justify-content: center; /* Center horizontally */
+  align-items: center;    /* Center vertically */
 }
 
-/* The navigation bar - REVISED for better centering */
-.navbar {
-  /* We don't need position: fixed or top/left percentages anymore! */
-  /* The flexbox on the body handles the centering. */
+/* The new main wrapper for all your content */
+.main-content {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;    /* Center items inside horizontally */
+  gap: 25px; /* Adds nice spacing between your elements */
+}
+
+/* Typewriter Text Styling */
+.container h1 {
+  border: 1px solid white;
+  padding: 5px 15px;
   background-color: #070707;
-  width: 22%; /* You can keep this, but consider a max-width for very large screens */
-  max-width: 350px; /* Example: Prevents it from getting too wide */
+}
+
+/* Live Subcount Iframe Styling */
+iframe {
+  border: 1px solid white;
+}
+
+/* The navigation bar - Simplified */
+.navbar {
+  background-color: #070707;
+  width: 320px; /* A fixed width often looks cleaner */
   border-radius: 0px;
   outline: 1px solid #ffffff;
-  text-align: center; /* Center the image and other inline content */
 }
 
-/* The Plasma logo image */
-.navbar img {
-  width: 50%;
-  max-width: 180px; /* Prevents the image from being excessively large */
-  height: auto; /* Let the height adjust automatically to maintain aspect ratio */
-  display: inline-block; /* Better than block for centering with text-align */
-  margin-top: 20px; /* Add some space above the image */
-  margin-bottom: 10px; /* Add space between image and links */
-}
-
-/* Links inside the navbar - CORRECTED */
+/* Links inside the navbar */
 .navbar a {
-  /* `float: fixed;` is not a valid CSS property. We'll remove it. */
-  display: block; /* This is correct, it makes the whole area clickable */
+  display: block;
   color: #f2f2f2;
+  text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  transition: all 0.3s ease; /* Add a smooth transition for the hover effect */
+  transition: all 0.3s ease; /* Smooth hover effect */
 }
 
 /* Change background on mouse-over */
@@ -53,4 +69,11 @@ body {
   background: #ffffff;
   color: #111111;
   border-radius: 20px;
+}
+
+.navbar img {
+  width: 50%;
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin: 15px auto; /* Add space and center the image */
 }
