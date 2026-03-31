@@ -1,0 +1,5 @@
+{
+  "name": "Myrient Shutdown Tracker",
+  "description": "A real-time countdown to the Myrient shutdown at 23:59 UTC.",
+  "requestFramePermissions": []
+}
