@@ -297,8 +297,7 @@
   <!-- Main Profile Card -->
   <div class="glass-card">
     <div class="badges">
-      <div class="badge"><i class="fa fa-eye"></i> 310</div>
-      <div class="badge"><i class="fa fa-hashtag"></i> 5526</div>
+      <div class="badge"><i class="fa fa-eye"></i> <span id="view-count">...</span></div>
     </div>
 
     <div class="logo-container">
@@ -511,6 +510,20 @@
     });
   }
 
+  // View Counter Logic
+  async function initViewCounter() {
+    try {
+      const response = await fetch('/api/views');
+      const data = await response.json();
+      const viewCountEl = document.getElementById('view-count');
+      if (viewCountEl) {
+        viewCountEl.textContent = data.count.toLocaleString();
+      }
+    } catch (e) {
+      console.error("Error fetching view count:", e);
+    }
+  }
+
   enterScreen.addEventListener('click', () => {
     enterScreen.classList.add('fade-out');
     mainContent.classList.add('visible');
@@ -518,6 +531,7 @@
     initTyped();
     initTilt();
     initMusicPlayer();
+    initViewCounter();
   });
 
   // Download Function
