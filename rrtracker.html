@@ -9,126 +9,147 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', system-ui, sans-serif; }
-        .hero-bg {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.75)), url('https://picsum.photos/id/1015/2000/800');
-            background-size: cover;
-            background-position: center;
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)),
+            url('https://picsum.photos/id/1015/2000/900') center/cover no-repeat;
+            height: 520px;
         }
         .rec-orange { color: #FF6727; }
+        .nav-hover:hover { color: #FF6727; }
     </style>
 </head>
-<body class="bg-zinc-950 text-zinc-200">
+<body class="bg-zinc-950 text-zinc-100">
 
-<nav class="bg-black border-b border-zinc-800">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-10">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-[#FF6727] rounded-xl flex items-center justify-center text-black font-black text-2xl">R</div>
-                <span class="text-2xl font-bold tracking-tighter">REC ROOM</span>
+<!-- Top Nav -->
+<nav class="bg-black border-b border-zinc-800 py-5">
+    <div class="max-w-6xl mx-auto px-8 flex items-center justify-between">
+        <div class="flex items-center gap-12">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-[#FF6727] rounded-2xl flex items-center justify-center text-black font-black text-3xl leading-none">R</div>
+                <span class="text-3xl font-bold tracking-[-2px]">REC ROOM</span>
             </div>
-            <div class="hidden md:flex gap-8 text-sm font-medium">
-                <a href="#" class="hover:text-[#FF6727]">NEWS HUB</a>
-                <a href="#" class="hover:text-[#FF6727]">SAFETY</a>
-                <a href="#" class="hover:text-[#FF6727]">CREATOR</a>
-                <a href="#" class="hover:text-[#FF6727]">COMMUNITY</a>
+            <div class="hidden md:flex gap-9 text-sm font-medium">
+                <a href="https://blog.recroom.com/" target="_blank" class="nav-hover">NEWS HUB</a>
+                <a href="https://blog.recroom.com/safety" target="_blank" class="nav-hover">SAFETY</a>
+                <a href="https://blog.recroom.com/creator" target="_blank" class="nav-hover">CREATOR</a>
+                <a href="https://blog.recroom.com/communitynews" target="_blank" class="nav-hover">COMMUNITY</a>
+                <a href="https://blog.recroom.com/company-news" target="_blank" class="nav-hover">COMPANY NEWS</a>
             </div>
         </div>
-        <a href="https://recroom.com" target="_blank" class="px-6 py-2 border border-white/30 hover:border-white text-sm font-medium rounded-full">RECROOM.COM</a>
+        <a href="https://recroom.com" target="_blank" class="px-7 py-2.5 border border-white/40 hover:border-white text-sm font-medium rounded-full">RECROOM.COM</a>
     </div>
 </nav>
 
-<div class="hero-bg h-[520px] flex items-center">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-        <h1 class="text-6xl md:text-7xl font-bold tracking-tighter text-white">School’s Out for Rec Room</h1>
+<!-- Hero -->
+<div class="hero flex items-center">
+    <div class="max-w-5xl mx-auto px-8 text-center">
+        <h1 class="text-white text-6xl md:text-7xl font-bold tracking-tighter leading-none">
+            School’s Out for Rec Room
+        </h1>
     </div>
 </div>
 
-<div class="max-w-3xl mx-auto px-6 py-16 bg-white text-zinc-900">
-    <div class="text-center mb-12">
-        <p class="text-zinc-500">Rec Room • March 30, 2026</p>
+<!-- Content -->
+<div class="max-w-3xl mx-auto px-8 py-20 bg-white text-zinc-900">
+    <div class="text-center mb-10 text-zinc-500">
+        Rec Room • March 30, 2026
     </div>
 
-    <div class="text-2xl font-medium text-zinc-800 mb-10">
-        Rec Room will be closing down on <span class="font-semibold">June 1st 2026 at noon Pacific time</span>.
+    <div class="text-[22px] leading-tight font-medium mb-12">
+        Rec Room will be closing down on June 1st 2026 at noon Pacific time.
     </div>
 
-    <div class="prose prose-zinc max-w-none text-[17px] leading-relaxed">
-        <p>Over the past decade, Rec Room grew into something amazing, reaching over 150 million players and creators. Players made over half a billion friends on the platform. In total, people all around the world spent a cumulative 68 thousand years in Rec Room. The top UGC rooms saw over 500 years of play time each.</p>
+    <div class="text-[17px] leading-relaxed text-zinc-700 space-y-6">
+        <p>Over the past decade, Rec Room grew into something amazing, reaching over 150 million players and creators along the way. Players made over half a billion friends on the platform. In total, people all around the world spent a cumulative 68 thousand years in Rec Room. The top UGC rooms saw over 500 years of play time each. That’s a lot of people having a lot of fun.</p>
     </div>
 
-    <div class="mt-20 border-t border-zinc-200 pt-12">
-        <div class="flex items-center justify-between mb-6">
+    <!-- Live Status -->
+    <div class="mt-24 border-t border-zinc-200 pt-16">
+        <div class="flex justify-between items-end mb-8">
             <div>
-                <h2 class="text-2xl font-semibold">Live RecNet Status</h2>
-                <p class="text-sm text-zinc-500">Real-time connectivity</p>
+                <h2 class="text-2xl font-semibold text-zinc-900">Live RecNet Status</h2>
+                <p class="text-zinc-500 text-sm">Real-time connectivity checks</p>
             </div>
-            <button onclick="pingAll()" class="flex items-center gap-2 px-6 py-3 bg-[#FF6727] hover:bg-orange-600 text-white font-semibold rounded-2xl">
+            <button onclick="pingAll()" class="flex items-center gap-3 px-8 py-3 bg-[#FF6727] hover:bg-orange-600 text-white font-semibold rounded-2xl transition-colors">
                 <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                 REFRESH
             </button>
         </div>
 
-        <div id="servers" class="space-y-4"></div>
+        <div id="serverList" class="space-y-4 mb-10"></div>
 
-        <div id="log" class="mt-8 bg-zinc-100 border border-zinc-200 rounded-3xl p-6 h-56 overflow-y-auto text-sm font-mono text-zinc-700"></div>
+        <div id="pingLog" class="bg-zinc-100 rounded-3xl p-7 h-60 overflow-auto text-sm font-mono text-zinc-600"></div>
     </div>
 
-    <div class="text-center mt-16 text-zinc-400 text-sm">
+    <div class="text-center mt-20 text-zinc-400 text-sm">
         Thank you for everything ❤️<br>
         — The Rec Room Team
     </div>
 </div>
 
-<div id="audio" class="hidden"></div>
+<div id="yt" class="hidden"></div>
 
 <script>
     lucide.createIcons();
-    document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/gkoSFix4AZA?autoplay=1&loop=1&playlist=gkoSFix4AZA" frameborder="0" allow="autoplay"></iframe>`;
+    document.getElementById('yt').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/gkoSFix4AZA?autoplay=1&loop=1" frameborder="0" allow="autoplay"></iframe>`;
 
-    const endpoints = [
-        {n:"ns.rec.net", u:"https://ns.rec.net/"},
-        {n:"rec.net", u:"https://rec.net/"},
-        {n:"api.rec.net", u:"https://api.rec.net/"}
+    const servers = [
+        { name: "ns.rec.net", url: "https://ns.rec.net/" },
+        { name: "rec.net", url: "https://rec.net/" },
+        { name: "api.rec.net", url: "https://api.rec.net/" }
     ];
 
-    let logs = [];
+    let logEntries = [];
 
-    function log(t, m) {
-        const ts = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-        logs.unshift({t:ts, m, c: t==='error' ? 'text-red-600' : 'text-emerald-600'});
-        if (logs.length > 12) logs.pop();
-        document.getElementById('log').innerHTML = logs.map(l => `<div class="flex gap-4 ${l.c}"><span class="text-zinc-400 w-20">${l.t}</span><span>${l.m}</span></div>`).join('');
+    function addLog(msg, isError) {
+        const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        logEntries.unshift({ time, msg, isError });
+        if (logEntries.length > 15) logEntries.pop();
+
+        const logEl = document.getElementById('pingLog');
+        logEl.innerHTML = logEntries.map(l => `
+                <div class="flex gap-4 ${l.isError ? 'text-red-600' : 'text-emerald-600'}">
+                    <span class="text-zinc-400 w-20 shrink-0">${l.time}</span>
+                    <span>${l.msg}</span>
+                </div>
+            `).join('');
     }
 
-    async function ping(u) {
-        const s = Date.now();
+    async function checkServer(srv) {
+        const start = Date.now();
         try {
-            const c = new AbortController();
-            setTimeout(() => c.abort(), 7000);
-            await fetch(u, {method:'HEAD', mode:'no-cors', signal: c.signal});
-            const ms = Date.now() - s;
-            return ms < 2000 ? `✅ ONLINE (${ms}ms)` : `⚠️ SLOW (${ms}ms)`;
-        } catch(e) {
+            const ctrl = new AbortController();
+            setTimeout(() => ctrl.abort(), 6500);
+            await fetch(srv.url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal });
+            const ms = Date.now() - start;
+            const txt = ms < 1800 ? `✅ ONLINE (${ms}ms)` : `⚠️ SLOW (${ms}ms)`;
+            addLog(`${srv.name} responded`, false);
+            return txt;
+        } catch (_) {
+            addLog(`${srv.name} unreachable`, true);
             return '❌ OFFLINE';
         }
     }
 
     async function pingAll() {
-        const el = document.getElementById('servers');
-        el.innerHTML = `<div class="text-center py-12 text-zinc-400">checking...</div>`;
+        const container = document.getElementById('serverList');
+        container.innerHTML = `<div class="py-10 text-center text-zinc-400">Checking RecNet...</div>`;
 
-        for (let ep of endpoints) {
-            const res = await ping(ep.u);
-            const d = document.createElement('div');
-            d.className = `flex justify-between items-center p-5 border border-zinc-200 rounded-2xl`;
-            d.innerHTML = `<div class="font-medium">${ep.n}</div><div class="font-mono">${res}</div>`;
-            el.appendChild(d);
-            if (res.includes('ONLINE')) log('info', `${ep.n} ok`);
-            else log('error', `${ep.n} ${res}`);
+        for (let srv of servers) {
+            const status = await checkServer(srv);
+            const row = document.createElement('div');
+            row.className = "flex justify-between items-center px-7 py-5 border border-zinc-200 rounded-3xl";
+            row.innerHTML = `<div class="font-medium">${srv.name}</div><div class="font-mono">${status}</div>`;
+            container.appendChild(row);
         }
     }
 
-    setTimeout(() => { pingAll(); setInterval(pingAll, 15000); }, 600);
+    setTimeout(() => {
+        pingAll();
+        setInterval(pingAll, 18000);
+    }, 800);
+
     window.pingAll = pingAll;
 </script>
 </body>
