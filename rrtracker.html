@@ -11,57 +11,36 @@
         body { font-family: 'Inter', system-ui, sans-serif; }
 
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.75)),
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)),
             url('https://images.squarespace-cdn.com/content/v1/5fa5929d1cf2d45763f942cf/1774893773686-IPQTVT227H6YFTHQ0PYG/RR+Thumbnail.png?format=2500w') center/cover no-repeat;
             height: 560px;
         }
-
-        .nav-link:hover { color: #FF6727; }
     </style>
 </head>
 <body class="bg-white">
 
-<!-- Black Top Bar -->
-<nav class="bg-black text-white py-5">
-    <div class="max-w-7xl mx-auto px-8 flex items-center justify-between">
-        <div class="flex items-center gap-10">
-            <!-- REC ROOM Logo -->
-            <div class="flex items-center gap-1 text-3xl font-black tracking-tighter">
-                <span>REC</span>
-                <span class="text-[#FF6727]">ROOM</span>
-            </div>
-
-            <!-- Navigation -->
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="https://blog.recroom.com/" target="_blank" class="nav-link">NEWS HUB</a>
-                <a href="https://blog.recroom.com/safety" target="_blank" class="nav-link">SAFETY</a>
-                <a href="https://blog.recroom.com/creator" target="_blank" class="nav-link">CREATOR</a>
-                <a href="https://blog.recroom.com/communitynews" target="_blank" class="nav-link">COMMUNITY</a>
-                <a href="https://blog.recroom.com/company-news" target="_blank" class="nav-link">COMPANY NEWS</a>
-            </div>
-        </div>
-
+<!-- Top Nav -->
+<nav class="bg-black py-5">
+    <div class="max-w-7xl mx-auto px-8 flex justify-end">
         <a href="https://recroom.com" target="_blank"
-           class="px-6 py-2 border border-white/70 hover:border-white text-xs font-medium rounded">RECROOM.COM</a>
+           class="px-6 py-2 border border-white/60 text-white text-xs font-medium hover:border-white">RECROOM.COM</a>
     </div>
 </nav>
 
-<!-- Hero Section -->
-<div class="hero relative flex items-center justify-center text-center">
-    <div>
-        <h1 class="text-white text-6xl md:text-7xl font-bold tracking-tighter leading-none">
-            School’s Out for Rec Room
-        </h1>
-    </div>
+<!-- Hero -->
+<div class="hero flex items-center justify-center text-center">
+    <h1 class="text-white text-6xl md:text-[82px] font-bold tracking-tighter leading-none">
+        School’s Out for Rec Room
+    </h1>
 </div>
 
-<!-- Content Area -->
+<!-- Content -->
 <div class="max-w-3xl mx-auto px-8 py-16 text-zinc-900">
-    <div class="text-center mb-12">
-        <p class="text-zinc-500 text-sm">Rec Room • March 30, 2026</p>
+    <div class="text-center mb-10 text-zinc-500 text-sm">
+        Rec Room • March 30, 2026
     </div>
 
-    <div class="text-2xl leading-tight font-medium mb-12">
+    <div class="text-2xl font-medium mb-12">
         Rec Room will be closing down on June 1st 2026 at noon Pacific time.
     </div>
 
@@ -69,9 +48,9 @@
         <p>Over the past decade, Rec Room grew into something amazing, reaching over 150 million players and creators along the way. Players made over half a billion friends on the platform. In total, people all around the world spent a cumulative 68 thousand years in Rec Room. The top UGC rooms saw over 500 years of play time each. That’s a lot of people having a lot of fun.</p>
     </div>
 
-    <!-- Live RecNet Status -->
-    <div class="mt-20 pt-12 border-t border-zinc-200">
-        <div class="flex items-center justify-between mb-8">
+    <!-- Server Status -->
+    <div class="mt-24 pt-12 border-t">
+        <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-semibold">Live RecNet Status</h2>
             <button onclick="pingAll()"
                     class="flex items-center gap-2 bg-[#FF6727] hover:bg-orange-600 text-white px-7 py-3 rounded-2xl font-semibold text-sm">
@@ -82,7 +61,7 @@
 
         <div id="serverList" class="space-y-4"></div>
 
-        <div id="pingLog" class="mt-10 bg-zinc-100 rounded-3xl p-6 h-64 overflow-auto text-sm font-mono text-zinc-600"></div>
+        <div id="pingLog" class="mt-10 bg-zinc-100 rounded-3xl p-6 h-64 overflow-auto text-sm font-mono"></div>
     </div>
 
     <div class="text-center mt-20 text-sm text-zinc-400">
@@ -91,7 +70,6 @@
     </div>
 </div>
 
-<!-- Hidden Audio -->
 <div id="audio" class="hidden"></div>
 
 <script>
@@ -104,55 +82,49 @@
         { name: "api.rec.net", url: "https://api.rec.net/" }
     ];
 
-    let logEntries = [];
+    let logs = [];
 
-    function addLog(msg, isError) {
+    function addLog(msg, error) {
         const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-        logEntries.unshift({time, msg, isError});
-        if (logEntries.length > 12) logEntries.pop();
-
-        document.getElementById('pingLog').innerHTML = logEntries.map(l => `
-                <div class="flex gap-4 ${l.isError ? 'text-red-600' : 'text-emerald-600'}">
+        logs.unshift({time, msg, error});
+        if (logs.length > 12) logs.pop();
+        document.getElementById('pingLog').innerHTML = logs.map(l =>
+            `<div class="flex gap-4 ${l.error ? 'text-red-600' : 'text-emerald-600'}">
                     <span class="text-zinc-400 w-20">${l.time}</span>
                     <span>${l.msg}</span>
-                </div>
-            `).join('');
+                </div>`
+        ).join('');
     }
 
-    async function pingServer(server) {
+    async function pingServer(s) {
         try {
             const ctrl = new AbortController();
             setTimeout(() => ctrl.abort(), 7000);
             const start = Date.now();
-            await fetch(server.url, {method: 'HEAD', mode: 'no-cors', signal: ctrl.signal});
+            await fetch(s.url, {method: 'HEAD', mode: 'no-cors', signal: ctrl.signal});
             const ms = Date.now() - start;
-            addLog(`${server.name} responded (${ms}ms)`, false);
+            addLog(`${s.name} responded (${ms}ms)`, false);
             return ms < 1800 ? `✅ ONLINE (${ms}ms)` : `⚠️ SLOW (${ms}ms)`;
-        } catch (e) {
-            addLog(`${server.name} unreachable`, true);
+        } catch (_) {
+            addLog(`${s.name} unreachable`, true);
             return `❌ OFFLINE`;
         }
     }
 
     async function pingAll() {
         const container = document.getElementById('serverList');
-        container.innerHTML = `<div class="text-center py-12 text-zinc-400">Checking RecNet servers...</div>`;
+        container.innerHTML = `<div class="py-12 text-center text-zinc-400">Checking RecNet...</div>`;
 
-        for (let server of servers) {
-            const status = await pingServer(server);
+        for (let s of servers) {
+            const status = await pingServer(s);
             const div = document.createElement('div');
-            div.className = `flex justify-between items-center px-8 py-5 border border-zinc-200 rounded-3xl bg-white`;
-            div.innerHTML = `<div class="font-medium">${server.name}</div><div class="font-mono">${status}</div>`;
+            div.className = "flex justify-between px-8 py-5 border border-zinc-200 rounded-3xl";
+            div.innerHTML = `<div>${s.name}</div><div class="font-mono">${status}</div>`;
             container.appendChild(div);
         }
     }
 
-    // Auto start pings
-    setTimeout(() => {
-        pingAll();
-        setInterval(pingAll, 20000);
-    }, 1200);
-
+    setTimeout(() => { pingAll(); setInterval(pingAll, 20000); }, 800);
     window.pingAll = pingAll;
 </script>
 </body>
