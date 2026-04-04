@@ -16,7 +16,7 @@ async function startServer() {
     const PORT = 3000;
 
     // In-memory message store
-    const messages: { id: string; user: string; text: string; timestamp: number }[] = [];
+    const messages: { id: string; user: string; text: string; avatar?: string; timestamp: number }[] = [];
 
     io.on("connection", (socket) => {
         console.log("A user connected");
@@ -29,6 +29,7 @@ async function startServer() {
                 id: Math.random().toString(36).substring(2, 9),
                 user: data.user || "Anonymous",
                 text: data.text,
+                avatar: data.avatar,
                 timestamp: Date.now(),
             };
             messages.push(newMessage);
