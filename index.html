@@ -39,7 +39,6 @@
       pointer-events: none;
     }
 
-    /* Custom Cursor */
     .custom-cursor {
       width: 8px;
       height: 8px;
@@ -64,7 +63,6 @@
       transition: transform 0.1s ease-out;
     }
 
-    /* Enter Screen */
     #enter-screen {
       position: fixed;
       inset: 0;
@@ -98,7 +96,6 @@
       50% { opacity: 1; }
     }
 
-    /* Main Content */
     .main-content {
       height: 100vh;
       display: flex;
@@ -249,7 +246,6 @@
       transform: translateY(-2px);
     }
 
-    /* Scanline effect */
     .scanline {
       width: 100%;
       height: 100px;
@@ -294,7 +290,6 @@
 </div>
 
 <div class="main-content" id="main-content">
-  <!-- Main Profile Card -->
   <div class="glass-card">
     <div class="badges">
       <div class="badge"><i class="fa fa-eye"></i> <span id="view-count">...</span></div>
@@ -340,10 +335,8 @@
 <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 <script>
-  // Typed.js initialization
   function initTyped() {
     const stringsArray = ["Money twerk $$$$", "hycological/warfare", "Schizophrenic black caht", "Boo!", "Plasmaware Protocol"];
-    // Shuffle
     for (let i = stringsArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [stringsArray[i], stringsArray[j]] = [stringsArray[j], stringsArray[i]];
@@ -358,7 +351,6 @@
     });
   }
 
-  // Initialize Tilt
   function initTilt() {
     VanillaTilt.init(document.querySelector(".glass-card"), {
       max: 15,
@@ -368,7 +360,6 @@
     });
   }
 
-  // Plasma Background
   const canvas = document.getElementById('visual');
   const ctx = canvas.getContext('2d');
   let particles = [];
@@ -446,7 +437,6 @@
   initParticles();
   animate();
 
-  // Custom Cursor
   const cursor = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
   document.addEventListener('mousemove', (e) => {
@@ -458,12 +448,10 @@
     }, 50);
   });
 
-  // Enter Screen Logic
   const enterScreen = document.getElementById('enter-screen');
   const mainContent = document.getElementById('main-content');
   const audio = document.getElementById('bg-audio');
 
-  // Music Player Logic
   function initMusicPlayer() {
     const audio = document.getElementById('bg-audio');
     const playPauseBtn = document.getElementById('play-pause');
@@ -473,7 +461,6 @@
     const durationEl = document.getElementById('duration');
 
     if (!audio || !playPauseBtn || !progressBar || !progressContainer || !currentTimeEl || !durationEl) {
-      console.log("Music player elements missing, skipping initialization.");
       return;
     }
 
@@ -511,42 +498,30 @@
     });
   }
 
-  // View Counter Logic
   async function initViewCounter() {
-    const viewCountEl = document.getElementById('view-count');
-    if (!viewCountEl) return;
+    const el = document.getElementById('view-count');
+    if (!el) return;
 
     try {
-      const response = await fetch('/api/views');
-      if (!response.ok) throw new Error('API returned ' + response.status);
-      const data = await response.json();
+      const res = await fetch('/api/views');
+      const data = await res.json();
       if (data && typeof data.count === 'number') {
-        viewCountEl.textContent = data.count.toLocaleString();
-      } else {
-        throw new Error('Invalid data format');
+        el.textContent = data.count.toLocaleString();
       }
     } catch (e) {
-      console.error("Error fetching view count:", e);
-      // Fallback to a static number if it keeps failing
-      if (viewCountEl.textContent === '...') {
-        viewCountEl.textContent = '1,337';
-      }
+      if (el.textContent === '...') el.textContent = '0';
     }
   }
 
-  // Call immediately and on load
   initViewCounter();
-  window.addEventListener('load', initViewCounter);
 
   enterScreen.addEventListener('click', () => {
     enterScreen.classList.add('fade-out');
     mainContent.classList.add('visible');
-    audio.play().catch(e => console.log("Audio play blocked:", e));
+    audio.play().catch(e => {});
     initTyped();
     initTilt();
     initMusicPlayer();
-    // Refresh count on enter
-    initViewCounter();
   });
 
 </script>
