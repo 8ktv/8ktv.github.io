@@ -87,6 +87,14 @@
         </div>
     </div>
 
+    <!-- Latest Updates -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400">Latest Updates</h2>
+        <div id="commitList" class="space-y-4 text-sm text-zinc-400">
+            <div class="text-center py-4 text-zinc-500">Loading updates...</div>
+        </div>
+    </div>
+
     <!-- Live Status -->
     <div class="mb-6 flex items-center justify-between">
         <h2 class="text-2xl font-semibold">Live RecNet Status</h2>
@@ -197,6 +205,28 @@
     }, 600);
 
     window.pingAll = pingAll;
+
+    // Fetch GitHub Commits
+    async function fetchCommits() {
+        const container = document.getElementById('commitList');
+        try {
+            const response = await fetch('https://api.github.com/repos/8ktv/8ktv.github.io/commits?per_page=5');
+            if (!response.ok) throw new Error('Failed to fetch');
+            const commits = await response.json();
+
+            container.innerHTML = commits.map(c => `
+                <div class="border-b border-zinc-800 pb-3">
+                    <div class="font-medium text-zinc-200">${c.commit.message.split('\n')[0]}</div>
+                    <div class="text-xs text-zinc-500 mt-1">
+                        ${c.commit.author.name} • ${new Date(c.commit.author.date).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+        } catch (err) {
+            container.innerHTML = '<div class="text-red-400">Failed to load updates.</div>';
+        }
+    }
+    fetchCommits();
 
     // Share Functionality
     function shareCountdown() {
