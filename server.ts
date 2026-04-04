@@ -7,7 +7,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Use process.cwd() to ensure we are in the project root
 const VIEWS_FILE = path.join(process.cwd(), "views.json");
 
 function getViews() {
@@ -18,7 +17,7 @@ function getViews() {
             return typeof parsed.count === 'number' ? parsed.count : 0;
         }
     } catch (e) {
-        console.error("Error reading views file:", e);
+        console.error(e);
     }
     return 0;
 }
@@ -28,7 +27,7 @@ function incrementViews() {
     try {
         fs.writeFileSync(VIEWS_FILE, JSON.stringify({ count }), "utf-8");
     } catch (e) {
-        console.error("Error writing views file:", e);
+        console.error(e);
     }
     return count;
 }
@@ -37,28 +36,27 @@ async function startServer() {
     const app = express();
     const PORT = 3000;
 
-    // Initialize views.json if it doesn't exist
     if (!fs.existsSync(VIEWS_FILE)) {
         try {
-            fs.writeFileSync(VIEWS_FILE, JSON.stringify({ count: 1337 }), "utf-8");
-            console.log("Initialized views.json with 1337");
+            fs.writeFileSync(VIEWS_FILE, JSON.stringify({ count: 0 }), "utf-8");
         } catch (e) {
-            console.error("Error initializing views file:", e);
+            console.error(e);
         }
     }
 
-    // API to get and increment views
-    app.get("/api/views", (req, res) => {
-        try {
-            const count = incrementViews();
-            res.json({ count });
-        } catch (e) {
-            console.error("API error:", e);
-            res.status(500).json({ error: "Internal server error" });
+    app.use((req, res, next) => {
+        if (req.url === "/" || req.url === "/index.html") {
+            try {
+                incrementViews();
+            } catch (e) {}
         }
+        next();
     });
 
-    // Vite middleware for development
+    app.get("/api/views", (req, res) => {
+        res.json({ count: getViews() });
+    });
+
     if (process.env.NODE_ENV !== "production") {
         const vite = await createViteServer({
             server: { middlewareMode: true },
