@@ -32,6 +32,14 @@
         </div>
     </div>
 
+    <!-- Shutdown Stages -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400">Shutdown Progress</h2>
+        <div id="stagesTracker" class="space-y-4">
+            <!-- Stages will be injected here by JS -->
+        </div>
+    </div>
+
     <!-- Context -->
     <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
         <h2 class="text-xl font-semibold mb-4 text-orange-400">Shutdown Context</h2>
@@ -42,6 +50,29 @@
             Sources:
             <a href="https://blog.recroom.com/posts/2025/8/25/rec-room-update-august-2025" class="underline hover:text-orange-400" target="_blank">A hard day at Rec Room (Aug 2025)</a>,
             <a href="https://blog.recroom.com/posts/2025/8/28/rec-room-finances-and-ugc-revenue" class="underline hover:text-orange-400" target="_blank">Rec Room Finances And UGC Revenue (Aug 2025)</a>
+        </div>
+    </div>
+
+    <!-- Alternatives -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400">Rec Room Alternatives</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a href="https://vrchat.com/" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+                <div class="font-semibold text-white">VRChat</div>
+                <div class="text-xs text-zinc-400">The main social VR platform</div>
+            </a>
+            <a href="https://discord.gg/radium-rr" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+                <div class="font-semibold text-white">Radium</div>
+                <div class="text-xs text-zinc-400">Rec Room FanHosted Servers</div>
+            </a>
+            <a href="https://resonite.com/" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+                <div class="font-semibold text-white">Resonite</div>
+                <div class="text-xs text-zinc-400">Advanced social VR</div>
+            </a>
+            <a href="https://chilloutvr.com/" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+                <div class="font-semibold text-white">ChilloutVR</div>
+                <div class="text-xs text-zinc-400">Social VR experience</div>
+            </a>
         </div>
     </div>
 
@@ -155,6 +186,42 @@
     }, 600);
 
     window.pingAll = pingAll;
+
+    // Shutdown Stages Tracker
+    const stages = [
+        { name: "Announcement", date: new Date('2025-08-25') },
+        { name: "Transition", date: new Date('2026-04-01') },
+        { name: "Data Download", date: new Date('2026-05-01') },
+        { name: "Shutdown", date: SHUTDOWN_DATE }
+    ];
+
+    function updateStages() {
+        const now = new Date();
+        const container = document.getElementById('stagesTracker');
+
+        container.innerHTML = stages.map((stage, index) => {
+            const isPast = now >= stage.date;
+            const isCurrent = !isPast || (index < stages.length - 1 && now < stages[index + 1].date);
+
+            return `
+                <div class="flex items-center gap-4 ${isPast ? 'text-zinc-200' : 'text-zinc-600'}">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold ${isPast ? 'bg-orange-600 text-white' : 'bg-zinc-800'}">
+                        ${index + 1}
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-semibold">${stage.name}</div>
+                        <div class="text-xs ${isPast ? 'text-zinc-400' : 'text-zinc-600'}">
+                            ${stage.date.toLocaleDateString()}
+                        </div>
+                    </div>
+                    ${isPast ? '<i data-lucide="check" class="w-5 h-5 text-orange-500"></i>' : ''}
+                </div>
+            `;
+        }).join('');
+        lucide.createIcons();
+    }
+
+    updateStages();
 </script>
 </body>
 </html>
