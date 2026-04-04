@@ -171,6 +171,27 @@
 
     <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-5 border border-zinc-800/50 shadow-xl">
         <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
+            Live Memory Chat
+        </h2>
+        <div id="chatContainer" class="flex flex-col h-[400px]">
+            <div id="chatMessages" class="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 scrollbar-thin scrollbar-thumb-zinc-700">
+                <div class="text-center text-zinc-500 text-xs py-10">Connecting to chat...</div>
+            </div>
+            <div class="flex flex-col gap-3">
+                <input type="text" id="chatNickname" maxlength="20" placeholder="Your Nickname" class="bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all">
+                <div class="flex gap-2">
+                    <input type="text" id="chatInput" placeholder="Share a memory..." class="flex-1 bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all">
+                    <button id="sendBtn" class="bg-orange-600 hover:bg-orange-500 p-2 rounded-xl transition-all active:scale-95 text-white">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-5 border border-zinc-800/50 shadow-xl">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
             <i data-lucide="message-square" class="w-5 h-5"></i>
             Share Your Thoughts
         </h2>
@@ -215,7 +236,66 @@
 
 <div id="audio" class="hidden"></div>
 
+<script src="/socket.io/socket.io.js"></script>
 <script>
+    const socket = io();
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const chatNickname = document.getElementById('chatNickname');
+    const sendBtn = document.getElementById('sendBtn');
+
+    // Load nickname from local storage
+    chatNickname.value = localStorage.getItem('chatNickname') || '';
+
+    function appendMessage(msg) {
+        const isMe = msg.user === chatNickname.value;
+        const div = document.createElement('div');
+        div.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} animate-fade-in-up`;
+        div.innerHTML = `
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">${msg.user}</span>
+                <span class="text-[8px] text-zinc-600">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+            <div class="max-w-[80%] bg-zinc-800/80 border border-zinc-700/30 rounded-2xl px-4 py-2 text-sm text-zinc-300 shadow-sm">
+                ${msg.text}
+            </div>
+        `;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    socket.on('init_messages', (messages) => {
+        chatMessages.innerHTML = '';
+        if (messages.length === 0) {
+            chatMessages.innerHTML = '<div class="text-center text-zinc-600 text-xs py-10">No memories shared yet. Be the first!</div>';
+        } else {
+            messages.forEach(appendMessage);
+        }
+    });
+
+    socket.on('new_message', (msg) => {
+        if (chatMessages.querySelector('.text-center')) {
+            chatMessages.innerHTML = '';
+        }
+        appendMessage(msg);
+    });
+
+    function sendMessage() {
+        const text = chatInput.value.trim();
+        const user = chatNickname.value.trim() || 'Anonymous';
+
+        if (text) {
+            socket.emit('send_message', { user, text });
+            chatInput.value = '';
+            localStorage.setItem('chatNickname', user);
+        }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
     lucide.createIcons();
     document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/HJl-i58SuW4?autoplay=1&loop=1&playlist=HJl-i58SuW4" frameborder="0" allow="autoplay"></iframe>`;
 
