@@ -291,10 +291,6 @@
 
 <div class="main-content" id="main-content">
   <div class="glass-card">
-    <div class="badges">
-      <div class="badge"><i class="fa fa-eye"></i> <span id="view-count">...</span></div>
-    </div>
-
     <div class="logo-container">
       <img src="https://8ktv.github.io/images/PlasmaLogo.png" alt="Plasma Logo" class="logo-img">
     </div>
@@ -497,23 +493,6 @@
       audio.currentTime = (clickX / width) * duration;
     });
   }
-
-  async function initViewCounter() {
-    const el = document.getElementById('view-count');
-    if (!el) return;
-
-    try {
-      const res = await fetch('/api/views');
-      const data = await res.json();
-      if (data && typeof data.count === 'number') {
-        el.textContent = data.count.toLocaleString();
-      }
-    } catch (e) {
-      if (el.textContent === '...') el.textContent = '0';
-    }
-  }
-
-  initViewCounter();
 
   enterScreen.addEventListener('click', () => {
     enterScreen.classList.add('fade-out');
