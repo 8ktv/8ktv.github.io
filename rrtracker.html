@@ -453,7 +453,8 @@
     function getShareContent() {
         const countdown = document.getElementById('countdown').textContent.trim();
         const customNote = document.getElementById('customShareMessage').value.trim();
-        const text = customNote ? `${customNote} Only ${countdown} left until Rec Room shuts down forever.` : `Only ${countdown} left until Rec Room shuts down forever.`;
+        const tags = "#recroom #recroomshutdown #recnet";
+        const text = customNote ? `${customNote} Only ${countdown} left until Rec Room shuts down forever. ${tags}` : `Only ${countdown} left until Rec Room shuts down forever. ${tags}`;
         return { text, url: window.location.href };
     }
 
