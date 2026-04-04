@@ -245,10 +245,15 @@
 <div id="audio" class="hidden"></div>
 
 <script>
+    const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00');
+    const stages = [
+        { name: "Announcement", date: new Date('2025-08-25') },
+        { name: "Transition", date: new Date('2026-04-01') },
+        { name: "Data Download", date: new Date('2026-05-01') },
+        { name: "Shutdown", date: SHUTDOWN_DATE }
+    ];
     lucide.createIcons();
     document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/HJl-i58SuW4?autoplay=1&loop=1&playlist=HJl-i58SuW4" frameborder="0" allow="autoplay"></iframe>`;
-
-    const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00');
     const baseTimezones = [{ label: "Auto (Local)", value: "auto" }, { label: "UTC", value: "UTC" }];
     let selectedTimezone = localStorage.getItem('selectedTimezone') || 'auto';
 
@@ -374,19 +379,6 @@
         }
     }
 
-    initTimezoneSelector();
-    setInterval(() => {
-        updateCountdown();
-        updateSharePreview();
-    }, 1000);
-    updateCountdown();
-    updateSharePreview();
-
-    setTimeout(() => {
-        pingAll();
-        setInterval(pingAll, 20000);
-    }, 600);
-
     document.getElementById('avatarUpload').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -492,21 +484,30 @@
         document.body.removeChild(el);
     }
 
-    const stages = [
-        { name: "Announcement", date: new Date('2025-08-25') },
-        { name: "Transition", date: new Date('2026-04-01') },
-        { name: "Data Download", date: new Date('2026-05-01') },
-        { name: "Shutdown", date: SHUTDOWN_DATE }
-    ];
-
     function updateStages() {
         const now = new Date();
         document.getElementById('stagesTracker').innerHTML = stages.map((stage, index) => {
             const isPast = now >= stage.date;
-            const isCurrent = !isPast || (index < stages.length - 1 && now < stages[index + 1].date);
+            const nextStage = stages[index + 1];
+            let progress = 0;
+            if (nextStage) {
+                if (now >= nextStage.date) {
+                    progress = 100;
+                } else if (now >= stage.date) {
+                    const total = nextStage.date - stage.date;
+                    const elapsed = now - stage.date;
+                    progress = (elapsed / total) * 100;
+                }
+            }
+            const isCurrent = isPast && nextStage && now < nextStage.date;
+
             return `
                 <div class="relative flex gap-4 ${isPast ? 'text-zinc-200' : 'text-zinc-600'}">
-                    ${index < stages.length - 1 ? `<div class="absolute left-4 top-8 bottom-[-16px] w-0.5 ${isPast ? 'bg-orange-600' : 'bg-zinc-800'}"></div>` : ''}
+                    ${index < stages.length - 1 ? `
+                        <div class="absolute left-4 top-8 bottom-[-16px] w-0.5 bg-zinc-800">
+                            <div class="absolute top-0 left-0 w-full bg-orange-600 transition-all duration-1000" style="height: ${progress}%"></div>
+                        </div>
+                    ` : ''}
                     <div class="relative z-10 w-8 h-8 rounded-full flex items-center justify-center font-bold ${isPast ? 'bg-orange-600 text-white' : 'bg-zinc-800'} ${isCurrent ? 'animate-progress' : ''}">
                         ${isPast ? '<i data-lucide="check" class="w-5 h-5"></i>' : index + 1}
                     </div>
@@ -521,6 +522,22 @@
     }
 
     updateStages();
+
+    initTimezoneSelector();
+    setInterval(() => {
+        updateCountdown();
+        updateSharePreview();
+        updateStages();
+    }, 1000);
+    updateCountdown();
+    updateSharePreview();
+    updateStages();
+
+    setTimeout(() => {
+        pingAll();
+        setInterval(pingAll, 20000);
+    }, 600);
+
     window.shareTwitter = shareTwitter;
     window.shareFacebook = shareFacebook;
     window.shareCountdown = shareCountdown;
