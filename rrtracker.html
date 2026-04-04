@@ -18,8 +18,42 @@
             50% { opacity: 1; transform: scale(1); }
             100% { opacity: 0.5; transform: scale(0.95); }
         }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes tick {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
         .animate-progress {
             animation: progress 2s ease-in-out infinite;
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .animate-tick {
+            animation: tick 0.2s ease-out;
+        }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            background-color: #1c1c1f;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        #countdown span {
+            display: inline-block;
+            transition: transform 0.2s ease-out;
         }
 
     </style>
@@ -43,77 +77,102 @@
     </div>
 
     <!-- Title -->
-    <div class="text-center mb-12">
+    <div class="text-center mb-12 animate-fade-in-up">
         <h1 class="text-5xl font-bold tracking-tighter mb-2">School’s Out</h1>
         <p class="text-zinc-400">Rec Room Final Shutdown</p>
     </div>
 
     <!-- Countdown -->
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10" aria-label="Shutdown Countdown">
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-1 shadow-2xl border border-zinc-800/50" aria-label="Shutdown Countdown">
         <div class="text-center mb-6">
-            <p class="text-zinc-500 text-sm mb-2">TIME UNTIL SHUTDOWN</p>
-            <div id="countdown" class="font-mono text-6xl font-bold tabular-nums tracking-tighter text-orange-400" aria-live="polite">
+            <p class="text-zinc-500 text-sm mb-2 tracking-widest">TIME UNTIL SHUTDOWN</p>
+            <div id="countdown" class="font-mono text-6xl font-bold tabular-nums tracking-tighter text-orange-400 drop-shadow-[0_0_15px_rgba(251,146,60,0.2)]" aria-live="polite">
                 00d 00h 00m 00s
             </div>
-            <p class="text-xs text-zinc-500 mt-3" id="timezone"></p>
+            <p class="text-xs text-zinc-400 mt-3 font-medium opacity-80" id="targetDate"></p>
+
+            <div class="mt-6 pt-6 border-t border-zinc-800/50">
+                <label for="tzSelector" class="text-[10px] text-zinc-500 block mb-2 uppercase tracking-widest">Display Timezone</label>
+                <select id="tzSelector" onchange="changeTimezone(this.value)" class="bg-zinc-800/50 text-zinc-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-orange-500 w-full max-w-[240px] mx-auto block appearance-none cursor-pointer hover:bg-zinc-800 transition-colors border border-zinc-700/50">
+                    <!-- Options injected by JS -->
+                </select>
+            </div>
+        </div>
+        <div class="flex flex-col items-center gap-3 mb-6">
+            <input type="text" id="customShareMessage"
+                   oninput="updateSharePreview()"
+                   class="w-full max-w-sm bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 text-center transition-all focus:bg-zinc-800"
+                   placeholder="Add a personal note to your share...">
+            <div id="sharePreview" class="text-[10px] text-zinc-500 italic max-w-sm text-center px-4 opacity-60">
+                Preview: Only 00d 00h 00m 00s left until Rec Room shuts down forever.
+            </div>
         </div>
         <div class="flex justify-center gap-3">
-            <button onclick="shareTwitter()" aria-label="Share on Twitter" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition text-orange-400">
+            <button onclick="shareTwitter()" aria-label="Share on Twitter" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
                 <i data-lucide="send" class="w-5 h-5"></i>
             </button>
-            <button onclick="shareFacebook()" aria-label="Share on Facebook" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition text-orange-400">
+            <button onclick="shareFacebook()" aria-label="Share on Facebook" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
                 <i data-lucide="users" class="w-5 h-5"></i>
             </button>
-            <button onclick="shareCountdown()" aria-label="Share via other methods" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition text-orange-400">
+            <button onclick="shareCountdown()" aria-label="Share via other methods" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
                 <i data-lucide="share-2" class="w-5 h-5"></i>
             </button>
         </div>
     </div>
 
     <!-- Shutdown Stages -->
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400">Shutdown Progress</h2>
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-2 border border-zinc-800/50 shadow-xl">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+            <i data-lucide="activity" class="w-5 h-5"></i>
+            Shutdown Progress
+        </h2>
         <div id="stagesTracker" class="space-y-4">
             <!-- Stages will be injected here by JS -->
         </div>
     </div>
 
     <!-- Context -->
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
-        <h2 class="text-xl font-semibold mb-4 text-orange-400">Shutdown Context</h2>
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-3 border border-zinc-800/50 shadow-xl">
+        <h2 class="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
+            <i data-lucide="info" class="w-5 h-5"></i>
+            Shutdown Context
+        </h2>
         <p class="text-zinc-400 text-sm leading-relaxed mb-4">
             In August 2025, Rec Room announced the layoff of approximately half its staff, citing "business necessity" as the company reached a critical crossroads. Leadership subsequently acknowledged severe financial strain, specifically highlighting the difficulty of balancing the operational costs of running the platform with the payouts required for its User Generated Content (UGC) revenue model. Despite efforts to achieve sustainability, these ongoing financial pressures and the inability to reconcile the platform's cost structure with its revenue model ultimately led to the decision to cease operations.
         </p>
         <div class="text-xs text-zinc-500 mb-4">
             Sources:
-            <a href="https://blog.recroom.com/posts/2025/8/25/rec-room-update-august-2025" class="underline hover:text-orange-400" target="_blank">A hard day at Rec Room (Aug 2025)</a>,
-            <a href="https://blog.recroom.com/posts/2025/8/28/rec-room-finances-and-ugc-revenue" class="underline hover:text-orange-400" target="_blank">Rec Room Finances And UGC Revenue (Aug 2025)</a>
+            <a href="https://blog.recroom.com/posts/2025/8/25/rec-room-update-august-2025" class="underline hover:text-orange-400 transition-colors" target="_blank">A hard day at Rec Room (Aug 2025)</a>,
+            <a href="https://blog.recroom.com/posts/2025/8/28/rec-room-finances-and-ugc-revenue" class="underline hover:text-orange-400 transition-colors" target="_blank">Rec Room Finances And UGC Revenue (Aug 2025)</a>
         </div>
-        <button onclick="toggleContext()" class="text-orange-400 text-sm font-medium hover:underline">Read more about the financial situation</button>
-        <div id="moreContext" class="hidden mt-4 space-y-2 text-zinc-400 text-sm">
+        <button onclick="toggleContext()" class="text-orange-400 text-sm font-medium hover:underline transition-all">Read more about the financial situation</button>
+        <div id="moreContext" class="hidden mt-4 space-y-2 text-zinc-400 text-sm animate-fade-in-up">
             <p>The platform's reliance on a UGC revenue model created a difficult balancing act. As operational costs scaled, the payout requirements for creators became increasingly unsustainable, leading to a structural deficit that could not be overcome.</p>
-            <a href="https://www.gamesindustry.biz/rec-room-to-shut-down-following-financial-struggles" class="block underline hover:text-orange-400" target="_blank">GamesIndustry.biz: Rec Room to shut down</a>
-            <a href="https://www.theverge.com/2025/8/25/rec-room-layoffs-financial-struggles" class="block underline hover:text-orange-400" target="_blank">The Verge: Rec Room layoffs and financial context</a>
+            <a href="https://www.gamesindustry.biz/rec-room-to-shut-down-following-financial-struggles" class="block underline hover:text-orange-400 transition-colors" target="_blank">GamesIndustry.biz: Rec Room to shut down</a>
+            <a href="https://www.theverge.com/2025/8/25/rec-room-layoffs-financial-struggles" class="block underline hover:text-orange-400 transition-colors" target="_blank">The Verge: Rec Room layoffs and financial context</a>
         </div>
     </div>
 
     <!-- Alternatives -->
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400">Rec Room Alternatives</h2>
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-4 border border-zinc-800/50 shadow-xl">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+            <i data-lucide="compass" class="w-5 h-5"></i>
+            Rec Room Alternatives
+        </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a href="https://vrchat.com/" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+            <a href="https://vrchat.com/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">VRChat</div>
                 <div class="text-xs text-zinc-400">The main social VR platform</div>
             </a>
-            <a href="https://discord.gg/radium-rr" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+            <a href="https://discord.gg/radium-rr" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">Radium</div>
                 <div class="text-xs text-zinc-400">Rec Room FanHosted Servers</div>
             </a>
-            <a href="https://resonite.com/" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+            <a href="https://resonite.com/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">Resonite</div>
                 <div class="text-xs text-zinc-400">Advanced social VR</div>
             </a>
-            <a href="https://chilloutvr.net/" target="_blank" class="bg-zinc-800 p-4 rounded-2xl hover:bg-zinc-700 transition">
+            <a href="https://chilloutvr.net/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">ChilloutVR</div>
                 <div class="text-xs text-zinc-400">Social VR experience</div>
             </a>
@@ -121,21 +180,24 @@
     </div>
 
     <!-- Feedback Form -->
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400">Share Your Thoughts</h2>
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-5 border border-zinc-800/50 shadow-xl">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+            <i data-lucide="message-square" class="w-5 h-5"></i>
+            Share Your Thoughts
+        </h2>
         <form id="feedbackForm" class="space-y-4">
             <div class="flex items-center gap-4">
-                <div id="avatarPreview" class="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
+                <div id="avatarPreview" class="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700/50 shadow-inner">
                     <i data-lucide="user" class="w-8 h-8 text-zinc-500"></i>
                 </div>
-                <input type="file" id="avatarUpload" accept="image/*" class="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-orange-400 hover:file:bg-zinc-700">
+                <input type="file" id="avatarUpload" accept="image/*" class="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-orange-400 hover:file:bg-zinc-700 transition-all cursor-pointer">
             </div>
-            <textarea id="feedbackText" required placeholder="What are your thoughts on the shutdown?" class="w-full bg-zinc-800 rounded-2xl p-4 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 h-32"></textarea>
-            <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition">
+            <textarea id="feedbackText" required placeholder="What are your thoughts on the shutdown?" class="w-full bg-zinc-800/50 rounded-2xl p-4 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 h-32 transition-all focus:bg-zinc-800 border border-zinc-700/50"></textarea>
+            <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] active:scale-[0.98]">
                 SUBMIT FEEDBACK
             </button>
         </form>
-        <div id="feedbackResponse" class="hidden mt-4 text-center text-emerald-400">Thank you for your feedback!</div>
+        <div id="feedbackResponse" class="hidden mt-4 text-center text-emerald-400 animate-fade-in-up">Thank you for your feedback!</div>
     </div>
 
     <!-- Confirmation Modal -->
@@ -174,6 +236,44 @@
     document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/HJl-i58SuW4?autoplay=1&loop=1&playlist=HJl-i58SuW4" frameborder="0" allow="autoplay"></iframe>`;
 
     const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00'); // June 1, 2026 12:00 PDT
+
+    const baseTimezones = [
+        { label: "Auto (Local)", value: "auto" },
+        { label: "UTC", value: "UTC" }
+    ];
+
+    let selectedTimezone = localStorage.getItem('selectedTimezone') || 'auto';
+
+    function initTimezoneSelector() {
+        const selector = document.getElementById('tzSelector');
+
+        // Get all supported timezones from the browser
+        let allTz = [];
+        try {
+            allTz = Intl.supportedValuesOf('timeZone');
+        } catch (e) {
+            // Fallback to a decent list if supportedValuesOf is not available
+            allTz = [
+                "America/Los_Angeles", "America/Denver", "America/Chicago", "America/New_York",
+                "Europe/London", "Europe/Berlin", "Asia/Tokyo", "Australia/Sydney"
+            ];
+        }
+
+        const options = [
+            ...baseTimezones,
+            ...allTz.map(tz => ({ label: tz.replace(/_/g, ' '), value: tz }))
+        ];
+
+        selector.innerHTML = options.map(tz =>
+            `<option value="${tz.value}" ${selectedTimezone === tz.value ? 'selected' : ''}>${tz.label}</option>`
+        ).join('');
+    }
+
+    function changeTimezone(val) {
+        selectedTimezone = val;
+        localStorage.setItem('selectedTimezone', val);
+        updateCountdown();
+    }
 
     const servers = [
         { name: "ns.rec.net", url: "https://ns.rec.net/", location: "US-East" },
@@ -234,6 +334,7 @@
     }
 
     // Countdown
+    let lastSeconds = -1;
     function updateCountdown() {
         const now = new Date();
         const diff = SHUTDOWN_DATE - now;
@@ -242,7 +343,8 @@
 
         if (diff <= 0) {
             countdownEl.innerHTML = `<span class="text-red-600 font-bold animate-bounce">SHUTDOWN COMPLETE</span>`;
-            document.getElementById('timezone').textContent = "June 1, 2026 • 12:00 PDT";
+            const targetDateEl = document.getElementById('targetDate');
+            if (targetDateEl) targetDateEl.textContent = "June 1, 2026 • 12:00 PDT";
             return;
         }
 
@@ -259,16 +361,46 @@
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-        countdownEl.textContent =
-            `${days.toString().padStart(2, '0')}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+        const newText = `${days.toString().padStart(2, '0')}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
 
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        document.getElementById('timezone').textContent = `Your timezone: ${tz}`;
+        if (seconds !== lastSeconds) {
+            countdownEl.classList.remove('animate-tick');
+            void countdownEl.offsetWidth; // Trigger reflow
+            countdownEl.classList.add('animate-tick');
+            lastSeconds = seconds;
+        }
+
+        countdownEl.textContent = newText;
+
+        const displayTz = selectedTimezone === 'auto' ? Intl.DateTimeFormat().resolvedOptions().timeZone : selectedTimezone;
+
+        const options = {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            timeZoneName: 'short',
+            timeZone: displayTz
+        };
+
+        try {
+            const formattedTarget = new Intl.DateTimeFormat('en-US', options).format(SHUTDOWN_DATE);
+            document.getElementById('targetDate').textContent = `Shutdown: ${formattedTarget}`;
+        } catch (e) {
+            // Fallback if timezone is invalid
+            document.getElementById('targetDate').textContent = `Shutdown: June 1, 2026 (PDT)`;
+        }
     }
 
     // Init
-    setInterval(updateCountdown, 1000);
+    initTimezoneSelector();
+    setInterval(() => {
+        updateCountdown();
+        updateSharePreview();
+    }, 1000);
     updateCountdown();
+    updateSharePreview();
 
     setTimeout(() => {
         pingAll();
@@ -345,32 +477,49 @@
     fetchCommits();
 
     // Share Functionality
+    function getShareContent() {
+        const countdown = document.getElementById('countdown').textContent.trim();
+        const customNote = document.getElementById('customShareMessage').value.trim();
+        const baseUrl = 'Only ' + countdown + ' left until Rec Room shuts down forever.';
+        const fullText = customNote ? `${customNote} ${baseUrl}` : baseUrl;
+        return {
+            text: fullText,
+            url: window.location.href
+        };
+    }
+
+    function updateSharePreview() {
+        const content = getShareContent();
+        document.getElementById('sharePreview').textContent = `Preview: ${content.text}`;
+    }
+
     function shareTwitter() {
-        const url = window.location.href;
-        const text = 'Tracking the final days of Rec Room until the June 1st, 2026 shutdown. Check the countdown here:';
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        const content = getShareContent();
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(content.text)}&url=${encodeURIComponent(content.url)}`, '_blank');
     }
 
     function shareFacebook() {
-        const url = window.location.href;
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        const content = getShareContent();
+        // Facebook sharing mainly uses the URL for metadata, but we can try to append the text as a quote if supported by some integrations, 
+        // though standard sharer.php mostly ignores 'quote' now. We'll stick to the URL.
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(content.url)}`, '_blank');
     }
 
     function shareCountdown() {
-        const url = window.location.href;
+        const content = getShareContent();
         const shareData = {
             title: 'Rec Room Shutdown Countdown',
-            text: 'Tracking the final days of Rec Room until the June 1st, 2026 shutdown. Check the countdown here:',
-            url: url
+            text: content.text,
+            url: content.url
         };
 
         if (navigator.share) {
             navigator.share(shareData).catch(err => {
                 console.error('Share failed:', err);
-                copyToClipboard(url);
+                copyToClipboard(content.url);
             });
         } else {
-            copyToClipboard(url);
+            copyToClipboard(content.url);
         }
     }
 
@@ -433,18 +582,18 @@
             return `
                 <div class="relative flex gap-4 ${isPast ? 'text-zinc-200' : 'text-zinc-600'}">
                     <!-- Vertical line -->
-                    ${index < stages.length - 1 ? `<div class="absolute left-4 top-8 bottom-[-16px] w-0.5 ${isPast ? 'bg-orange-600' : 'bg-zinc-800'}"></div>` : ''}
-                    
-                    <div class="relative z-10 w-8 h-8 rounded-full flex items-center justify-center font-bold ${isPast ? 'bg-orange-600 text-white' : 'bg-zinc-800'} ${isCurrent ? 'animate-progress' : ''}">
-                        ${isPast ? '<i data-lucide="check" class="w-5 h-5"></i>' : index + 1}
-                    </div>
-                    <div class="flex-1 pb-8">
-                        <div class="font-semibold">${stage.name}</div>
-                        <div class="text-xs ${isPast ? 'text-zinc-400' : 'text-zinc-600'}">
-                            ${stage.date.toLocaleDateString()}
-                        </div>
-                    </div>
-                </div>
+            ${index < stages.length - 1 ? `<div class="absolute left-4 top-8 bottom-[-16px] w-0.5 ${isPast ? 'bg-orange-600' : 'bg-zinc-800'}"></div>` : ''}
+
+            <div class="relative z-10 w-8 h-8 rounded-full flex items-center justify-center font-bold ${isPast ? 'bg-orange-600 text-white' : 'bg-zinc-800'} ${isCurrent ? 'animate-progress' : ''}">
+            ${isPast ? '<i data-lucide="check" class="w-5 h-5"></i>' : index + 1}
+            </div>
+            <div class="flex-1 pb-8">
+            <div class="font-semibold">${stage.name}</div>
+            <div class="text-xs ${isPast ? 'text-zinc-400' : 'text-zinc-600'}">
+            ${stage.date.toLocaleDateString()}
+            </div>
+            </div>
+            </div>
             `;
         }).join('');
         lucide.createIcons();
