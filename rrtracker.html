@@ -19,6 +19,20 @@
 
 <div class="max-w-2xl mx-auto p-8">
 
+    <!-- Latest Updates Button -->
+    <div class="fixed top-4 right-4 z-50">
+        <button onclick="toggleDropdown()"
+                class="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition">
+            <i data-lucide="git-commit" class="w-6 h-6 text-orange-400"></i>
+        </button>
+        <div id="commitDropdown" class="hidden absolute right-0 mt-2 w-72 bg-zinc-900 border border-zinc-800 rounded-2xl p-4 shadow-xl">
+            <h2 class="text-lg font-semibold mb-3 text-orange-400">Latest Updates</h2>
+            <div id="commitList" class="space-y-3 text-sm text-zinc-400">
+                <div class="text-center py-4 text-zinc-500">Loading updates...</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Title -->
     <div class="text-center mb-12">
         <h1 class="text-5xl font-bold tracking-tighter mb-2">School’s Out</h1>
@@ -84,14 +98,6 @@
                 <div class="font-semibold text-white">ChilloutVR</div>
                 <div class="text-xs text-zinc-400">Social VR experience</div>
             </a>
-        </div>
-    </div>
-
-    <!-- Latest Updates -->
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400">Latest Updates</h2>
-        <div id="commitList" class="space-y-4 text-sm text-zinc-400">
-            <div class="text-center py-4 text-zinc-500">Loading updates...</div>
         </div>
     </div>
 
@@ -206,6 +212,12 @@
 
     window.pingAll = pingAll;
 
+    // Toggle Dropdown
+    function toggleDropdown() {
+        const dropdown = document.getElementById('commitDropdown');
+        dropdown.classList.toggle('hidden');
+    }
+
     // Fetch GitHub Commits
     async function fetchCommits() {
         const container = document.getElementById('commitList');
@@ -215,7 +227,7 @@
             const commits = await response.json();
 
             container.innerHTML = commits.map(c => `
-                <div class="border-b border-zinc-800 pb-3">
+                <div class="border-b border-zinc-800 pb-2 last:border-0 last:pb-0">
                     <div class="font-medium text-zinc-200">${c.commit.message.split('\n')[0]}</div>
                     <div class="text-xs text-zinc-500 mt-1">
                         ${c.commit.author.name} • ${new Date(c.commit.author.date).toLocaleDateString()}
