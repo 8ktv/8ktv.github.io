@@ -247,10 +247,26 @@
 <script>
     const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00');
     const stages = [
-        { name: "Announcement", date: new Date('2025-08-25') },
-        { name: "Transition", date: new Date('2026-04-01') },
-        { name: "Data Download", date: new Date('2026-05-01') },
-        { name: "Shutdown", date: SHUTDOWN_DATE }
+        {
+            name: "Announcement",
+            date: new Date('2025-08-25'),
+            description: "Rec Room officially announces the shutdown due to financial sustainability issues."
+        },
+        {
+            name: "Transition",
+            date: new Date('2026-04-01'),
+            description: "In-game store closes and Token purchases are disabled. Final event season begins."
+        },
+        {
+            name: "Data Download",
+            date: new Date('2026-05-01'),
+            description: "Creators can begin exporting room data and assets. Final server maintenance check."
+        },
+        {
+            name: "Shutdown",
+            date: SHUTDOWN_DATE,
+            description: "Final server shutdown and end of all platform services. RecNet goes offline."
+        }
     ];
     lucide.createIcons();
     document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/HJl-i58SuW4?autoplay=1&loop=1&playlist=HJl-i58SuW4" frameborder="0" allow="autoplay"></iframe>`;
@@ -513,7 +529,8 @@
                     </div>
                     <div class="flex-1 pb-8">
                         <div class="font-semibold">${stage.name}</div>
-                        <div class="text-xs ${isPast ? 'text-zinc-400' : 'text-zinc-600'}">${stage.date.toLocaleDateString()}</div>
+                        <div class="text-xs ${isPast ? 'text-zinc-400' : 'text-zinc-600'} mb-1">${stage.date.toLocaleDateString()}</div>
+                        <div class="text-xs ${isPast ? 'text-zinc-500' : 'text-zinc-700'} leading-relaxed">${stage.description}</div>
                     </div>
                 </div>
             `;
