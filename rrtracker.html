@@ -13,11 +13,20 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', system-ui, sans-serif; }
+        @keyframes progress {
+            0% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.5; transform: scale(0.95); }
+        }
+        .animate-progress {
+            animation: progress 2s ease-in-out infinite;
+        }
+
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
 
-<div class="max-w-2xl mx-auto p-8">
+<div class="relative z-10 max-w-2xl mx-auto p-8">
 
     <!-- Latest Updates Button -->
     <div class="fixed top-4 right-4 z-50">
@@ -40,19 +49,23 @@
     </div>
 
     <!-- Countdown -->
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10" aria-label="Shutdown Countdown">
         <div class="text-center mb-6">
             <p class="text-zinc-500 text-sm mb-2">TIME UNTIL SHUTDOWN</p>
-            <div id="countdown" class="font-mono text-6xl font-bold tabular-nums tracking-tighter text-orange-400">
+            <div id="countdown" class="font-mono text-6xl font-bold tabular-nums tracking-tighter text-orange-400" aria-live="polite">
                 00d 00h 00m 00s
             </div>
             <p class="text-xs text-zinc-500 mt-3" id="timezone"></p>
         </div>
-        <div class="text-center">
-            <button onclick="shareCountdown()"
-                    class="flex items-center gap-2 mx-auto bg-zinc-800 hover:bg-zinc-700 px-6 py-2 rounded-2xl text-sm font-medium transition">
-                <i data-lucide="share-2" class="w-4 h-4"></i>
-                SHARE COUNTDOWN
+        <div class="flex justify-center gap-3">
+            <button onclick="shareTwitter()" aria-label="Share on Twitter" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition text-orange-400">
+                <i data-lucide="send" class="w-5 h-5"></i>
+            </button>
+            <button onclick="shareFacebook()" aria-label="Share on Facebook" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition text-orange-400">
+                <i data-lucide="users" class="w-5 h-5"></i>
+            </button>
+            <button onclick="shareCountdown()" aria-label="Share via other methods" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition text-orange-400">
+                <i data-lucide="share-2" class="w-5 h-5"></i>
             </button>
         </div>
     </div>
@@ -71,10 +84,16 @@
         <p class="text-zinc-400 text-sm leading-relaxed mb-4">
             In August 2025, Rec Room announced the layoff of approximately half its staff, citing "business necessity" as the company reached a critical crossroads. Leadership subsequently acknowledged severe financial strain, specifically highlighting the difficulty of balancing the operational costs of running the platform with the payouts required for its User Generated Content (UGC) revenue model. Despite efforts to achieve sustainability, these ongoing financial pressures and the inability to reconcile the platform's cost structure with its revenue model ultimately led to the decision to cease operations.
         </p>
-        <div class="text-xs text-zinc-500">
+        <div class="text-xs text-zinc-500 mb-4">
             Sources:
             <a href="https://blog.recroom.com/posts/2025/8/25/rec-room-update-august-2025" class="underline hover:text-orange-400" target="_blank">A hard day at Rec Room (Aug 2025)</a>,
             <a href="https://blog.recroom.com/posts/2025/8/28/rec-room-finances-and-ugc-revenue" class="underline hover:text-orange-400" target="_blank">Rec Room Finances And UGC Revenue (Aug 2025)</a>
+        </div>
+        <button onclick="toggleContext()" class="text-orange-400 text-sm font-medium hover:underline">Read more about the financial situation</button>
+        <div id="moreContext" class="hidden mt-4 space-y-2 text-zinc-400 text-sm">
+            <p>The platform's reliance on a UGC revenue model created a difficult balancing act. As operational costs scaled, the payout requirements for creators became increasingly unsustainable, leading to a structural deficit that could not be overcome.</p>
+            <a href="https://www.gamesindustry.biz/rec-room-to-shut-down-following-financial-struggles" class="block underline hover:text-orange-400" target="_blank">GamesIndustry.biz: Rec Room to shut down</a>
+            <a href="https://www.theverge.com/2025/8/25/rec-room-layoffs-financial-struggles" class="block underline hover:text-orange-400" target="_blank">The Verge: Rec Room layoffs and financial context</a>
         </div>
     </div>
 
@@ -98,6 +117,36 @@
                 <div class="font-semibold text-white">ChilloutVR</div>
                 <div class="text-xs text-zinc-400">Social VR experience</div>
             </a>
+        </div>
+    </div>
+
+    <!-- Feedback Form -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400">Share Your Thoughts</h2>
+        <form id="feedbackForm" class="space-y-4">
+            <div class="flex items-center gap-4">
+                <div id="avatarPreview" class="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
+                    <i data-lucide="user" class="w-8 h-8 text-zinc-500"></i>
+                </div>
+                <input type="file" id="avatarUpload" accept="image/*" class="text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-orange-400 hover:file:bg-zinc-700">
+            </div>
+            <textarea id="feedbackText" required placeholder="What are your thoughts on the shutdown?" class="w-full bg-zinc-800 rounded-2xl p-4 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 h-32"></textarea>
+            <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition">
+                SUBMIT FEEDBACK
+            </button>
+        </form>
+        <div id="feedbackResponse" class="hidden mt-4 text-center text-emerald-400">Thank you for your feedback!</div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 max-w-sm w-full text-center">
+            <h2 class="text-xl font-semibold mb-4 text-orange-400">Confirm Submission</h2>
+            <p class="text-zinc-400 mb-6">Are you sure you want to send this feedback via email?</p>
+            <div class="flex gap-4">
+                <button onclick="closeConfirmModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 py-3 rounded-2xl text-sm font-medium transition">CANCEL</button>
+                <button onclick="confirmFeedback()" class="flex-1 bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition">CONFIRM</button>
+            </div>
         </div>
     </div>
 
@@ -127,10 +176,10 @@
     const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00'); // June 1, 2026 12:00 PDT
 
     const servers = [
-        { name: "ns.rec.net", url: "https://ns.rec.net/" },
-        { name: "rec.net", url: "https://rec.net/" },
-        { name: "api.rec.net", url: "https://api.rec.net/" },
-        { name: "auth.rec.net", url: "https://auth.rec.net/" }
+        { name: "ns.rec.net", url: "https://ns.rec.net/", location: "US-East" },
+        { name: "rec.net", url: "https://rec.net/", location: "US-West" },
+        { name: "api.rec.net", url: "https://api.rec.net/", location: "US-East" },
+        { name: "auth.rec.net", url: "https://auth.rec.net/", location: "US-West" }
     ];
 
     let logs = [];
@@ -158,10 +207,10 @@
             await fetch(s.url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal });
             const ms = Date.now() - start;
             addLog(`${s.name} responded (${ms}ms)`);
-            return `✅ ONLINE (${ms}ms)`;
-        } catch (_) {
+            return { status: 'ONLINE', message: `✅ ${ms}ms` };
+        } catch (e) {
             addLog(`${s.name} unreachable`, true);
-            return `❌ OFFLINE`;
+            return { status: 'OFFLINE', message: `❌ ${e.name === 'AbortError' ? 'Timeout' : 'Connection Refused'}` };
         }
     }
 
@@ -170,10 +219,16 @@
         container.innerHTML = `<div class="text-center py-8 text-zinc-500">Checking RecNet...</div>`;
 
         for (let s of servers) {
-            const status = await pingServer(s);
+            const result = await pingServer(s);
             const div = document.createElement('div');
             div.className = "bg-zinc-900 rounded-2xl px-6 py-4 flex justify-between items-center";
-            div.innerHTML = `<div class="font-medium">${s.name}</div><div class="font-mono">${status}</div>`;
+            div.innerHTML = `
+                <div>
+                    <div class="font-medium text-white">${s.name}</div>
+                    <div class="text-xs text-zinc-500">${s.location}</div>
+                </div>
+                <div class="font-mono ${result.status === 'ONLINE' ? 'text-emerald-400' : 'text-red-400'}">${result.message}</div>
+            `;
             container.appendChild(div);
         }
     }
@@ -183,10 +238,20 @@
         const now = new Date();
         const diff = SHUTDOWN_DATE - now;
 
+        const countdownEl = document.getElementById('countdown');
+
         if (diff <= 0) {
-            document.getElementById('countdown').innerHTML = `<span class="text-red-500">SHUTDOWN COMPLETE</span>`;
+            countdownEl.innerHTML = `<span class="text-red-600 font-bold animate-bounce">SHUTDOWN COMPLETE</span>`;
             document.getElementById('timezone').textContent = "June 1, 2026 • 12:00 PDT";
             return;
+        }
+
+        // 7 days in milliseconds
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+        if (diff < sevenDays) {
+            countdownEl.classList.add('animate-pulse', 'text-orange-500');
+        } else {
+            countdownEl.classList.remove('animate-pulse', 'text-orange-500');
         }
 
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -194,7 +259,7 @@
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-        document.getElementById('countdown').textContent =
+        countdownEl.textContent =
             `${days.toString().padStart(2, '0')}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
 
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -212,10 +277,49 @@
 
     window.pingAll = pingAll;
 
+    // Avatar Preview
+    document.getElementById('avatarUpload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatarPreview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Feedback Form
+    const feedbackForm = document.getElementById('feedbackForm');
+    const confirmModal = document.getElementById('confirmModal');
+
+    feedbackForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        confirmModal.classList.remove('hidden');
+    });
+
+    function closeConfirmModal() {
+        confirmModal.classList.add('hidden');
+    }
+
+    function confirmFeedback() {
+        const text = document.getElementById('feedbackText').value;
+        window.location.href = `mailto:plasma8k@reborn.com?subject=Feedback&body=${encodeURIComponent(text)}`;
+        confirmModal.classList.add('hidden');
+        feedbackForm.classList.add('hidden');
+        document.getElementById('feedbackResponse').classList.remove('hidden');
+    }
+
     // Toggle Dropdown
     function toggleDropdown() {
         const dropdown = document.getElementById('commitDropdown');
         dropdown.classList.toggle('hidden');
+    }
+
+    // Toggle Context
+    function toggleContext() {
+        const context = document.getElementById('moreContext');
+        context.classList.toggle('hidden');
     }
 
     // Fetch GitHub Commits
@@ -241,6 +345,17 @@
     fetchCommits();
 
     // Share Functionality
+    function shareTwitter() {
+        const url = window.location.href;
+        const text = 'Tracking the final days of Rec Room until the June 1st, 2026 shutdown. Check the countdown here:';
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+    }
+
+    function shareFacebook() {
+        const url = window.location.href;
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+    }
+
     function shareCountdown() {
         const url = window.location.href;
         const shareData = {
@@ -293,7 +408,11 @@
         }
         document.body.removeChild(textArea);
     }
+    window.shareTwitter = shareTwitter;
+    window.shareFacebook = shareFacebook;
     window.shareCountdown = shareCountdown;
+    window.closeConfirmModal = closeConfirmModal;
+    window.confirmFeedback = confirmFeedback;
 
     // Shutdown Stages Tracker
     const stages = [
@@ -312,17 +431,19 @@
             const isCurrent = !isPast || (index < stages.length - 1 && now < stages[index + 1].date);
 
             return `
-                <div class="flex items-center gap-4 ${isPast ? 'text-zinc-200' : 'text-zinc-600'}">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold ${isPast ? 'bg-orange-600 text-white' : 'bg-zinc-800'}">
-                        ${index + 1}
+                <div class="relative flex gap-4 ${isPast ? 'text-zinc-200' : 'text-zinc-600'}">
+                    <!-- Vertical line -->
+                    ${index < stages.length - 1 ? `<div class="absolute left-4 top-8 bottom-[-16px] w-0.5 ${isPast ? 'bg-orange-600' : 'bg-zinc-800'}"></div>` : ''}
+                    
+                    <div class="relative z-10 w-8 h-8 rounded-full flex items-center justify-center font-bold ${isPast ? 'bg-orange-600 text-white' : 'bg-zinc-800'} ${isCurrent ? 'animate-progress' : ''}">
+                        ${isPast ? '<i data-lucide="check" class="w-5 h-5"></i>' : index + 1}
                     </div>
-                    <div class="flex-1">
+                    <div class="flex-1 pb-8">
                         <div class="font-semibold">${stage.name}</div>
                         <div class="text-xs ${isPast ? 'text-zinc-400' : 'text-zinc-600'}">
                             ${stage.date.toLocaleDateString()}
                         </div>
                     </div>
-                    ${isPast ? '<i data-lucide="check" class="w-5 h-5 text-orange-500"></i>' : ''}
                 </div>
             `;
         }).join('');
