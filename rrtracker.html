@@ -174,12 +174,18 @@
             <i data-lucide="message-circle" class="w-5 h-5"></i>
             Live Memory Chat
         </h2>
-        <div id="chatContainer" class="flex flex-col h-[400px]">
+        <div id="chatContainer" class="flex flex-col h-[450px]">
             <div id="chatMessages" class="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 scrollbar-thin scrollbar-thumb-zinc-700">
                 <div class="text-center text-zinc-500 text-xs py-10">Connecting to chat...</div>
             </div>
             <div class="flex flex-col gap-3">
-                <input type="text" id="chatNickname" maxlength="20" placeholder="Your Nickname" class="bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all">
+                <div class="flex items-center gap-3">
+                    <div id="chatAvatarPreview" class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700/50 shadow-inner flex-shrink-0 cursor-pointer hover:bg-zinc-700 transition-all" onclick="document.getElementById('chatAvatarUpload').click()">
+                        <i data-lucide="user" class="w-5 h-5 text-zinc-500"></i>
+                    </div>
+                    <input type="file" id="chatAvatarUpload" accept="image/*" class="hidden">
+                    <input type="text" id="chatNickname" maxlength="20" placeholder="Your Nickname" class="flex-1 bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all">
+                </div>
                 <div class="flex gap-2">
                     <input type="text" id="chatInput" placeholder="Share a memory..." class="flex-1 bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all">
                     <button id="sendBtn" class="bg-orange-600 hover:bg-orange-500 p-2 rounded-xl transition-all active:scale-95 text-white">
@@ -242,25 +248,53 @@
     const chatMessages = document.getElementById('chatMessages');
     const chatInput = document.getElementById('chatInput');
     const chatNickname = document.getElementById('chatNickname');
+    const chatAvatarUpload = document.getElementById('chatAvatarUpload');
+    const chatAvatarPreview = document.getElementById('chatAvatarPreview');
     const sendBtn = document.getElementById('sendBtn');
 
-    // Load nickname from local storage
+    // Load nickname and avatar from local storage
     chatNickname.value = localStorage.getItem('chatNickname') || '';
+    let currentAvatar = localStorage.getItem('chatAvatar') || null;
+    if (currentAvatar) {
+        chatAvatarPreview.innerHTML = `<img src="${currentAvatar}" class="w-full h-full object-cover">`;
+    }
+
+    chatAvatarUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                currentAvatar = e.target.result;
+                chatAvatarPreview.innerHTML = `<img src="${currentAvatar}" class="w-full h-full object-cover">`;
+                localStorage.setItem('chatAvatar', currentAvatar);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
     function appendMessage(msg) {
         const isMe = msg.user === chatNickname.value;
         const div = document.createElement('div');
-        div.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} animate-fade-in-up`;
+        div.className = `flex gap-3 ${isMe ? 'flex-row-reverse' : 'flex-row'} animate-fade-in-up`;
+
+        const avatarHtml = msg.avatar
+            ? `<img src="${msg.avatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700/50 shadow-sm">`
+            : `<div class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700/50 shadow-sm"><i data-lucide="user" class="w-4 h-4 text-zinc-500"></i></div>`;
+
         div.innerHTML = `
-            <div class="flex items-center gap-2 mb-1">
-                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">${msg.user}</span>
-                <span class="text-[8px] text-zinc-600">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            </div>
-            <div class="max-w-[80%] bg-zinc-800/80 border border-zinc-700/30 rounded-2xl px-4 py-2 text-sm text-zinc-300 shadow-sm">
-                ${msg.text}
+            <div class="flex-shrink-0 mt-1">${avatarHtml}</div>
+            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">${msg.user}</span>
+                    <span class="text-[8px] text-zinc-600">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+                <div class="max-w-[90%] bg-zinc-800/80 border border-zinc-700/30 rounded-2xl px-4 py-2 text-sm text-zinc-300 shadow-sm">
+                    ${msg.text}
+                </div>
             </div>
         `;
         chatMessages.appendChild(div);
+        lucide.createIcons();
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
@@ -283,9 +317,10 @@
     function sendMessage() {
         const text = chatInput.value.trim();
         const user = chatNickname.value.trim() || 'Anonymous';
+        const avatar = currentAvatar;
 
         if (text) {
-            socket.emit('send_message', { user, text });
+            socket.emit('send_message', { user, text, avatar });
             chatInput.value = '';
             localStorage.setItem('chatNickname', user);
         }
