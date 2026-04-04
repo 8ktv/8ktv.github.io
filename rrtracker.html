@@ -30,6 +30,13 @@
             </div>
             <p class="text-xs text-zinc-500 mt-3" id="timezone"></p>
         </div>
+        <div class="text-center">
+            <button onclick="shareCountdown()"
+                    class="flex items-center gap-2 mx-auto bg-zinc-800 hover:bg-zinc-700 px-6 py-2 rounded-2xl text-sm font-medium transition">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                SHARE COUNTDOWN
+            </button>
+        </div>
     </div>
 
     <!-- Shutdown Stages -->
@@ -186,6 +193,20 @@
     }, 600);
 
     window.pingAll = pingAll;
+
+    // Share Functionality
+    function shareCountdown() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Rec Room Shutdown Countdown',
+                text: 'Check out the countdown until Rec Room shuts down!',
+                url: window.location.href
+            }).catch(console.error);
+        } else {
+            alert('Web Share API not supported in this browser.');
+        }
+    }
+    window.shareCountdown = shareCountdown;
 
     // Shutdown Stages Tracker
     const stages = [
