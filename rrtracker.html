@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rec Room Shutdown</title>
+    <meta property="og:title" content="Rec Room Shutdown Countdown">
+    <meta property="og:description" content="Tracking the final days of Rec Room until the June 1st, 2026 shutdown.">
+    <meta property="og:image" content="https://picsum.photos/seed/recroom/1200/630">
+    <meta property="og:url" content="https://ais-dev-i5lnius3jz3hei4clo2kce-281162511810.us-west2.run.app">
+    <meta name="twitter:card" content="summary_large_image">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -196,15 +201,56 @@
 
     // Share Functionality
     function shareCountdown() {
+        const url = window.location.href;
+        const shareData = {
+            title: 'Rec Room Shutdown Countdown',
+            text: 'Tracking the final days of Rec Room until the June 1st, 2026 shutdown. Check the countdown here:',
+            url: url
+        };
+
         if (navigator.share) {
-            navigator.share({
-                title: 'Rec Room Shutdown Countdown',
-                text: 'Check out the countdown until Rec Room shuts down!',
-                url: window.location.href
-            }).catch(console.error);
+            navigator.share(shareData).catch(err => {
+                console.error('Share failed:', err);
+                copyToClipboard(url);
+            });
         } else {
-            alert('Web Share API not supported in this browser.');
+            copyToClipboard(url);
         }
+    }
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Clipboard write failed:', err);
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                alert('Link copied to clipboard!');
+            } else {
+                prompt('Copy this link manually:', text);
+            }
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+            prompt('Copy this link manually:', text);
+        }
+        document.body.removeChild(textArea);
     }
     window.shareCountdown = shareCountdown;
 
