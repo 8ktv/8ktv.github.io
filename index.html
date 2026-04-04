@@ -472,6 +472,11 @@
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
 
+    if (!audio || !playPauseBtn || !progressBar || !progressContainer || !currentTimeEl || !durationEl) {
+      console.log("Music player elements missing, skipping initialization.");
+      return;
+    }
+
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
       const sec = Math.floor(seconds % 60);
@@ -543,7 +548,7 @@
     // Refresh count on enter
     initViewCounter();
   });
-  
+
 </script>
 </body>
 </html>
