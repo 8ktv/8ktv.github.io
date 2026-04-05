@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rec Room Shutdown</title>
-    <meta property="og:title" content="Rec Room Shutdown Countdown">
-    <meta property="og:description" content="Tracking the final days of Rec Room until the June 1st, 2026 shutdown. Rec Room is ceasing operations due to severe financial strain and the inability to balance operational costs with its UGC revenue model.">
-    <meta property="og:url" content="https://ais-dev-i5lnius3jz3hei4clo2kce-281162511810.us-west2.run.app">
+    <meta property="og:title" content="Rec Room is Actually Dying...">
+    <meta property="og:description" content="School’s Out Forever. Rec Room shuts down June 1st 2026. Made with pain by Plasma.">
+    <meta property="og:url" content="https://yourdomain.com/recroom-shutdown"> <!-- CHANGE THIS -->
     <meta name="twitter:card" content="summary_large_image">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,61 +27,29 @@
             50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
-        .animate-progress {
-            animation: progress 2s ease-in-out infinite;
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        .animate-tick {
-            animation: tick 0.2s ease-out;
-        }
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
-        .stagger-5 { animation-delay: 0.5s; }
+        .animate-progress { animation: progress 2s ease-in-out infinite; }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        .animate-tick { animation: tick 0.2s ease-out; }
 
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover {
-            transform: translateY(-2px);
-            background-color: #1c1c1f;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
-
-        #countdown span {
-            display: inline-block;
-            transition: transform 0.2s ease-out;
-        }
-
+        .rant { font-style: italic; color: #f59e0b; }
+        .meme-text { font-family: monospace; background: #27272a; padding: 12px; border-left: 4px solid #f59e0b; }
+        .rage-item { background: #18181b; border-left: 3px solid #ef4444; }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
 
 <div class="relative z-10 max-w-2xl mx-auto p-8">
 
-    <div class="fixed top-4 right-4 z-50">
-        <button onclick="toggleDropdown()" class="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-full transition">
-            <i data-lucide="git-commit" class="w-6 h-6 text-orange-400"></i>
-        </button>
-        <div id="commitDropdown" class="hidden absolute right-0 mt-2 w-72 bg-zinc-900 border border-zinc-800 rounded-2xl p-4 shadow-xl">
-            <h2 class="text-lg font-semibold mb-3 text-orange-400">Latest Updates</h2>
-            <div id="commitList" class="space-y-3 text-sm text-zinc-400">
-                <div class="text-center py-4 text-zinc-500">Loading updates...</div>
-            </div>
-        </div>
-    </div>
-
     <div class="text-center mb-12 animate-fade-in-up">
-        <h1 class="text-5xl font-bold tracking-tighter mb-2">School’s Out</h1>
-        <p class="text-zinc-400">Rec Room Final Shutdown</p>
+        <h1 class="text-5xl font-bold tracking-tighter mb-2 text-orange-400">School’s Out... Forever</h1>
+        <p class="text-zinc-400 text-xl">Rec Room shuts down June 1st, 2026. Yeah, it's real this time.</p>
+        <div class="mt-4 text-xs text-zinc-500">Made with pain by Plasma • est. 2026</div>
     </div>
 
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-1 shadow-2xl border border-zinc-800/50" aria-label="Shutdown Countdown">
+    <!-- Countdown -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up shadow-2xl border border-zinc-800/50">
         <div class="text-center mb-6">
-            <p class="text-zinc-500 text-sm mb-2 tracking-widest uppercase">Time Until Shutdown</p>
+            <p class="text-zinc-500 text-sm mb-2 tracking-widest uppercase">Time left until we lose the dumbest best game ever</p>
             <div id="countdown" class="font-mono text-6xl font-bold tabular-nums tracking-tighter text-orange-400 drop-shadow-[0_0_15px_rgba(251,146,60,0.2)]" aria-live="polite">
                 00d 00h 00m 00s
             </div>
@@ -93,116 +61,143 @@
                 </select>
             </div>
         </div>
+
         <div class="flex flex-col items-center gap-3 mb-6">
-            <input type="text" id="customShareMessage"
-                   oninput="updateSharePreview()"
+            <input type="text" id="customShareMessage" oninput="updateSharePreview()"
                    class="w-full max-w-sm bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 text-center transition-all focus:bg-zinc-800"
                    placeholder="Add a personal note to your share...">
             <div id="sharePreview" class="text-[10px] text-zinc-500 italic max-w-sm text-center px-4 opacity-60">
                 Preview: Only 00d 00h 00m 00s left until Rec Room shuts down forever.
             </div>
         </div>
+
         <div class="flex justify-center gap-3">
-            <button onclick="shareTwitter()" aria-label="Share on Twitter" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
+            <button onclick="shareTwitter()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
                 <i data-lucide="send" class="w-5 h-5"></i>
             </button>
-            <button onclick="shareFacebook()" aria-label="Share on Facebook" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
+            <button onclick="shareFacebook()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
                 <i data-lucide="users" class="w-5 h-5"></i>
             </button>
-            <button onclick="shareCountdown()" aria-label="Share via other methods" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
+            <button onclick="shareCountdown()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
                 <i data-lucide="share-2" class="w-5 h-5"></i>
             </button>
         </div>
     </div>
 
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-2 border border-zinc-800/50 shadow-xl">
+    <!-- Stages -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
         <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
             <i data-lucide="activity" class="w-5 h-5"></i>
-            Shutdown Progress
+            How We Got Here (The Slow Death)
         </h2>
         <div id="stagesTracker" class="space-y-4"></div>
     </div>
 
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-3 border border-zinc-800/50 shadow-xl">
+    <!-- Why is this happening -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
         <h2 class="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
-            <i data-lucide="info" class="w-5 h-5"></i>
-            Shutdown Context
+            <i data-lucide="heart-crack" class="w-5 h-5"></i>
+            Why The Hell Is This Happening?
         </h2>
-        <p class="text-zinc-400 text-sm leading-relaxed mb-4">
-            In August 2025, Rec Room announced the layoff of approximately half its staff, citing "business necessity" as the company reached a critical crossroads. Leadership subsequently acknowledged severe financial strain, specifically highlighting the difficulty of balancing the operational costs of running the platform with the payouts required for its User Generated Content (UGC) revenue model. Despite efforts to achieve sustainability, these ongoing financial pressures and the inability to reconcile the platform's cost structure with its revenue model ultimately led to the decision to cease operations.
-        </p>
-        <div class="text-xs text-zinc-500 mb-4">
-            Sources:
-            <a href="https://blog.recroom.com/posts/2025/8/25/rec-room-update-august-2025" class="underline hover:text-orange-400 transition-colors" target="_blank">A hard day at Rec Room (Aug 2025)</a>,
-            <a href="https://blog.recroom.com/posts/2025/8/28/rec-room-finances-and-ugc-revenue" class="underline hover:text-orange-400 transition-colors" target="_blank">Rec Room Finances And UGC Revenue (Aug 2025)</a>
+        <div class="text-zinc-400 text-sm leading-relaxed mb-6">
+            <p class="mb-4">Man... Rec Room hit over 150 million players. We had dorm parties, stupid inventions, Rec Royale chaos, and rooms that somehow became legends. And they're still shutting it down on June 1, 2026.</p>
+
+            <p class="mb-4 rant">The devs basically said: "We never figured out how to make money without bleeding cash." Costs kept winning against the UGC payouts. They laid off half the team back in August 2025 trying to fix it, but it wasn't enough.</p>
+
+            <div class="meme-text mb-4">
+                "Our costs always ended up overwhelming the revenue we brought in." <br>
+                — Official blog (translation: we tried, but money said no)
+            </div>
+
+            <p>Feels weird knowing all those late nights grinding tokens and building dumb shit are about to disappear. A lot of us basically grew up here.</p>
         </div>
-        <button onclick="toggleContext()" class="text-orange-400 text-sm font-medium hover:underline transition-all">Read more about the financial situation</button>
-        <div id="moreContext" class="hidden mt-4 space-y-2 text-zinc-400 text-sm animate-fade-in-up">
-            <p>The platform's reliance on a UGC revenue model created a difficult balancing act. As operational costs scaled, the payout requirements for creators became increasingly unsustainable, leading to a structural deficit that could not be overcome.</p>
-            <a href="https://www.gamesindustry.biz/rec-room-to-shut-down-following-financial-struggles" class="block underline hover:text-orange-400 transition-colors" target="_blank">GamesIndustry.biz: Rec Room to shut down</a>
-            <a href="https://www.theverge.com/2025/8/25/rec-room-layoffs-financial-struggles" class="block underline hover:text-orange-400 transition-colors" target="_blank">The Verge: Rec Room layoffs and financial context</a>
+
+        <button onclick="toggleContext()" class="text-orange-400 text-sm font-medium hover:underline transition-all">Show the full sad story...</button>
+
+        <div id="moreContext" class="hidden mt-6 space-y-4 text-zinc-400 text-sm">
+            <p>They gave us some time at least — data downloads start in May so creators can try saving their rooms. But after June 1? Login gone. Rec.net offline. Everything just... poof.</p>
+            <p class="text-orange-300">Half the Discords are still in denial saying "April Fools right???"</p>
         </div>
     </div>
 
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-4 border border-zinc-800/50 shadow-xl">
+    <!-- Rage Corner (new) -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
+        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+            <i data-lucide="flame" class="w-5 h-5"></i>
+            Rage Corner
+        </h2>
+        <div class="space-y-4 text-sm text-zinc-400">
+            <div class="rage-item p-4 rounded-2xl">
+                Spent like 3 years building one room just for it to vanish forever. Cool.
+            </div>
+            <div class="rage-item p-4 rounded-2xl">
+                That one hat I dropped 4000 tokens on... worth it? Probably not.
+            </div>
+            <div class="rage-item p-4 rounded-2xl">
+                "Just touch grass" they said. Bro I grew up in the dorms.
+            </div>
+        </div>
+    </div>
+
+    <!-- Alternatives -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
         <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
             <i data-lucide="compass" class="w-5 h-5"></i>
-            Rec Room Alternatives
+            Where Do We Go Now?
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <a href="https://vrchat.com/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">VRChat</div>
-                <div class="text-xs text-zinc-400">The main social VR platform</div>
+                <div class="text-xs text-zinc-400 mt-1">Its so retarded, but it hits different</div>
             </a>
             <a href="https://discord.gg/radium-rr" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">Radium</div>
-                <div class="text-xs text-zinc-400">Rec Room FanHosted Servers</div>
+                <div class="text-xs text-zinc-400 mt-1">Fan servers trying to keep the dream alive</div>
             </a>
             <a href="https://resonite.com/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">Resonite</div>
-                <div class="text-xs text-zinc-400">Advanced social VR</div>
+                <div class="text-xs text-zinc-400 mt-1">For the big brains who like nodes n shit</div>
             </a>
             <a href="https://chilloutvr.net/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
                 <div class="font-semibold text-white">ChilloutVR</div>
-                <div class="text-xs text-zinc-400">Social VR experience</div>
+                <div class="text-xs text-zinc-400 mt-1">It exists ig</div>
             </a>
         </div>
     </div>
 
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-5 border border-zinc-800/50 shadow-xl">
+    <!-- FAQ -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
         <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
             <i data-lucide="help-circle" class="w-5 h-5"></i>
-            Frequently Asked Questions
+            FAQ (Real Talk Edition)
         </h2>
         <div class="space-y-6">
             <div>
-                <h3 class="text-white font-medium mb-2">Why is Rec Room shutting down?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Rec Room is ceasing operations due to severe financial strain and the inability to balance operational costs with its UGC revenue model. Despite layoffs and restructuring, the platform's cost structure became unsustainable.</p>
+                <h3 class="text-white font-medium mb-2">Why is Rec Room actually shutting down?</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">They couldn't make the money work. Too expensive to run, UGC payouts were eating them alive, and the VR hype died down. Layoffs didn't save it.</p>
             </div>
             <div>
-                <h3 class="text-white font-medium mb-2">Can I still play until the shutdown?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Yes, servers are expected to remain online until June 1st, 2026. However, some services like the store or certain RecNet features may be phased out as we approach the final date.</p>
+                <h3 class="text-white font-medium mb-2">Can I still play until June 1?</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">Yeah, go wild. Make stupid rooms. Take screenshots. Say goodbye to your favorite spots.</p>
             </div>
             <div>
-                <h3 class="text-white font-medium mb-2">What happens to my purchased items and Tokens?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">All in-game items, currency, and cosmetics will be inaccessible after the final shutdown. There are currently no plans for refunds or transfers to other platforms.</p>
+                <h3 class="text-white font-medium mb-2">What about my items and tokens?</h3>
+                <p class="text-zinc-400 text-sm leading-relaxed">They're gone after shutdown. No refunds. Sorry king.</p>
             </div>
             <div>
                 <h3 class="text-white font-medium mb-2">Is there a way to save my creations?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">A "Data Download" stage is planned for May 2026. Rec Room has stated they intend to provide a way for creators to export their room data and assets before the servers go dark.</p>
-            </div>
-            <div>
-                <h3 class="text-white font-medium mb-2">Are there any community-run alternatives?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Yes, projects like Radium are working on fan-hosted servers and preservation efforts. You can find links to these communities in the 'Alternatives' section above.</p>
+                <p class="text-zinc-400 text-sm leading-relaxed">Data downloads start in May. Export what you can before everything goes dark.</p>
             </div>
         </div>
     </div>
 
-    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up stagger-5 border border-zinc-800/50 shadow-xl">
+    <!-- Feedback -->
+    <div class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
         <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
             <i data-lucide="message-square" class="w-5 h-5"></i>
-            Share Your Thoughts
+            Yell Into The Void (Feedback)
         </h2>
+        <p class="text-xs text-zinc-500 mb-4">I'll probably read these and cry/laugh. Or just forward them to nobody.</p>
         <form id="feedbackForm" class="space-y-4">
             <div class="flex items-center gap-4">
                 <div id="avatarPreview" class="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700/50 shadow-inner">
@@ -212,12 +207,13 @@
             </div>
             <textarea id="feedbackText" required placeholder="What are your thoughts on the shutdown?" class="w-full bg-zinc-800/50 rounded-2xl p-4 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 h-32 transition-all focus:bg-zinc-800 border border-zinc-700/50"></textarea>
             <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] active:scale-[0.98]">
-                SUBMIT FEEDBACK
+                SEND MY RANT
             </button>
         </form>
         <div id="feedbackResponse" class="hidden mt-4 text-center text-emerald-400 animate-fade-in-up">Thank you for your feedback!</div>
     </div>
 
+    <!-- Confirm Modal -->
     <div id="confirmModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
         <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 max-w-sm w-full text-center">
             <h2 class="text-xl font-semibold mb-4 text-orange-400">Confirm Submission</h2>
@@ -229,58 +225,48 @@
         </div>
     </div>
 
+    <!-- Simplified RecNet Status -->
     <div class="mb-6 flex items-center justify-between">
-        <h2 class="text-2xl font-semibold">Live RecNet Status</h2>
+        <h2 class="text-2xl font-semibold">RecNet Death Watch</h2>
         <button onclick="pingAll()" class="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 px-6 py-2 rounded-2xl text-sm font-medium">
             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
             REFRESH
         </button>
     </div>
-
     <div id="serverList" class="space-y-3 mb-8"></div>
+    <div id="pingLog" class="bg-zinc-900 rounded-3xl p-6 h-64 overflow-auto text-sm font-mono text-zinc-400"></div>
 
-    <div id="pingLog" class="bg-zinc-900 rounded-3xl p-6 h-80 overflow-auto text-sm font-mono text-zinc-400"></div>
+    <div class="text-center text-xs text-zinc-500 mt-12">
+        Not affiliated with Rec Room. Just a dude who wasted too many hours here.<br>
+        plasma was here • 2026
+    </div>
 </div>
 
 <div id="audio" class="hidden"></div>
 
 <script>
     const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00');
+
     const stages = [
-        {
-            name: "Announcement",
-            date: new Date('2025-08-25'),
-            description: "Rec Room officially announces the shutdown due to financial sustainability issues."
-        },
-        {
-            name: "Transition",
-            date: new Date('2026-04-01'),
-            description: "In-game store closes and Token purchases are disabled. Final event season begins."
-        },
-        {
-            name: "Data Download",
-            date: new Date('2026-05-01'),
-            description: "Creators can begin exporting room data and assets. Final server maintenance check."
-        },
-        {
-            name: "Shutdown",
-            date: SHUTDOWN_DATE,
-            description: "Final server shutdown and end of all platform services. RecNet goes offline."
-        }
+        { name: "The Big Layoff", date: new Date('2025-08-25'), description: "Half the team got cut. We all pretended it was fine." },
+        { name: "Quiet Panic", date: new Date('2026-04-01'), description: "Store starts closing. Everyone realizes it's real." },
+        { name: "The Great Backup", date: new Date('2026-05-01'), description: "Creators scrambling to download their rooms before they vanish." },
+        { name: "The End", date: SHUTDOWN_DATE, description: "Servers go dark. RecNet dies. We all touch grass." }
     ];
+
     lucide.createIcons();
-    document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/HJl-i58SuW4?autoplay=1&loop=1&playlist=HJl-i58SuW4" frameborder="0" allow="autoplay"></iframe>`;
+
+    // Removed YouTube autoplay - add your own audio file here if you want
+    // document.getElementById('audio').innerHTML = `...`;
+
     const baseTimezones = [{ label: "Auto (Local)", value: "auto" }, { label: "UTC", value: "UTC" }];
     let selectedTimezone = localStorage.getItem('selectedTimezone') || 'auto';
 
     function initTimezoneSelector() {
         const selector = document.getElementById('tzSelector');
         let allTz = [];
-        try {
-            allTz = Intl.supportedValuesOf('timeZone');
-        } catch (e) {
-            allTz = ["America/Los_Angeles", "America/Denver", "America/Chicago", "America/New_York", "Europe/London", "Europe/Berlin", "Asia/Tokyo", "Australia/Sydney"];
-        }
+        try { allTz = Intl.supportedValuesOf('timeZone'); }
+        catch (e) { allTz = ["America/Los_Angeles", "America/Chicago", "America/New_York", "Europe/London"]; }
 
         const options = [...baseTimezones, ...allTz.map(tz => ({ label: tz.replace(/_/g, ' '), value: tz }))];
         selector.innerHTML = options.map(tz => `<option value="${tz.value}" ${selectedTimezone === tz.value ? 'selected' : ''}>${tz.label}</option>`).join('');
@@ -295,19 +281,18 @@
     const servers = [
         { name: "ns.rec.net", url: "https://ns.rec.net/", location: "US-East" },
         { name: "rec.net", url: "https://rec.net/", location: "US-West" },
-        { name: "api.rec.net", url: "https://api.rec.net/", location: "US-East" },
-        { name: "auth.rec.net", url: "https://auth.rec.net/", location: "US-West" }
+        { name: "api.rec.net", url: "https://api.rec.net/", location: "US-East" }
     ];
     let logs = [];
 
     function addLog(msg, isError = false) {
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         logs.unshift({ time, msg, isError });
-        if (logs.length > 15) logs.pop();
+        if (logs.length > 10) logs.pop();
 
         document.getElementById('pingLog').innerHTML = logs.map(l => `
             <div class="flex gap-4 ${l.isError ? 'text-red-400' : 'text-emerald-400'}">
-                <span class="text-zinc-500 w-20">${l.time}</span>
+                <span class="text-zinc-500 w-16">${l.time}</span>
                 <span>${l.msg}</span>
             </div>
         `).join('');
@@ -315,23 +300,20 @@
 
     async function pingServer(s) {
         try {
-            const ctrl = new AbortController();
-            const timeout = setTimeout(() => ctrl.abort(), 7000);
             const start = Date.now();
-            await fetch(s.url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal });
-            clearTimeout(timeout);
+            await fetch(s.url, { method: 'HEAD', mode: 'no-cors', signal: AbortSignal.timeout(5000) });
             const ms = Date.now() - start;
-            addLog(`${s.name} responded (${ms}ms)`);
+            addLog(`${s.name} still breathing (${ms}ms)`);
             return { status: 'ONLINE', message: `✅ ${ms}ms` };
         } catch (e) {
-            addLog(`${s.name} unreachable`, true);
-            return { status: 'OFFLINE', message: `❌ ${e.name === 'AbortError' ? 'Timeout' : 'Refused'}` };
+            addLog(`${s.name} is already dead`, true);
+            return { status: 'OFFLINE', message: `❌ unreachable` };
         }
     }
 
     async function pingAll() {
         const container = document.getElementById('serverList');
-        container.innerHTML = `<div class="text-center py-8 text-zinc-500">Checking RecNet...</div>`;
+        container.innerHTML = `<div class="text-center py-6 text-zinc-500">Checking if RecNet is still alive...</div>`;
 
         for (let s of servers) {
             const result = await pingServer(s);
@@ -355,16 +337,8 @@
         const countdownEl = document.getElementById('countdown');
 
         if (diff <= 0) {
-            countdownEl.innerHTML = `<span class="text-red-600 font-bold animate-bounce">SHUTDOWN COMPLETE</span>`;
-            const targetDateEl = document.getElementById('targetDate');
-            if (targetDateEl) targetDateEl.textContent = "June 1, 2026 • 12:00 PDT";
+            countdownEl.innerHTML = `<span class="text-red-600 font-bold">SHUTDOWN COMPLETE</span>`;
             return;
-        }
-
-        if (diff < 7 * 24 * 60 * 60 * 1000) {
-            countdownEl.classList.add('animate-pulse', 'text-orange-500');
-        } else {
-            countdownEl.classList.remove('animate-pulse', 'text-orange-500');
         }
 
         const days = Math.floor(diff / 86400000);
@@ -384,77 +358,50 @@
 
         const displayTz = selectedTimezone === 'auto' ? Intl.DateTimeFormat().resolvedOptions().timeZone : selectedTimezone;
         try {
-            const formattedTarget = new Intl.DateTimeFormat('en-US', {
-                month: 'long', day: 'numeric', year: 'numeric',
-                hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
-                timeZone: displayTz
-            }).format(SHUTDOWN_DATE);
-            document.getElementById('targetDate').textContent = `Shutdown: ${formattedTarget}`;
+            const formatted = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short', timeZone: displayTz }).format(SHUTDOWN_DATE);
+            document.getElementById('targetDate').textContent = `Shutdown: ${formatted}`;
         } catch (e) {
             document.getElementById('targetDate').textContent = `Shutdown: June 1, 2026 (PDT)`;
         }
     }
 
+    // Avatar upload
     document.getElementById('avatarUpload').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('avatarPreview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+            reader.onload = (ev) => {
+                document.getElementById('avatarPreview').innerHTML = `<img src="${ev.target.result}" class="w-full h-full object-cover">`;
             };
             reader.readAsDataURL(file);
         }
     });
 
+    // Feedback form
     const feedbackForm = document.getElementById('feedbackForm');
     feedbackForm.addEventListener('submit', (e) => {
         e.preventDefault();
         document.getElementById('confirmModal').classList.remove('hidden');
     });
 
-    function closeConfirmModal() {
-        document.getElementById('confirmModal').classList.add('hidden');
-    }
-
+    function closeConfirmModal() { document.getElementById('confirmModal').classList.add('hidden'); }
     function confirmFeedback() {
         const text = document.getElementById('feedbackText').value;
-        window.location.href = `mailto:plasma8k@reborn.com?subject=Feedback&body=${encodeURIComponent(text)}`;
+        window.location.href = `mailto:plasma8k@reborn.com?subject=Rec Room Rant&body=${encodeURIComponent(text)}`;
         closeConfirmModal();
         feedbackForm.classList.add('hidden');
         document.getElementById('feedbackResponse').classList.remove('hidden');
-    }
-
-    function toggleDropdown() {
-        document.getElementById('commitDropdown').classList.toggle('hidden');
     }
 
     function toggleContext() {
         document.getElementById('moreContext').classList.toggle('hidden');
     }
 
-    async function fetchCommits() {
-        const container = document.getElementById('commitList');
-        try {
-            const response = await fetch('https://api.github.com/repos/8ktv/8ktv.github.io/commits?per_page=5');
-            if (!response.ok) throw new Error();
-            const commits = await response.json();
-            container.innerHTML = commits.map(c => `
-                <div class="border-b border-zinc-800 pb-2 last:border-0 last:pb-0">
-                    <div class="font-medium text-zinc-200">${c.commit.message.split('\n')[0]}</div>
-                    <div class="text-xs text-zinc-500 mt-1">${c.commit.author.name} • ${new Date(c.commit.author.date).toLocaleDateString()}</div>
-                </div>
-            `).join('');
-        } catch (err) {
-            container.innerHTML = '<div class="text-red-400">Failed to load updates.</div>';
-        }
-    }
-    fetchCommits();
-
     function getShareContent() {
         const countdown = document.getElementById('countdown').textContent.trim();
         const customNote = document.getElementById('customShareMessage').value.trim();
-        const tags = "#recroom #recroomshutdown #recnet";
-        const text = customNote ? `${customNote} Only ${countdown} left until Rec Room shuts down forever. ${tags}` : `Only ${countdown} left until Rec Room shuts down forever. ${tags}`;
+        const tags = "#recroom #recroomshutdown";
+        const text = customNote ? `${customNote} Only ${countdown} left. ${tags}` : `Only ${countdown} left until Rec Room shuts down forever. ${tags}`;
         return { text, url: window.location.href };
     }
 
@@ -466,39 +413,13 @@
         const { text, url } = getShareContent();
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
     }
-
     function shareFacebook() {
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
     }
-
     function shareCountdown() {
         const { text, url } = getShareContent();
-        if (navigator.share) {
-            navigator.share({ title: 'Rec Room Shutdown', text, url }).catch(() => copyToClipboard(url));
-        } else {
-            copyToClipboard(url);
-        }
-    }
-
-    function copyToClipboard(text) {
-        if (navigator.clipboard?.writeText) {
-            navigator.clipboard.writeText(text).then(() => alert('Link copied!')).catch(() => fallbackCopy(text));
-        } else {
-            fallbackCopy(text);
-        }
-    }
-
-    function fallbackCopy(text) {
-        const el = document.createElement("textarea");
-        el.value = text;
-        document.body.appendChild(el);
-        el.select();
-        try {
-            document.execCommand('copy') ? alert('Link copied!') : prompt('Copy manually:', text);
-        } catch (err) {
-            prompt('Copy manually:', text);
-        }
-        document.body.removeChild(el);
+        if (navigator.share) navigator.share({ title: 'Rec Room Shutdown', text, url });
+        else alert('Copy the link above and share it yourself lol');
     }
 
     function updateStages() {
@@ -507,14 +428,10 @@
             const isPast = now >= stage.date;
             const nextStage = stages[index + 1];
             let progress = 0;
-            if (nextStage) {
-                if (now >= nextStage.date) {
-                    progress = 100;
-                } else if (now >= stage.date) {
-                    const total = nextStage.date - stage.date;
-                    const elapsed = now - stage.date;
-                    progress = (elapsed / total) * 100;
-                }
+            if (nextStage && now >= stage.date) {
+                const total = nextStage.date - stage.date;
+                const elapsed = now - stage.date;
+                progress = Math.min(100, (elapsed / total) * 100);
             }
             const isCurrent = isPast && nextStage && now < nextStage.date;
 
@@ -539,29 +456,26 @@
         lucide.createIcons();
     }
 
-    updateStages();
-
+    // Init everything
     initTimezoneSelector();
+    updateStages();
+    updateCountdown();
+    updateSharePreview();
     setInterval(() => {
         updateCountdown();
         updateSharePreview();
         updateStages();
     }, 1000);
-    updateCountdown();
-    updateSharePreview();
-    updateStages();
 
-    setTimeout(() => {
-        pingAll();
-        setInterval(pingAll, 20000);
-    }, 600);
+    // Initial ping
+    setTimeout(() => { pingAll(); }, 800);
 
+    // Expose functions to window
     window.shareTwitter = shareTwitter;
     window.shareFacebook = shareFacebook;
     window.shareCountdown = shareCountdown;
     window.closeConfirmModal = closeConfirmModal;
     window.confirmFeedback = confirmFeedback;
-    window.toggleDropdown = toggleDropdown;
     window.toggleContext = toggleContext;
     window.changeTimezone = changeTimezone;
     window.pingAll = pingAll;
