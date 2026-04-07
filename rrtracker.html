@@ -385,12 +385,34 @@
 
     lucide.createIcons();
 
+    let currentVideoId = "HJl-i58SuW4";
     function playAudio(videoId) {
+        if (currentVideoId === videoId) return;
+        currentVideoId = videoId;
         document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}" frameborder="0" allow="autoplay"></iframe>`;
     }
 
-    // Removed YouTube autoplay - add your own audio file here if you want
-    document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/HJl-i58SuW4?autoplay=1&loop=1&playlist=HJl-i58SuW4" frameborder="0" allow="autoplay"></iframe>`;
+    // Default audio
+    document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${currentVideoId}?autoplay=1&loop=1&playlist=${currentVideoId}" frameborder="0" allow="autoplay"></iframe>`;
+
+    let lastActiveStageIndex = -1;
+    function checkAutomaticAudio() {
+        const now = new Date();
+        let currentActiveIndex = -1;
+        for (let i = stages.length - 1; i >= 0; i--) {
+            if (now >= stages[i].date) {
+                currentActiveIndex = i;
+                break;
+            }
+        }
+
+        if (currentActiveIndex !== lastActiveStageIndex) {
+            if (currentActiveIndex >= 0 && stages[currentActiveIndex].videoId) {
+                playAudio(stages[currentActiveIndex].videoId);
+            }
+            lastActiveStageIndex = currentActiveIndex;
+        }
+    }
 
 
     const baseTimezones = [{ label: "Auto (Local)", value: "auto" }, { label: "UTC", value: "UTC" }];
@@ -584,10 +606,12 @@
     updateStages();
     updateCountdown();
     updateSharePreview();
+    checkAutomaticAudio();
     setInterval(() => {
         updateCountdown();
         updateSharePreview();
         updateStages();
+        checkAutomaticAudio();
     }, 1000);
 
     // Initial ping
