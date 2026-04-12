@@ -34,547 +34,577 @@
         .rant { font-style: italic; color: #f59e0b; }
         .meme-text { font-family: monospace; background: #27272a; padding: 12px; border-left: 4px solid #f59e0b; }
         .rage-item { background: #18181b; border-left: 3px solid #ef4444; }
+
+        @keyframes introSequence {
+            0% { opacity: 0; transform: scale(0.8) translateY(10px); filter: blur(10px); }
+            15% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px); }
+            85% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px); }
+            100% { opacity: 0; transform: scale(1.1) translateY(-10px); filter: blur(10px); }
+        }
+        @keyframes introSequenceLong {
+            0% { opacity: 0; transform: scale(0.8) translateY(10px); filter: blur(10px); }
+            10% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px); }
+            90% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px); }
+            100% { opacity: 0; transform: scale(1.1) translateY(-10px); filter: blur(10px); }
+        }
+        .intro-word {
+            opacity: 0;
+            position: absolute;
+            animation: introSequence 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .intro-word-1 { animation-delay: 0.5s; }
+        .intro-word-2 { animation-delay: 2.0s; }
+        .intro-word-4 { animation-delay: 3.5s; color: #f97316; text-shadow: 0 0 40px rgba(249,115,22,0.6); }
+
+        .glass-card {
+            background: rgba(24, 24, 27, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .bg-gradient-radial {
+            background-image: radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.15) 0%, rgba(9, 9, 11, 1) 70%);
+        }
+
+        .stars-bg {
+            background-image:
+                    radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                    radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                    radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                    radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                    radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                    radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: moveStars 60s linear infinite;
+        }
+        .stars-bg::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                    radial-gradient(3px 3px at 50px 50px, #fff, rgba(0,0,0,0)),
+                    radial-gradient(3px 3px at 100px 150px, #fff, rgba(0,0,0,0)),
+                    radial-gradient(3px 3px at 150px 20px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 300px 300px;
+            animation: moveStars 40s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes moveStars {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 500px; }
+        }
+
+        @keyframes firework {
+            0% { transform: translate(var(--x), var(--initialY)); width: var(--initialSize); opacity: 1; }
+            50% { width: 0.5vmin; opacity: 1; }
+            100% { width: var(--finalSize); opacity: 0; }
+        }
+
+        .firework,
+        .firework::before,
+        .firework::after
+        {
+            --initialSize: 0.5vmin;
+            --finalSize: 45vmin;
+            --particleSize: 0.4vmin;
+            --color1: yellow;
+            --color2: khaki;
+            --color3: white;
+            --color4: lime;
+            --color5: gold;
+            --color6: mediumseagreen;
+            --y: -30vmin;
+            --x: -50%;
+            --initialY: 60vmin;
+            content: "";
+            animation: firework 2.5s infinite ease-out;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, var(--y));
+            width: var(--initialSize);
+            aspect-ratio: 1;
+            background:
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 50% 0%,
+                    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 100% 50%,
+                    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 50% 100%,
+                    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 0% 50%,
+                    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 80% 90%,
+                    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 95% 90%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 90% 70%,
+                    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 100% 60%,
+                    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 55% 80%,
+                    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 70% 77%,
+                    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 22% 90%,
+                    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 45% 90%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 33% 70%,
+                    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 10% 60%,
+                    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 31% 80%,
+                    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 28% 77%,
+                    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 13% 72%,
+                    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 80% 10%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 95% 14%,
+                    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 90% 23%,
+                    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 100% 43%,
+                    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 85% 27%,
+                    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 77% 37%,
+                    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 60% 7%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 22% 14%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 45% 20%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 33% 34%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 10% 29%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 31% 37%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 28% 7%,
+                    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 13% 42%;
+            background-size: var(--initialSize) var(--initialSize);
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 0 8px var(--color1)) drop-shadow(0 0 15px var(--color2));
+        }
+
+        .firework::before {
+            --x: -50%;
+            --y: -50%;
+            --initialY: -50%;
+            transform: translate(-50%, -50%) rotate(40deg) scale(1.3) rotateY(40deg);
+        }
+
+        .firework::after {
+            --x: -50%;
+            --y: -50%;
+            --initialY: -50%;
+            transform: translate(-50%, -50%) rotate(170deg) scale(1.15) rotateY(-30deg);
+        }
+
+        .firework:nth-child(1) {
+            --x: -20vmin;
+            --y: -40vmin;
+            left: 20%; top: 30%;
+            animation-delay: 0.2s;
+        }
+
+        .firework:nth-child(2) {
+            --x: 30vmin;
+            --y: -30vmin;
+            left: 80%; top: 40%;
+            animation-delay: 0.7s;
+        }
+
+        .firework:nth-child(2),
+        .firework:nth-child(2)::before,
+        .firework:nth-child(2)::after {
+            --color1: pink;
+            --color2: violet;
+            --color3: fuchsia;
+            --color4: orchid;
+            --color5: plum;
+            --color6: lavender;
+            --finalSize: 40vmin;
+        }
+
+        .firework:nth-child(3) {
+            --x: -30vmin;
+            --y: -50vmin;
+            left: 50%; top: 20%;
+            animation-delay: 1.2s;
+        }
+
+        .firework:nth-child(3),
+        .firework:nth-child(3)::before,
+        .firework:nth-child(3)::after {
+            --color1: cyan;
+            --color2: lightcyan;
+            --color3: lightblue;
+            --color4: PaleTurquoise;
+            --color5: SkyBlue;
+            --color6: lavender;
+            --finalSize: 35vmin;
+        }
+
+        .firework:nth-child(4) {
+            --x: 10vmin;
+            --y: -20vmin;
+            left: 30%; top: 50%;
+            animation-delay: 0.4s;
+        }
+
+        .firework:nth-child(4),
+        .firework:nth-child(4)::before,
+        .firework:nth-child(4)::after {
+            --color1: #ff3366;
+            --color2: #ff6699;
+            --color3: #ff99cc;
+            --color4: #ffccff;
+            --color5: #ff0066;
+            --color6: #ff99ff;
+            --finalSize: 50vmin;
+        }
+
+        .firework:nth-child(5) {
+            --x: -15vmin;
+            --y: -35vmin;
+            left: 70%; top: 60%;
+            animation-delay: 0.9s;
+        }
+
+        .firework:nth-child(5),
+        .firework:nth-child(5)::before,
+        .firework:nth-child(5)::after {
+            --color1: #ff9900;
+            --color2: #ffcc00;
+            --color3: #ffff00;
+            --color4: #ff6600;
+            --color5: #ff3300;
+            --color6: #ffcc66;
+            --finalSize: 45vmin;
+        }
     </style>
 </head>
-<body class="bg-zinc-950 text-white min-h-screen">
+<body class="bg-zinc-950 text-white min-h-screen bg-gradient-radial selection:bg-orange-500/30 relative">
 
-<div class="relative z-10 max-w-2xl mx-auto p-8">
+<div id="defaultBg" class="fixed inset-0 z-[-2] bg-gradient-radial transition-opacity duration-[3000ms]"></div>
+<div id="starsBg" class="fixed inset-0 z-[-2] bg-black opacity-0 transition-opacity duration-[3000ms]">
+    <div class="absolute inset-0 stars-bg"></div>
+</div>
+<div id="fireworksBg" class="fixed inset-0 z-[-1] opacity-0 transition-opacity duration-[3000ms] pointer-events-none">
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+    <div class="firework"></div>
+</div>
 
-    <div id="headerSection" class="text-center mb-12 animate-fade-in-up">
-        <h1 class="text-5xl font-bold tracking-tighter mb-2 text-orange-400">School’s Out... Forever</h1>
-        <p class="text-zinc-400 text-xl">Rec Room shuts down June 1st, 2026. Yeah, it's real this time.</p>
-        <div class="mt-4 text-xs text-zinc-500">Made with pain by Plasma • est. 2026</div>
-    </div>
-
-    <!-- Countdown -->
-    <div id="countdownSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up shadow-2xl border border-zinc-800/50">
-        <div class="text-center mb-6">
-            <p class="text-zinc-500 text-sm mb-2 tracking-widest uppercase">Time left until we lose the dumbest best game ever</p>
-            <div id="countdown" class="font-mono text-6xl font-bold tabular-nums tracking-tighter text-orange-400 drop-shadow-[0_0_15px_rgba(251,146,60,0.2)]" aria-live="polite">
-                00d 00h 00m 00s
-            </div>
-            <p class="text-xs text-zinc-400 mt-3 font-medium opacity-80" id="targetDate"></p>
-
-            <div class="mt-6 pt-6 border-t border-zinc-800/50">
-                <label for="tzSelector" class="text-[10px] text-zinc-500 block mb-2 uppercase tracking-widest">Display Timezone</label>
-                <select id="tzSelector" onchange="changeTimezone(this.value)" class="bg-zinc-800/50 text-zinc-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-orange-500 w-full max-w-[240px] mx-auto block appearance-none cursor-pointer hover:bg-zinc-800 transition-colors border border-zinc-700/50">
-                </select>
-            </div>
-        </div>
-
-        <div class="flex flex-col items-center gap-3 mb-6">
-            <input type="text" id="customShareMessage" oninput="updateSharePreview()"
-                   class="w-full max-w-sm bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 text-center transition-all focus:bg-zinc-800"
-                   placeholder="Add a personal note to your share...">
-            <div id="sharePreview" class="text-[10px] text-zinc-500 italic max-w-sm text-center px-4 opacity-60">
-                Preview: Only 00d 00h 00m 00s left until Rec Room shuts down forever.
-            </div>
-        </div>
-
-        <div class="flex justify-center gap-3">
-            <button onclick="shareTwitter()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
-                <i data-lucide="send" class="w-5 h-5"></i>
-            </button>
-            <button onclick="shareFacebook()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
-                <i data-lucide="users" class="w-5 h-5"></i>
-            </button>
-            <button onclick="shareCountdown()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
-                <i data-lucide="share-2" class="w-5 h-5"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Stages -->
-    <div id="stagesSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
-            <i data-lucide="activity" class="w-5 h-5"></i>
-            How We Got Here (The Slow Death)
-        </h2>
-        <div id="stagesTracker" class="space-y-4"></div>
-    </div>
-
-    <!-- Why is this happening -->
-    <div id="whySection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
-        <h2 class="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
-            <i data-lucide="heart-crack" class="w-5 h-5"></i>
-            Why The Hell Is This Happening?
-        </h2>
-        <div class="text-zinc-400 text-sm leading-relaxed mb-6">
-            <p class="mb-4">Man... Rec Room hit over 150 million players. We had dorm parties, stupid inventions, Rec Royale chaos, and rooms that somehow became legends. And they're still shutting it down on June 1, 2026.</p>
-
-            <p class="mb-4 rant">The devs basically said: "We never figured out how to make money without bleeding cash." Costs kept winning against the UGC payouts. They laid off half the team back in August 2025 trying to fix it, but it wasn't enough.</p>
-
-            <div class="meme-text mb-4">
-                "Our costs always ended up overwhelming the revenue we brought in." <br>
-                — Official blog (translation: we tried, but money said no)
-            </div>
-
-            <p>Feels weird knowing all those late nights grinding tokens and building dumb shit are about to disappear. A lot of us basically grew up here.</p>
-        </div>
-
-        <button onclick="toggleContext()" class="text-orange-400 text-sm font-medium hover:underline transition-all">Show the full sad story...</button>
-
-        <div id="moreContext" class="hidden mt-6 space-y-4 text-zinc-400 text-sm">
-            <p>They gave us some time at least — data downloads start in May so creators can try saving their rooms. But after June 1? Login gone. Rec.net offline. Everything just... poof.</p>
-            <p class="text-orange-300">Half the Discords are still in denial saying "April Fools right???"</p>
-        </div>
-    </div>
-
-    <!-- Rage Corner (new) -->
-    <div id="rageSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
-            <i data-lucide="flame" class="w-5 h-5"></i>
-            Rage Corner
-        </h2>
-        <div class="space-y-4 text-sm text-zinc-400">
-            <div class="rage-item p-4 rounded-2xl">
-                Spent like 3 years building one room just for it to vanish forever. Cool.
-            </div>
-            <div class="rage-item p-4 rounded-2xl">
-                That one hat I dropped 4000 tokens on... worth it? Probably not.
-            </div>
-            <div class="rage-item p-4 rounded-2xl">
-                "Just touch grass" they said. Bro I grew up in the dorms.
-            </div>
-        </div>
-    </div>
-
-    <!-- Farewell Message (Hidden by default) -->
-    <div id="farewellSection" class="hidden text-center mb-12 animate-fade-in-up">
-        <h1 class="text-4xl sm:text-5xl font-bold tracking-tighter mb-4 text-orange-400">Thank you Rec Room. For Everything. Rest easy.</h1>
-    </div>
-
-    <!-- Community Legends -->
-    <div id="legendsSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
-            <i data-lucide="award" class="w-5 h-5"></i>
-            Community Legends
-        </h2>
-        <div class="space-y-4 text-sm text-zinc-400">
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://avatars.githubusercontent.com/u/259215128?v=4" alt="Plasma" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">Plasma (The Creator)</h3>
-                    <p class="mb-3 leading-relaxed">HOLY SHIT PLASMA IS ALIVE ON REC ROOM AFTER 600+ DAYS??? The creator of this very site has returned from the dead just in time to watch it all burn.</p>
-                    <blockquote class="border-l-2 border-zinc-700 pl-4 my-4 italic text-zinc-500 text-xs leading-relaxed">
-                        "I really logged into steam, hopped into rec room, and got everything out of my dorm just to get off afterwards and go back to bed lol, thx recroom."
-                    </blockquote>
-                    <div class="mb-4">
-                        <img src="https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/3dd0198096f34ff49eff7d6b22fc37c3.jpg" alt="Plasma Report Card" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://rec.net/user/Plasma8k" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/kCqnic1u3kzumts_aLvX5y9w6M_pswkTVSCEmH-8BpjC-1C7QCMLHBKXfPe9aEyq9o5Vfk1f6jc=s160-c-k-c0x00ffffff-no-rj" alt="Runeskate" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">Runeskate (The Linux Savior)</h3>
-                    <p class="mb-3 leading-relaxed">Massive shoutout to Runeskate, the trans lady who actually figured out how to run Rec Room on Linux and made a full tutorial for it. She even followed it up with a tutorial on getting Radium working on Linux. Such an absolute win for the community. Legends never die.</p>
-                    <blockquote class="border-l-2 border-zinc-700 pl-4 my-4 italic text-zinc-500 text-xs leading-relaxed">
-                        "I wish i could of made this video earilier, but.. you know me i.. i barely play this game so.. i forgot, its been ages man i-- i dont really give a danm about this game but im sad that this game is going.. and i really feel bad cuz i really use to hate this game very much because of its 'community', but i realized how many friends i had on there. and it was a wild journey man, it was fun."
-                    </blockquote>
-                    <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <img src="https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/60661626c2c24ddc971c6707472baaa7.jpg" alt="Runeskate Report Card" class="rounded-xl border border-zinc-700/50 w-full h-auto" referrerpolicy="no-referrer">
-                            <p class="text-xs text-zinc-500 mt-2 italic">"time to get a job in vrchat"</p>
-                        </div>
-                        <div>
-                            <img src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/main/images/RRarchive/2f6wbeoe8pkdoub08wevwvjkz.jpg" alt="Runeskate Second Report Card" class="rounded-xl border border-zinc-700/50 w-full h-auto" referrerpolicy="no-referrer">
-                        </div>
-                    </div>
-                    <p class="mb-3 leading-relaxed">She also met RealPedro (The creator of the yearbook)!</p>
-                    <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <img src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/bfc86983b318d0c0d352fb009bf03fa7c07b0131/images/RRarchive/aaincshldc6akuwn8h0lrkfjd.jpg" alt="Runeskate's POV" class="rounded-xl border border-zinc-700/50 w-full h-auto" referrerpolicy="no-referrer">
-                            <p class="text-xs text-zinc-500 mt-2 italic">Runeskate's POV</p>
-                        </div>
-                        <div>
-                            <img src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/bfc86983b318d0c0d352fb009bf03fa7c07b0131/images/RRarchive/2lbcy1hzslg8o54ce58t5qpy0.jpg" alt="RealPedro's POV" class="rounded-xl border border-zinc-700/50 w-full h-auto" referrerpolicy="no-referrer">
-                            <p class="text-xs text-zinc-500 mt-2 italic">RealPedro's POV</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/watch?v=Icvttk3XM4A" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> RR Linux Tutorial
-                        </a>
-                        <a href="https://www.youtube.com/watch?v=WSbuLvQzShM" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Radium Linux Tutorial
-                        </a>
-                        <a href="https://www.youtube.com/channel/UCa6Iw5ZSvEFrTnuqus8ysUg" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                        <a href="https://rec.net/user/runeskate" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://img.rec.net/ew8yqmtssqvduckl4wpdd4k9p.jpg?width=192&cropSquare=true" alt="RealPedro" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">RealPedro (The Yearbook Creator)</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to RealPedro for creating the Rec Room Yearbook, giving everyone a place to leave their final mark before the servers go dark.</p>
-                    <div class="mb-4">
-                        <img src="https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/c3f7ddeade2d4e45a27bbdcbdda02f30.jpg" alt="RealPedro Report Card" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://rec.net/user/ReaIPedro" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/q46okfgN32MqQeiWiGSzk_oq6Xj2XmKMsk91JnGfFdikFI8Rk_cIKxDSEvcFUCKLgFiQJl-dKG8=s160-c-k-c0x00ffffff-no-rj" alt="slat." class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div>
-                    <h3 class="text-white font-medium mb-2 text-base">slat.</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to slat. for doing things. You know what you did. He also played Rec Room with Hairymanlegs. W. The community appreciates it.</p>
-                    <div class="mb-4">
-                        <img src="https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/5e5515921b8644a5a31095e74797c194.png" alt="slat. Report Card" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/watch?v=xnFZHOOjIy4" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Playing w/ Hairymanlegs
-                        </a>
-                        <a href="https://www.youtube.com/@slat." target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                        <a href="https://rec.net/user/slat" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/iPdl3zSOSpje93gYmIll9MQJTU3iaAi2xZ_NQVn5zc23sSYUerKzCotNxXj898FklZ-dOGaSXw=s160-c-k-c0x00ffffff-no-rj" alt="GoblenoRR" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div>
-                    <h3 class="text-white font-medium mb-2 text-base">Alex (GoblenoRR)</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to Alex for somehow getting a recording of Amy Lee (the voice actor for Coach) talking about the end of Rec Room. Truly legendary.</p>
-                    <div class="mb-4">
-                        <img src="https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/491cd9b97d3a4232abf0be1febe0f894.png" alt="Alex Report Card" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/watch?v=cx5j8FbBv2E" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> His Message
-                        </a>
-                        <a href="https://www.youtube.com/watch?v=BXyewuQIeZc" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Coach's Message
-                        </a>
-                        <a href="https://www.youtube.com/@GoblenoRR" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                        <a href="https://rec.net/user/Gobleno" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/ieK0j0sDqI_AHDwYxZ2Wly07-R7PG4S3YMtxOWCEe1QH-I0FgimJ92tlydQa6M78YD0VaywCaw=s160-c-k-c0x00ffffff-no-rj" alt="IShowSpeed" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div>
-                    <h3 class="text-white font-medium mb-2 text-base">IShowSpeed</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to Speed for even noticing that it's shutting down. He used to make content for this 6 years ago.</p>
-                    <blockquote class="border-l-2 border-zinc-700 pl-4 my-4 italic text-zinc-500 text-xs leading-relaxed">
-                        "I used to make content on recroom bro! danm... this game kinda nostalgic for me."
-                    </blockquote>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/channel/UCWsDFcIhY2DBi3GB5uykGXA" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/LxhoiGFeB78iDYjRQkPNcJdMHeaNZ6QZQcAnrbXpjuT2UttM30NISins5FFLkeOcbUYjiDiz=s160-c-k-c0x00ffffff-no-rj" alt="Tarapeutic" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">Tarapeutic</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to this nice lady right here for even INTERVIEWING with coach, and she even interviewed the CREATOR of Rec Room (insane work). It has been a journey.</p>
-                    <div class="mb-4">
-                        <img src="https://yt3.ggpht.com/PWfJDwbhpBkm8B6w3nebwrIl_mFBO1YMwhQkUrx0sbr8v_FBThNmLYFZCHzpEorBs3GwjB3FJVF2=s640-rw-nd-v1" alt="Report Card" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                        <p class="text-xs text-zinc-500 mt-2 italic">"It has been a journey. ❤️"</p>
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/watch?v=r-oqPbBO3k0" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Coach Interview
-                        </a>
-                        <a href="https://www.youtube.com/watch?v=qX_3kC7GliQ" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Creator Interview
-                        </a>
-                        <a href="https://www.youtube.com/@Tarapeutic" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                        <a href="https://rec.net/user/tarapeutic" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://img.rec.net/0y64r18p37m142pefccgwc0nq.jpg?width=192&cropSquare=true" alt="Hairymanlegs" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">Hairymanlegs</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to hairymanlegs for being Hairymanlegs! He had almost any creator up on his profile.</p>
-                    <div class="mb-4">
-                        <img src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/main/images/RRarchive/e980f2c6eab34910afacd625d50d5a2c.jpg" alt="Hairymanlegs Profile" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://rec.net/user/Hairymanlegs" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://img.rec.net/645a77c234af403d89740bbf0cc6d8d7.jpg?width=192&cropSquare=true" alt="storrms" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">storrms</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to storrms for making shorts of the shutdown somehow in real life.</p>
-                    <div class="mb-4">
-                        <img src="https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/8383e488b149433aad960768bb6ed1d2.jpeg" alt="storrms Report Card" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/shorts/KTuZsuoyKps" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Watch the Short
-                        </a>
-                        <a href="https://www.youtube.com/@storrms" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                        <a href="https://rec.net/user/storrms" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/ytc/AIdro_no3fcZCVHpxz8_e63BqF46lJlEvMEVpmkeqRtVh0fYBKY=s160-c-k-c0x00ffffff-no-rj" alt="emilywafflesyay" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">emilywafflesyay</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to emilywafflesyay for moving forward with this shutdown and moving towards VRChat already. W will be remembered forever.</p>
-                    <div class="mb-4">
-                        <img src="https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/7eac7361ab2a428baf5f6d18600a2906.jpg" alt="emilywafflesyay Report Card" class="rounded-xl border border-zinc-700/50 max-w-full h-auto" referrerpolicy="no-referrer">
-                    </div>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/@emilywafflesyay" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                        <a href="https://rec.net/user/emilywafflesyay" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> Rec.net Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/nwjgcmNOYUtu6RzTetmkCtl0B4-h0f-cTuKtq-LE9jNvBTDYJz94yKdEvPaUN_R9ZkGeH1ZFdA=s160-c-k-c0x00ffffff-no-rj" alt="DriftySinVR" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">DriftySinVR</h3>
-                    <p class="mb-3 leading-relaxed">Massive shoutout to Drifty for making the Rec Center in VRChat to keep the memories alive.</p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://vrchat.com/home/world/wrld_cc537de5-d540-407d-ae06-dfe0352a0cb9/info" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="external-link" class="w-4 h-4"></i> VRChat Rec Center
-                        </a>
-                        <a href="https://www.youtube.com/channel/UCBQiLM4wzRNZAacbSLLcJYg" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-[#18181b] p-5 rounded-2xl border-l-4 border-orange-500 flex flex-col sm:flex-row gap-5 items-start">
-                <img src="https://yt3.googleusercontent.com/hcESwnc8NyxGp5_hTxSuquA4qKZvgSNCE5Btup8YB8EHjhKL956CCJiOH8ckIEpmOXT9NjVtUQ=s160-c-k-c0x00ffffff-no-rj" alt="Winter" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
-                <div class="w-full">
-                    <h3 class="text-white font-medium mb-2 text-base">Winter</h3>
-                    <p class="mb-3 leading-relaxed">Shoutout to Winter for capturing what will happen at the end day on Rec Room for its last maintenance 5 YEARS AGO.</p>
-                    <blockquote class="border-l-2 border-zinc-700 pl-4 my-4 italic text-zinc-500 text-xs leading-relaxed">
-                        "@runeskatee: This looks and feels like we were watching a nuclear bomb go off and skinning away every recroomian away like that one terminator movie"
-                    </blockquote>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="https://www.youtube.com/watch?v=i_Qqm4ssUPg" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Watch Video
-                        </a>
-                        <a href="https://www.youtube.com/@winterblox1" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
-                            <i data-lucide="play" class="w-4 h-4"></i> Channel
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Yearbook -->
-    <div id="yearbookSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-        <h2 class="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
-            <i data-lucide="book-open" class="w-5 h-5"></i>
-            The Rec Room Yearbook
-        </h2>
-        <p class="text-zinc-400 text-sm leading-relaxed mb-6">
-            Want to leave your mark before the servers go dark? You can visit the community yearbook and put your own report card in to be remembered alongside everyone else. You can also submit your graduation speech to say your final goodbyes.
-        </p>
-        <div class="flex flex-wrap gap-4">
-            <a href="https://rryearbook.alexagirl.xyz/yearbook" target="_blank" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] active:scale-[0.98]">
-                <i data-lucide="book-image" class="w-4 h-4"></i>
-                Sign the Yearbook
-            </a>
-            <a href="https://creations-association.formaloo.co/bakuod" target="_blank" class="inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-[0.98]">
-                <i data-lucide="mic" class="w-4 h-4"></i>
-                Submit Graduation Speech
-            </a>
-        </div>
-    </div>
-
-    <!-- Alternatives -->
-    <div id="alternativesSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
-            <i data-lucide="compass" class="w-5 h-5"></i>
-            Where Do We Go Now?
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a href="https://discord.gg/radium-rr" target="_blank" class="bg-emerald-500/5 p-4 rounded-2xl hover:bg-emerald-500/10 transition-all border border-emerald-500/30 card-hover relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
-                <div class="font-semibold text-white flex items-center">
-                    Radium
-                    <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
-                </div>
-                <div class="text-xs text-zinc-400 mt-1">Fan servers trying to keep the dream alive</div>
-            </a>
-            <a href="https://discord.gg/vanillarec" target="_blank" class="bg-amber-700/5 p-4 rounded-2xl hover:bg-amber-700/10 transition-all border border-amber-700/30 card-hover relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-16 h-16 bg-amber-700/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
-                <div class="font-semibold text-white flex items-center">
-                    VanillaRec
-                    <span class="text-[10px] bg-amber-700/20 text-amber-500 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
-                </div>
-                <div class="text-xs text-zinc-400 mt-1">A more trustworthy fan server</div>
-            </a>
-            <a href="https://vrchat.com/" target="_blank" class="bg-zinc-100/5 p-4 rounded-2xl hover:bg-zinc-100/10 transition-all border border-zinc-100/20 card-hover relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-16 h-16 bg-zinc-100/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
-                <div class="font-semibold text-white flex items-center">
-                    VRChat
-                    <span class="text-[10px] bg-zinc-100/20 text-white px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
-                </div>
-                <div class="text-xs text-zinc-400 mt-1">Its so retarded, but it hits different</div>
-            </a>
-            <a href="https://discord.com/invite/rebornrec-1076782953109131376" target="_blank" class="bg-blue-500/5 p-4 rounded-2xl hover:bg-blue-500/10 transition-all border border-blue-500/30 card-hover relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
-                <div class="font-semibold text-white flex items-center">
-                    RebornRec
-                    <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
-                </div>
-                <div class="text-xs text-zinc-400 mt-1">Another fan server keeping the dream alive</div>
-            </a>
-            <a href="https://discord.com/invite/daC8QUhnFP" target="_blank" class="bg-purple-500/5 p-4 rounded-2xl hover:bg-purple-500/10 transition-all border border-purple-500/30 card-hover relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-16 h-16 bg-purple-500/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
-                <div class="font-semibold text-white flex items-center">
-                    OpenRec (Openlabs)
-                    <span class="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
-                </div>
-                <div class="text-xs text-zinc-400 mt-1">Open source alternative project</div>
-            </a>
-            <a href="https://resonite.com/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
-                <div class="font-semibold text-white">Resonite</div>
-                <div class="text-xs text-zinc-400 mt-1">For the big brains who like nodes n shit</div>
-            </a>
-            <a href="https://chilloutvr.net/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
-                <div class="font-semibold text-white">ChilloutVR</div>
-                <div class="text-xs text-zinc-400 mt-1">It exists ig</div>
-            </a>
-        </div>
-    </div>
-
-    <!-- FAQ -->
-    <div id="faqSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
-            <i data-lucide="help-circle" class="w-5 h-5"></i>
-            FAQ (Real Talk Edition)
-        </h2>
-        <div class="space-y-6">
-            <div>
-                <h3 class="text-white font-medium mb-2">Why is Rec Room actually shutting down?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">They couldn't make the money work. Too expensive to run, UGC payouts were eating them alive, and the VR hype died down. Layoffs didn't save it.</p>
-            </div>
-            <div>
-                <h3 class="text-white font-medium mb-2">Can I still play until June 1?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Yeah, go wild. Make stupid rooms. Take screenshots. Say goodbye to your favorite spots.</p>
-            </div>
-            <div>
-                <h3 class="text-white font-medium mb-2">What about my items and tokens?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">They're gone after shutdown. No refunds. Sorry king.</p>
-            </div>
-            <div>
-                <h3 class="text-white font-medium mb-2">Is there a way to save my creations?</h3>
-                <p class="text-zinc-400 text-sm leading-relaxed">Data downloads start in May. Export what you can before everything goes dark.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Feedback -->
-    <div id="feedbackSection" class="bg-zinc-900 rounded-3xl p-8 mb-10 animate-fade-in-up border border-zinc-800/50 shadow-xl">
-        <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
-            <i data-lucide="message-square" class="w-5 h-5"></i>
-            Yell Into The Void (Feedback)
-        </h2>
-        <p class="text-xs text-zinc-500 mb-4">I'll probably read these and cry/laugh. Or just forward them to nobody.</p>
-        <form id="feedbackForm" class="space-y-4">
-            <textarea id="feedbackText" required placeholder="What are your thoughts on the shutdown?" class="w-full bg-zinc-800/50 rounded-2xl p-4 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 h-32 transition-all focus:bg-zinc-800 border border-zinc-700/50"></textarea>
-            <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] active:scale-[0.98]">
-                SEND MY RANT
-            </button>
-        </form>
-        <div id="feedbackResponse" class="hidden mt-4 text-center text-emerald-400 animate-fade-in-up">Thank you for your feedback!</div>
-    </div>
-
-    <!-- Confirm Modal -->
-    <div id="confirmModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 max-w-sm w-full text-center">
-            <h2 class="text-xl font-semibold mb-4 text-orange-400">Confirm Submission</h2>
-            <p class="text-zinc-400 mb-6">Are you sure you want to send this feedback via email?</p>
-            <div class="flex gap-4">
-                <button onclick="closeConfirmModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 py-3 rounded-2xl text-sm font-medium transition">CANCEL</button>
-                <button onclick="confirmFeedback()" class="flex-1 bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition">CONFIRM</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Simplified RecNet Status -->
-    <div class="mb-6 flex items-center justify-between">
-        <h2 class="text-2xl font-semibold">RecNet Death Watch</h2>
-        <button onclick="pingAll()" class="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 px-6 py-2 rounded-2xl text-sm font-medium">
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-            REFRESH
-        </button>
-    </div>
-    <div id="serverList" class="space-y-3 mb-8"></div>
-    <div id="pingLog" class="bg-zinc-900 rounded-3xl p-6 h-64 overflow-auto text-sm font-mono text-zinc-400"></div>
-
-    <div class="text-center text-xs text-zinc-500 mt-12">
-        Not affiliated with Rec Room. Just a dude who wasted too many hours here.<br>
-        plasma was here • 2026
+<div id="introOverlay" class="fixed inset-0 z-[100] bg-zinc-950 flex items-center justify-center text-5xl sm:text-7xl font-bold tracking-tighter transition-opacity duration-1000 pointer-events-none">
+    <div class="relative flex items-center justify-center w-full h-full">
+        <span class="intro-word intro-word-1 text-white">School's</span>
+        <span class="intro-word intro-word-2 text-white">Out</span>
+        <span class="intro-word intro-word-4">Forever.</span>
     </div>
 </div>
 
+<div id="mainContent" class="relative z-10 max-w-3xl mx-auto p-6 sm:p-8 opacity-0 translate-y-8 transition-all duration-1000 ease-out">
+
+    <nav class="glass-card rounded-2xl p-2 mb-8 flex flex-wrap justify-center gap-2 sticky top-4 z-50">
+        <button class="nav-btn active px-4 py-2 rounded-xl text-sm font-medium transition-colors bg-orange-500/20 text-orange-400" data-target="tab-home">Home</button>
+        <button class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-white/5 text-zinc-400" data-target="tab-timeline">Timeline</button>
+        <button class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-white/5 text-zinc-400" data-target="tab-why">Why & Rage</button>
+        <button class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-white/5 text-zinc-400" data-target="tab-community">Community</button>
+        <button class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-white/5 text-zinc-400" data-target="tab-yearbook">Yearbook</button>
+        <button class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-white/5 text-zinc-400" data-target="tab-aftermath">Aftermath</button>
+    </nav>
+
+    <div id="tab-home" class="tab-content animate-fade-in-up">
+        <div id="headerSection" class="text-center mb-12">
+            <h1 class="text-5xl font-bold tracking-tighter mb-2 text-orange-400">School’s Out... Forever</h1>
+            <p class="text-zinc-400 text-xl">Rec Room shuts down June 1st, 2026. Yeah, it's real this time.</p>
+            <div class="mt-4 text-xs text-zinc-500">Made with pain by Plasma • Finalized • EOL 06/15/26</div>
+        </div>
+
+        <div id="countdownSection" class="glass-card rounded-3xl p-8 mb-10">
+            <div class="text-center mb-6">
+                <p id="countdownLabel" class="text-zinc-500 text-sm mb-2 tracking-widest uppercase">Time left until we lose the dumbest best game ever</p>
+                <div id="countdown" class="font-mono text-5xl sm:text-7xl font-bold tabular-nums tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-orange-300 to-orange-600 drop-shadow-[0_0_25px_rgba(251,146,60,0.3)] py-2" aria-live="polite">
+                    00d 00h 00m 00s
+                </div>
+                <p class="text-xs text-zinc-400 mt-3 font-medium opacity-80" id="targetDate"></p>
+
+                <div class="mt-6 pt-6 border-t border-zinc-800/50">
+                    <label for="tzSelector" class="text-[10px] text-zinc-500 block mb-2 uppercase tracking-widest">Display Timezone</label>
+                    <select id="tzSelector" onchange="changeTimezone(this.value)" class="bg-zinc-800/50 text-zinc-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-orange-500 w-full max-w-[240px] mx-auto block appearance-none cursor-pointer hover:bg-zinc-800 transition-colors border border-zinc-700/50">
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center gap-3 mb-6">
+                <input type="text" id="customShareMessage" oninput="updateSharePreview()"
+                       class="w-full max-w-sm bg-zinc-800/50 border border-zinc-700/50 rounded-xl px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-orange-500 text-center transition-all focus:bg-zinc-800"
+                       placeholder="Add a personal note to your share...">
+                <div id="sharePreview" class="text-[10px] text-zinc-500 italic max-w-sm text-center px-4 opacity-60">
+                    Preview: Only 00d 00h 00m 00s left until Rec Room shuts down forever.
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-3">
+                <button onclick="shareTwitter()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </button>
+                <button onclick="shareFacebook()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                </button>
+                <button onclick="shareCountdown()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-timeline" class="tab-content hidden">
+        <div id="stagesSection" class="glass-card rounded-3xl p-8 mb-10">
+            <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+                How We Got Here (The Slow Death)
+            </h2>
+            <div id="stagesTracker" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <div id="tab-why" class="tab-content hidden">
+        <div id="whySection" class="glass-card rounded-3xl p-8 mb-10">
+            <h2 class="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
+                <i data-lucide="heart-crack" class="w-5 h-5"></i>
+                Why The Hell Is This Happening?
+            </h2>
+            <div class="text-zinc-400 text-sm leading-relaxed mb-6">
+                <p class="mb-4">Man... Rec Room hit over 150 million players. We had dorm parties, stupid inventions, Rec Royale chaos, and rooms that somehow became legends. And they're still shutting it down on June 1, 2026.</p>
+
+                <p class="mb-4 rant">The devs basically said: "We never figured out how to make money without bleeding cash." Costs kept winning against the UGC payouts. They laid off half the team back in August 2025 trying to fix it, but it wasn't enough.</p>
+
+                <div class="meme-text mb-4">
+                    "Our costs always ended up overwhelming the revenue we brought in." <br>
+                    — Official blog (translation: we tried, but money said no)
+                </div>
+
+                <p>Feels weird knowing all those late nights grinding tokens and building dumb shit are about to disappear. A lot of us basically grew up here.</p>
+            </div>
+
+            <button onclick="toggleContext()" class="text-orange-400 text-sm font-medium hover:underline transition-all">Show the full sad story...</button>
+
+            <div id="moreContext" class="hidden mt-6 space-y-4 text-zinc-400 text-sm">
+                <p>They gave us some time at least — data downloads start in May so creators can try saving their rooms. But after June 1? Login gone. Rec.net offline. Everything just... poof.</p>
+                <p class="text-orange-300">Half the Discords are still in denial saying "April Fools right???"</p>
+            </div>
+        </div>
+
+        <div id="rageSection" class="glass-card rounded-3xl p-8 mb-10">
+            <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+                <i data-lucide="flame" class="w-5 h-5"></i>
+                Rage Corner
+            </h2>
+            <div class="space-y-4 text-sm text-zinc-400">
+                <div class="rage-item p-4 rounded-2xl">
+                    Spent like 3 years building one room just for it to vanish forever. Cool.
+                </div>
+                <div class="rage-item p-4 rounded-2xl">
+                    That one hat I dropped 4000 tokens on... worth it? Probably not.
+                </div>
+                <div class="rage-item p-4 rounded-2xl">
+                    "Just touch grass" they said. Bro I grew up in the dorms.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-community" class="tab-content hidden">
+        <div id="legendsSection" class="glass-card rounded-3xl p-8 mb-10">
+            <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+                <i data-lucide="award" class="w-5 h-5"></i>
+                Community Legends
+            </h2>
+            <div id="legendsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-yearbook" class="tab-content hidden">
+        <div id="yearbookSection" class="glass-card rounded-3xl p-8 mb-10 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+            <h2 class="text-xl font-semibold mb-4 text-orange-400 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5"></i>
+                The Rec Room Yearbook
+            </h2>
+            <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+                Want to leave your mark before the servers go dark? You can visit the community yearbook and put your own report card in to be remembered alongside everyone else. You can also submit your graduation speech to say your final goodbyes.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="https://rryearbook.alexagirl.xyz/yearbook" target="_blank" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] active:scale-[0.98]">
+                    <i data-lucide="book-image" class="w-4 h-4"></i>
+                    Sign the Yearbook
+                </a>
+                <a href="https://creations-association.formaloo.co/bakuod" target="_blank" class="inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-[0.98]">
+                    <i data-lucide="mic" class="w-4 h-4"></i>
+                    Submit Graduation Speech
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-aftermath" class="tab-content hidden">
+        <div id="alternativesSection" class="glass-card rounded-3xl p-8 mb-10">
+            <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+                <i data-lucide="compass" class="w-5 h-5"></i>
+                Where Do We Go Now?
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="https://discord.gg/radium-rr" target="_blank" class="bg-emerald-500/5 p-4 rounded-2xl hover:bg-emerald-500/10 transition-all border border-emerald-500/30 card-hover relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
+                    <div class="font-semibold text-white flex items-center">
+                        Radium
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
+                    </div>
+                    <div class="text-xs text-zinc-400 mt-1">Fan servers trying to keep the dream alive</div>
+                </a>
+                <a href="https://discord.gg/vanillarec" target="_blank" class="bg-amber-700/5 p-4 rounded-2xl hover:bg-amber-700/10 transition-all border border-amber-700/30 card-hover relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-amber-700/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
+                    <div class="font-semibold text-white flex items-center">
+                        VanillaRec
+                        <span class="text-[10px] bg-amber-700/20 text-amber-500 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
+                    </div>
+                    <div class="text-xs text-zinc-400 mt-1">A more trustworthy fan server</div>
+                </a>
+                <a href="https://vrchat.com/" target="_blank" class="bg-zinc-100/5 p-4 rounded-2xl hover:bg-zinc-100/10 transition-all border border-zinc-100/20 card-hover relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-zinc-100/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
+                    <div class="font-semibold text-white flex items-center">
+                        VRChat
+                        <span class="text-[10px] bg-zinc-100/20 text-white px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
+                    </div>
+                    <div class="text-xs text-zinc-400 mt-1">Its so retarded, but it hits different</div>
+                </a>
+                <a href="https://discord.com/invite/rebornrec-1076782953109131376" target="_blank" class="bg-blue-500/5 p-4 rounded-2xl hover:bg-blue-500/10 transition-all border border-blue-500/30 card-hover relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
+                    <div class="font-semibold text-white flex items-center">
+                        RebornRec
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
+                    </div>
+                    <div class="text-xs text-zinc-400 mt-1">Another fan server keeping the dream alive</div>
+                </a>
+                <a href="https://discord.com/invite/daC8QUhnFP" target="_blank" class="bg-purple-500/5 p-4 rounded-2xl hover:bg-purple-500/10 transition-all border border-purple-500/30 card-hover relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-purple-500/10 rounded-full blur-xl -mr-4 -mt-4 pointer-events-none"></div>
+                    <div class="font-semibold text-white flex items-center">
+                        OpenRec (Openlabs)
+                        <span class="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full ml-2 font-medium tracking-wide uppercase">Trending</span>
+                    </div>
+                    <div class="text-xs text-zinc-400 mt-1">Open source alternative project</div>
+                </a>
+                <a href="https://resonite.com/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
+                    <div class="font-semibold text-white">Resonite</div>
+                    <div class="text-xs text-zinc-400 mt-1">For the big brains who like nodes n shit</div>
+                </a>
+                <a href="https://chilloutvr.net/" target="_blank" class="bg-zinc-800/50 p-4 rounded-2xl hover:bg-zinc-800 transition-all border border-zinc-700/30 card-hover">
+                    <div class="font-semibold text-white">ChilloutVR</div>
+                    <div class="text-xs text-zinc-400 mt-1">It exists ig</div>
+                </a>
+            </div>
+        </div>
+
+        <div id="faqSection" class="glass-card rounded-3xl p-8 mb-10">
+            <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-5 h-5"></i>
+                FAQ (Real Talk Edition)
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-white font-medium mb-2">Why is Rec Room actually shutting down?</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">They couldn't make the money work. Too expensive to run, UGC payouts were eating them alive, and the VR hype died down. Layoffs didn't save it.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-medium mb-2">Can I still play until June 1?</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">Yeah, go wild. Make stupid rooms. Take screenshots. Say goodbye to your favorite spots.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-medium mb-2">What about my items and tokens?</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">They're gone after shutdown. No refunds. Sorry king.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-medium mb-2">Is there a way to save my creations?</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed">Data downloads start in May. Export what you can before everything goes dark.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="feedbackSection" class="glass-card rounded-3xl p-8 mb-10">
+            <h2 class="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2">
+                <i data-lucide="message-square" class="w-5 h-5"></i>
+                Yell Into The Void (Feedback)
+            </h2>
+            <p class="text-xs text-zinc-500 mb-4">I'll probably read these and cry/laugh. Or just forward them to nobody.</p>
+            <form id="feedbackForm" class="space-y-4">
+                <textarea id="feedbackText" required placeholder="What are your thoughts on the shutdown?" class="w-full bg-zinc-800/50 rounded-2xl p-4 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 h-32 transition-all focus:bg-zinc-800 border border-zinc-700/50"></textarea>
+                <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition-all hover:shadow-[0_0_20px_rgba(234,88,12,0.3)] active:scale-[0.98]">
+                    SEND MY RANT
+                </button>
+            </form>
+            <div id="feedbackResponse" class="hidden text-green-400 font-medium text-center py-4">
+                Feedback sent to the void. Thanks.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+    <div class="glass-card rounded-3xl p-8 max-w-sm w-full text-center">
+        <h2 class="text-xl font-semibold mb-4 text-orange-400">Confirm Submission</h2>
+        <p class="text-zinc-400 mb-6">Are you sure you want to send this feedback via email?</p>
+        <div class="flex gap-4">
+            <button onclick="closeConfirmModal()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 py-3 rounded-2xl text-sm font-medium transition">CANCEL</button>
+            <button onclick="confirmFeedback()" class="flex-1 bg-orange-600 hover:bg-orange-500 py-3 rounded-2xl text-sm font-medium transition">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<div id="legendModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 transition-opacity">
+    <div class="glass-card rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative border border-orange-500/30">
+        <button onclick="closeLegendModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors bg-zinc-800 p-2 rounded-full z-10">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div id="legendModalContent" class="mt-2 text-zinc-400 text-sm"></div>
+    </div>
+</div>
+
+<div class="mb-6 flex items-center justify-between">
+    <h2 class="text-2xl font-semibold">RecNet Death Watch</h2>
+    <button onclick="pingAll()" class="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 px-6 py-2 rounded-2xl text-sm font-medium">
+        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        REFRESH
+    </button>
+</div>
+<div id="serverList" class="space-y-3 mb-8"></div>
+<div id="pingLog" class="glass-card rounded-3xl p-6 h-64 overflow-auto text-sm font-mono text-zinc-400"></div>
+
+<div id="eolSection" class="hidden glass-card rounded-3xl p-10 text-center animate-fade-in-up">
+    <h2 class="text-4xl font-bold text-orange-400 mb-4 tracking-tighter">School's Out Forever.</h2>
+    <p class="text-zinc-400 mb-8 max-w-md mx-auto">The tracker has reached its end of life. Rec Room is gone, and now this site is too. Thanks for the memories.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+        <a href="https://8ktv.github.io/" class="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white py-4 rounded-2xl font-medium transition-all border border-zinc-700/50">
+            <i data-lucide="home" class="w-5 h-5"></i>
+            Home
+        </a>
+        <button onclick="downloadSource()" class="flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-500 text-white py-4 rounded-2xl font-medium transition-all shadow-[0_0_20px_rgba(234,88,12,0.2)]">
+            <i data-lucide="download" class="w-5 h-5"></i>
+            Download Source
+        </button>
+        <button onclick="document.querySelector('[data-target=\'tab-yearbook\']').click()" class="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white py-4 rounded-2xl font-medium transition-all border border-zinc-700/50">
+            <i data-lucide="book-open" class="w-5 h-5"></i>
+            Yearbook
+            </a>
+            <button onclick="document.querySelector('[data-target=\'tab-community\']').click()" class="flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white py-4 rounded-2xl font-medium transition-all border border-zinc-700/50">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                Community
+                </a>
+    </div>
+</div>
+
+<div class="text-center text-xs text-zinc-500 mt-12">
+    Not affiliated with Rec Room. Just a dude who wasted too many hours here.<br>
+    plasma was here • 2026 • EOL June 15th
+</div>
+</div>
+
 <div id="audio" class="hidden"></div>
+<div id="fireworkAudio" class="hidden"></div>
 
 <script>
     const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00');
+    const EOL_DATE = new Date('2026-06-15T12:00:00-07:00');
 
     const stages = [
-        { name: "The Big Layoff", date: new Date('2025-08-25'), description: "Half the team got cut. We all pretended it was fine." },
-        { name: "Quiet Panic", date: new Date('2026-04-01'), description: "Store starts closing. Everyone realizes it's real." },
-        { name: "The Great Backup", date: new Date('2026-05-01'), description: "Creators scrambling to download their rooms before they vanish.", videoId: "yqv9kK5oXpo" },
-        { name: "The End", date: SHUTDOWN_DATE, description: "Servers go dark. RecNet dies. We all touch grass.", videoId: "iyLazLVj8P0" }
+        { name: "The Big Layoff", date: new Date('2025-08-25'), description: "Half the team got cut. We all pretended it was fine.", videoId: "HJl-i58SuW4", theme: "default" },
+        { name: "Quiet Panic", date: new Date('2026-04-01'), description: "Store starts closing. Everyone realizes it's real.", videoId: "HJl-i58SuW4", theme: "default" },
+        { name: "The Great Backup", date: new Date('2026-05-01'), description: "Creators scrambling to download their rooms before they vanish.", videoId: "yqv9kK5oXpo", theme: "backup" },
+        { name: "The End", date: SHUTDOWN_DATE, description: "Servers go dark. RecNet dies. We all touch grass.", videoId: "iyLazLVj8P0", theme: "end" }
     ];
 
     lucide.createIcons();
@@ -586,7 +616,6 @@
         document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}" frameborder="0" allow="autoplay"></iframe>`;
     }
 
-    // Default audio
     document.getElementById('audio').innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${currentVideoId}?autoplay=1&loop=1&playlist=${currentVideoId}" frameborder="0" allow="autoplay"></iframe>`;
 
     let lastActiveStageIndex = -1;
@@ -601,10 +630,40 @@
         }
 
         if (currentActiveIndex !== lastActiveStageIndex) {
-            if (currentActiveIndex >= 0 && stages[currentActiveIndex].videoId) {
-                playAudio(stages[currentActiveIndex].videoId);
+            if (currentActiveIndex >= 0) {
+                if (stages[currentActiveIndex].videoId) {
+                    playAudio(stages[currentActiveIndex].videoId);
+                }
+                applyTheme(stages[currentActiveIndex].theme || 'default');
             }
             lastActiveStageIndex = currentActiveIndex;
+        }
+    }
+
+    function applyTheme(theme) {
+        const defaultBg = document.getElementById('defaultBg');
+        const starsBg = document.getElementById('starsBg');
+        const fireworksBg = document.getElementById('fireworksBg');
+        const fireworkAudio = document.getElementById('fireworkAudio');
+
+        if (theme === 'default') {
+            defaultBg.style.opacity = '1';
+            starsBg.style.opacity = '0';
+            fireworksBg.style.opacity = '0';
+            fireworkAudio.innerHTML = '';
+        } else if (theme === 'backup') {
+            defaultBg.style.opacity = '0';
+            starsBg.style.opacity = '1';
+            fireworksBg.style.opacity = '0';
+            fireworkAudio.innerHTML = '';
+        } else if (theme === 'end') {
+            defaultBg.style.opacity = '0';
+            starsBg.style.opacity = '1';
+            fireworksBg.style.opacity = '1';
+            if (fireworkAudio.innerHTML === '') {
+                const videoId = 'XHi7UpUctWA';
+                fireworkAudio.innerHTML = `<iframe width="0" height="0" src="https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}" frameborder="0" allow="autoplay"></iframe>`;
+            }
         }
     }
 
@@ -668,7 +727,7 @@
         for (let s of servers) {
             const result = await pingServer(s);
             const div = document.createElement('div');
-            div.className = "bg-zinc-900 rounded-2xl px-6 py-4 flex justify-between items-center";
+            div.className = "glass-card rounded-2xl px-6 py-4 flex justify-between items-center mb-3";
             div.innerHTML = `
                 <div>
                     <div class="font-medium text-white">${s.name}</div>
@@ -683,25 +742,36 @@
     let lastSeconds = -1;
     function updateCountdown() {
         const now = new Date();
-        const diff = SHUTDOWN_DATE - now;
+        let target = SHUTDOWN_DATE;
+        let label = "Time left until we lose the dumbest best game ever";
+        let prefix = "Shutdown";
+
+        if (now >= SHUTDOWN_DATE) {
+            target = EOL_DATE;
+            label = "Tracker EOL Countdown - This site will go offline soon";
+            prefix = "EOL";
+        }
+
+        const diff = target - now;
         const countdownEl = document.getElementById('countdown');
+        const labelEl = document.getElementById('countdownLabel');
 
-        if (diff <= 0) {
-            countdownEl.innerHTML = `<span class="text-red-600 font-bold">SHUTDOWN COMPLETE</span>`;
+        if (diff <= 0 && now >= EOL_DATE) {
+            countdownEl.innerHTML = `<span class="text-red-600 font-bold">TRACKER OFFLINE</span>`;
 
-            const sectionsToHide = ['headerSection', 'countdownSection', 'stagesSection', 'whySection', 'rageSection', 'faqSection', 'feedbackSection'];
+            const sectionsToHide = ['headerSection', 'countdownSection', 'stagesSection', 'whySection', 'rageSection', 'faqSection', 'feedbackSection', 'serverList', 'pingLog'];
             sectionsToHide.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = 'none';
             });
 
-            const farewellEl = document.getElementById('farewellSection');
-            if (farewellEl) {
-                farewellEl.classList.remove('hidden');
-            }
+            const eolSection = document.getElementById('eolSection');
+            if (eolSection) eolSection.classList.remove('hidden');
 
             return;
         }
+
+        if (labelEl) labelEl.textContent = label;
 
         const days = Math.floor(diff / 86400000);
         const hours = Math.floor((diff % 86400000) / 3600000);
@@ -720,14 +790,13 @@
 
         const displayTz = selectedTimezone === 'auto' ? Intl.DateTimeFormat().resolvedOptions().timeZone : selectedTimezone;
         try {
-            const formatted = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short', timeZone: displayTz }).format(SHUTDOWN_DATE);
-            document.getElementById('targetDate').textContent = `Shutdown: ${formatted}`;
+            const formatted = new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short', timeZone: displayTz }).format(target);
+            document.getElementById('targetDate').textContent = `${prefix}: ${formatted}`;
         } catch (e) {
-            document.getElementById('targetDate').textContent = `Shutdown: June 1, 2026 (PDT)`;
+            document.getElementById('targetDate').textContent = `${prefix}: ${target.toLocaleDateString()}`;
         }
     }
 
-    // Feedback form
     const feedbackForm = document.getElementById('feedbackForm');
     feedbackForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -748,10 +817,12 @@
     }
 
     function getShareContent() {
+        const now = new Date();
         const countdown = document.getElementById('countdown').textContent.trim();
         const customNote = document.getElementById('customShareMessage').value.trim();
         const tags = "#recroom #recroomshutdown";
-        const text = customNote ? `${customNote} Only ${countdown} left. ${tags}` : `Only ${countdown} left until Rec Room shuts down forever. ${tags}`;
+        const prefix = now >= SHUTDOWN_DATE ? "until the tracker goes EOL" : "until Rec Room shuts down forever";
+        const text = customNote ? `${customNote} Only ${countdown} left. ${tags}` : `Only ${countdown} left ${prefix}. ${tags}`;
         return { text, url: window.location.href };
     }
 
@@ -799,7 +870,7 @@
                         <div class="font-semibold">${stage.name}</div>
                         <div class="text-xs ${isPast ? 'text-zinc-400' : 'text-zinc-600'} mb-1">${stage.date.toLocaleDateString()}</div>
                         <div class="text-xs ${isPast ? 'text-zinc-500' : 'text-zinc-700'} leading-relaxed">${stage.description}</div>
-                        ${stage.videoId ? `<button onclick="playAudio('${stage.videoId}')" class="mt-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-orange-400 px-3 py-1.5 rounded-lg flex items-center gap-2 transition-colors border border-zinc-700/50 w-fit"><i data-lucide="music" class="w-3 h-3"></i> Play Theme</button>` : ''}
+                        ${stage.videoId ? `<button onclick="playAudio('${stage.videoId}'); applyTheme('${stage.theme || 'default'}')" class="mt-3 text-xs bg-zinc-800 hover:bg-zinc-700 text-orange-400 px-3 py-1.5 rounded-lg flex items-center gap-2 transition-colors border border-zinc-700/50 w-fit"><i data-lucide="music" class="w-3 h-3"></i> Play Theme</button>` : ''}
                     </div>
                 </div>
             `;
@@ -807,7 +878,254 @@
         lucide.createIcons();
     }
 
-    // Init everything
+    setTimeout(() => {
+        const overlay = document.getElementById('introOverlay');
+        const mainContent = document.getElementById('mainContent');
+        if(overlay) overlay.style.opacity = '0';
+        if(mainContent) mainContent.classList.remove('opacity-0', 'translate-y-8');
+        setTimeout(() => {
+            if(overlay) overlay.style.display = 'none';
+        }, 1000);
+    }, 5000);
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('bg-orange-500/20', 'text-orange-400', 'active');
+                b.classList.add('hover:bg-white/5', 'text-zinc-400');
+            });
+            e.target.classList.add('bg-orange-500/20', 'text-orange-400', 'active');
+            e.target.classList.remove('hover:bg-white/5', 'text-zinc-400');
+
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('animate-fade-in-up');
+            });
+
+            const targetId = e.target.getAttribute('data-target');
+            const targetTab = document.getElementById(targetId);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+                void targetTab.offsetWidth;
+                targetTab.classList.add('animate-fade-in-up');
+            }
+
+            document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    const legendsData = [
+        {
+            id: "plasma",
+            name: "Plasma (The Creator)",
+            image: "https://avatars.githubusercontent.com/u/259215128?v=4",
+            desc: "HOLY SHIT PLASMA IS ALIVE ON REC ROOM AFTER 600+ DAYS??? The creator of this very site has returned from the dead just in time to watch it all burn.",
+            quote: "I really logged into steam, hopped into rec room, and got everything out of my dorm just to get off afterwards and go back to bed lol, thx recroom.",
+            images: [{ src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/3dd0198096f34ff49eff7d6b22fc37c3.jpg", alt: "Plasma Report Card" }],
+            links: [{ url: "https://rec.net/user/Plasma8k", icon: "external-link", text: "Rec.net Profile" }]
+        },
+        {
+            id: "runeskate",
+            name: "Runeskate (The Linux Savior)",
+            image: "https://yt3.googleusercontent.com/kCqnic1u3kzumts_aLvX5y9w6M_pswkTVSCEmH-8BpjC-1C7QCMLHBKXfPe9aEyq9o5Vfk1f6jc=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Massive shoutout to Runeskate, the trans lady who actually figured out how to run Rec Room on Linux and made a full tutorial for it. She even followed it up with a tutorial on getting Radium working on Linux. Such an absolute win for the community. Legends never die.",
+            quote: "I wish i could of made this video earilier, but.. you know me i.. i barely play this game so.. i forgot, its been ages man i-- i dont really give a danm about this game but im sad that this game is going.. and i really feel bad cuz i really use to hate this game very much because of its 'community', but i realized how many friends i had on there. and it was a wild journey man, it was fun.",
+            images: [
+                { src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/60661626c2c24ddc971c6707472baaa7.jpg", alt: "Runeskate Report Card", caption: "\"time to get a job in vrchat\"" },
+                { src: "https://raw.githubusercontent.com/8ktv/8ktv.github.io/main/images/RRarchive/2f6wbeoe8pkdoub08wevwvjkz.jpg", alt: "Runeskate Second Report Card" },
+                { src: "https://raw.githubusercontent.com/8ktv/8ktv.github.io/bfc86983b318d0c0d352fb009bf03fa7c07b0131/images/RRarchive/aaincshldc6akuwn8h0lrkfjd.jpg", alt: "Runeskate's POV", caption: "Runeskate's POV" },
+                { src: "https://raw.githubusercontent.com/8ktv/8ktv.github.io/bfc86983b318d0c0d352fb009bf03fa7c07b0131/images/RRarchive/2lbcy1hzslg8o54ce58t5qpy0.jpg", alt: "RealPedro's POV", caption: "RealPedro's POV" }
+            ],
+            links: [
+                { url: "https://www.youtube.com/watch?v=Icvttk3XM4A", icon: "play", text: "RR Linux Tutorial" },
+                { url: "https://www.youtube.com/watch?v=WSbuLvQzShM", icon: "play", text: "Radium Linux Tutorial" },
+                { url: "https://www.youtube.com/channel/UCa6Iw5ZSvEFrTnuqus8ysUg", icon: "play", text: "Channel" },
+                { url: "https://rec.net/user/runeskate", icon: "external-link", text: "Rec.net Profile" }
+            ]
+        },
+        {
+            id: "realpedro",
+            name: "RealPedro (The Yearbook Creator)",
+            image: "https://img.rec.net/ew8yqmtssqvduckl4wpdd4k9p.jpg?width=192&cropSquare=true",
+            desc: "Shoutout to RealPedro for creating the Rec Room Yearbook, giving everyone a place to leave their final mark before the servers go dark.",
+            images: [{ src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/c3f7ddeade2d4e45a27bbdcbdda02f30.jpg", alt: "RealPedro Report Card" }],
+            links: [{ url: "https://rec.net/user/ReaIPedro", icon: "external-link", text: "Rec.net Profile" }]
+        },
+        {
+            id: "slat",
+            name: "slat.",
+            image: "https://yt3.googleusercontent.com/q46okfgN32MqQeiWiGSzk_oq6Xj2XmKMsk91JnGfFdikFI8Rk_cIKxDSEvcFUCKLgFiQJl-dKG8=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Shoutout to slat. for doing things. You know what you did. He also played Rec Room with Hairymanlegs. W. The community appreciates it.",
+            images: [{ src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/5e5515921b8644a5a31095e74797c194.png", alt: "slat. Report Card" }],
+            links: [
+                { url: "https://www.youtube.com/watch?v=xnFZHOOjIy4", icon: "play", text: "Playing w/ Hairymanlegs" },
+                { url: "https://www.youtube.com/@slat.", icon: "play", text: "Channel" },
+                { url: "https://rec.net/user/slat", icon: "external-link", text: "Rec.net Profile" }
+            ]
+        },
+        {
+            id: "goblenorr",
+            name: "Alex (GoblenoRR)",
+            image: "https://yt3.googleusercontent.com/iPdl3zSOSpje93gYmIll9MQJTU3iaAi2xZ_NQVn5zc23sSYUerKzCotNxXj898FklZ-dOGaSXw=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Shoutout to Alex for somehow getting a recording of Amy Lee (the voice actor for Coach) talking about the end of Rec Room. Truly legendary.",
+            images: [{ src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/491cd9b97d3a4232abf0be1febe0f894.png", alt: "Alex Report Card" }],
+            links: [
+                { url: "https://www.youtube.com/watch?v=cx5j8FbBv2E", icon: "play", text: "His Message" },
+                { url: "https://www.youtube.com/watch?v=BXyewuQIeZc", icon: "play", text: "Coach's Message" },
+                { url: "https://www.youtube.com/@GoblenoRR", icon: "play", text: "Channel" },
+                { url: "https://rec.net/user/Gobleno", icon: "external-link", text: "Rec.net Profile" }
+            ]
+        },
+        {
+            id: "ishowspeed",
+            name: "IShowSpeed",
+            image: "https://yt3.googleusercontent.com/ieK0j0sDqI_AHDwYxZ2Wly07-R7PG4S3YMtxOWCEe1QH-I0FgimJ92tlydQa6M78YD0VaywCaw=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Shoutout to Speed for even noticing that it's shutting down. He used to make content for this 6 years ago.",
+            quote: "I used to make content on recroom bro! danm... this game kinda nostalgic for me.",
+            links: [{ url: "https://www.youtube.com/channel/UCWsDFcIhY2DBi3GB5uykGXA", icon: "play", text: "Channel" }]
+        },
+        {
+            id: "tarapeutic",
+            name: "Tarapeutic",
+            image: "https://yt3.googleusercontent.com/LxhoiGFeB78iDYjRQkPNcJdMHeaNZ6QZQcAnrbXpjuT2UttM30NISins5FFLkeOcbUYjiDiz=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Shoutout to this nice lady right here for even INTERVIEWING with coach, and she even interviewed the CREATOR of Rec Room (insane work). It has been a journey.",
+            images: [{ src: "https://yt3.ggpht.com/PWfJDwbhpBkm8B6w3nebwrIl_mFBO1YMwhQkUrx0sbr8v_FBThNmLYFZCHzpEorBs3GwjB3FJVF2=s640-rw-nd-v1", alt: "Report Card", caption: "\"It has been a journey. ❤️\"" }],
+            links: [
+                { url: "https://www.youtube.com/watch?v=r-oqPbBO3k0", icon: "play", text: "Coach Interview" },
+                { url: "https://www.youtube.com/watch?v=qX_3kC7GliQ", icon: "play", text: "Creator Interview" },
+                { url: "https://www.youtube.com/@Tarapeutic", icon: "play", text: "Channel" },
+                { url: "https://rec.net/user/tarapeutic", icon: "external-link", text: "Rec.net Profile" }
+            ]
+        },
+        {
+            id: "hairymanlegs",
+            name: "Hairymanlegs",
+            image: "https://img.rec.net/0y64r18p37m142pefccgwc0nq.jpg?width=192&cropSquare=true",
+            desc: "Shoutout to hairymanlegs for being Hairymanlegs! He had almost any creator up on his profile.",
+            images: [{ src: "https://raw.githubusercontent.com/8ktv/8ktv.github.io/main/images/RRarchive/e980f2c6eab34910afacd625d50d5a2c.jpg", alt: "Hairymanlegs Profile" }],
+            links: [{ url: "https://rec.net/user/Hairymanlegs", icon: "external-link", text: "Rec.net Profile" }]
+        },
+        {
+            id: "storrms",
+            name: "storrms",
+            image: "https://img.rec.net/645a77c234af403d89740bbf0cc6d8d7.jpg?width=192&cropSquare=true",
+            desc: "Shoutout to storrms for making shorts of the shutdown somehow in real life.",
+            images: [{ src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/8383e488b149433aad960768bb6ed1d2.jpeg", alt: "storrms Report Card" }],
+            links: [
+                { url: "https://www.youtube.com/shorts/KTuZsuoyKps", icon: "play", text: "Watch the Short" },
+                { url: "https://www.youtube.com/@storrms", icon: "play", text: "Channel" },
+                { url: "https://rec.net/user/storrms", icon: "external-link", text: "Rec.net Profile" }
+            ]
+        },
+        {
+            id: "emilywafflesyay",
+            name: "emilywafflesyay",
+            image: "https://yt3.googleusercontent.com/ytc/AIdro_no3fcZCVHpxz8_e63BqF46lJlEvMEVpmkeqRtVh0fYBKY=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Shoutout to emilywafflesyay for moving forward with this shutdown and moving towards VRChat already. W will be remembered forever.",
+            images: [{ src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/7eac7361ab2a428baf5f6d18600a2906.jpg", alt: "emilywafflesyay Report Card" }],
+            links: [
+                { url: "https://www.youtube.com/@emilywafflesyay", icon: "play", text: "Channel" },
+                { url: "https://rec.net/user/emilywafflesyay", icon: "external-link", text: "Rec.net Profile" }
+            ]
+        },
+        {
+            id: "driftysinvr",
+            name: "DriftySinVR",
+            image: "https://yt3.googleusercontent.com/nwjgcmNOYUtu6RzTetmkCtl0B4-h0f-cTuKtq-LE9jNvBTDYJz94yKdEvPaUN_R9ZkGeH1ZFdA=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Massive shoutout to Drifty for making the Rec Center in VRChat to keep the memories alive.",
+            links: [
+                { url: "https://vrchat.com/home/world/wrld_cc537de5-d540-407d-ae06-dfe0352a0cb9/info", icon: "external-link", text: "VRChat Rec Center" },
+                { url: "https://www.youtube.com/channel/UCBQiLM4wzRNZAacbSLLcJYg", icon: "play", text: "Channel" }
+            ]
+        },
+        {
+            id: "winter",
+            name: "Winter",
+            image: "https://yt3.googleusercontent.com/hcESwnc8NyxGp5_hTxSuquA4qKZvgSNCE5Btup8YB8EHjhKL956CCJiOH8ckIEpmOXT9NjVtUQ=s160-c-k-c0x00ffffff-no-rj",
+            desc: "Shoutout to Winter for capturing what will happen at the end day on Rec Room for its last maintenance 5 YEARS AGO.",
+            quote: "@runeskatee: This looks and feels like we were watching a nuclear bomb go off and skinning away every recroomian away like that one terminator movie",
+            links: [
+                { url: "https://www.youtube.com/watch?v=i_Qqm4ssUPg", icon: "play", text: "Watch Video" },
+                { url: "https://www.youtube.com/@winterblox1", icon: "play", text: "Channel" }
+            ]
+        }
+    ];
+
+    function renderLegends() {
+        const grid = document.getElementById('legendsGrid');
+        if (!grid) return;
+        grid.innerHTML = legendsData.map(legend => `
+            <div class="bg-[#18181b] p-4 rounded-2xl border border-zinc-800 hover:border-orange-500 cursor-pointer transition-all text-center group flex flex-col items-center justify-center" onclick="openLegendModal('${legend.id}')">
+                <img src="${legend.image}" alt="${legend.name}" class="w-20 h-20 rounded-full mb-3 object-cover group-hover:scale-105 transition-transform border-2 border-zinc-800" referrerpolicy="no-referrer">
+                <h3 class="text-white font-medium text-sm line-clamp-2">${legend.name}</h3>
+            </div>
+        `).join('');
+    }
+
+    function openLegendModal(id) {
+        const legend = legendsData.find(l => l.id === id);
+        if (!legend) return;
+
+        let imagesHtml = '';
+        if (legend.images && legend.images.length > 0) {
+            imagesHtml = `<div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">`;
+            legend.images.forEach(img => {
+                imagesHtml += `
+                    <div>
+                        <img src="${img.src}" alt="${img.alt}" class="rounded-xl border border-zinc-700/50 w-full h-auto" referrerpolicy="no-referrer">
+                        ${img.caption ? `<p class="text-xs text-zinc-500 mt-2 italic">${img.caption}</p>` : ''}
+                    </div>
+                `;
+            });
+            imagesHtml += `</div>`;
+        }
+
+        let linksHtml = '';
+        if (legend.links && legend.links.length > 0) {
+            linksHtml = `<div class="flex flex-wrap gap-4 mt-6">`;
+            legend.links.forEach(link => {
+                linksHtml += `
+                    <a href="${link.url}" target="_blank" class="text-orange-400 hover:text-orange-300 hover:underline flex items-center gap-1.5 inline-flex font-medium transition-colors">
+                        <i data-lucide="${link.icon}" class="w-4 h-4"></i> ${link.text}
+                    </a>
+                `;
+            });
+            linksHtml += `</div>`;
+        }
+
+        const content = `
+            <div class="flex flex-col sm:flex-row gap-6 items-start">
+                <img src="${legend.image}" alt="${legend.name}" class="w-24 h-24 rounded-full object-cover border-2 border-zinc-800 shrink-0" referrerpolicy="no-referrer">
+                <div class="w-full text-left">
+                    <h3 class="text-white font-medium mb-2 text-xl">${legend.name}</h3>
+                    <p class="mb-3 leading-relaxed text-zinc-300">${legend.desc}</p>
+                    ${legend.quote ? `
+                        <blockquote class="border-l-2 border-zinc-700 pl-4 my-4 italic text-zinc-500 text-sm leading-relaxed">
+                            "${legend.quote}"
+                        </blockquote>
+                    ` : ''}
+                    ${imagesHtml}
+                    ${linksHtml}
+                </div>
+            </div>
+        `;
+
+        document.getElementById('legendModalContent').innerHTML = content;
+        document.getElementById('legendModal').classList.remove('hidden');
+        lucide.createIcons();
+    }
+
+    function closeLegendModal() {
+        document.getElementById('legendModal').classList.add('hidden');
+    }
+
+    document.getElementById('legendModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeLegendModal();
+        }
+    });
+
+    renderLegends();
     initTimezoneSelector();
     updateStages();
     updateCountdown();
@@ -820,10 +1138,21 @@
         checkAutomaticAudio();
     }, 1000);
 
-    // Initial ping
     setTimeout(() => { pingAll(); }, 800);
 
-    // Expose functions to window
+    function downloadSource() {
+        const html = document.documentElement.outerHTML;
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rrtracker_archive.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
     window.shareTwitter = shareTwitter;
     window.shareFacebook = shareFacebook;
     window.shareCountdown = shareCountdown;
@@ -834,6 +1163,9 @@
     window.pingAll = pingAll;
     window.updateSharePreview = updateSharePreview;
     window.playAudio = playAudio;
+    window.openLegendModal = openLegendModal;
+    window.closeLegendModal = closeLegendModal;
+    window.downloadSource = downloadSource;
 </script>
 </body>
 </html>
