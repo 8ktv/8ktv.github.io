@@ -693,44 +693,6 @@
             url: 'https://shockvpn.com'
         },
         {
-            id: 'purevpn',
-            name: 'PureVPN',
-            description: 'Hong Kong based VPN with a large server network.',
-            jurisdiction: { country: 'Hong Kong', level: JurisdictionLevel.RISKY },
-            metrics: {
-                logs: 'Timestamps/Bandwidth',
-                encryption: 'AES 256',
-                handshake: 'RSA 2048',
-                features: [],
-                paymentMethods: ['Crypto'],
-                servers: 6500,
-                countries: 70,
-                maxDevices: 10,
-                interfaceType: 'GUI',
-                hasFreeTier: false
-            },
-            url: 'https://purevpn.com'
-        },
-        {
-            id: 'ivacy',
-            name: 'Ivacy',
-            description: 'Cost-effective VPN based in Singapore with focus on privacy and high speed.',
-            jurisdiction: { country: 'Singapore', level: JurisdictionLevel.RISKY },
-            metrics: {
-                logs: 'No Logs',
-                encryption: 'AES 256',
-                handshake: 'RSA 4096',
-                features: [],
-                paymentMethods: ['Crypto'],
-                servers: 5700,
-                countries: 60,
-                maxDevices: 10,
-                interfaceType: 'GUI',
-                hasFreeTier: false
-            },
-            url: 'https://ivacy.com'
-        },
-        {
             id: 'umnv',
             name: 'Umnetwork',
             description: 'Decentralized VPN solution with focus on privacy and security.',
@@ -787,6 +749,26 @@
                 diskless: true
             },
             url: 'https://vp.net/l/en-US/'
+        },
+        {
+            id: 'privatevpn',
+            name: 'PrivateVPN',
+            description: 'Proven no-logs VPN based in Sweden. Known for being budget-friendly but lacks diskless infrastructure and has reported IPv6 leaks on Linux.',
+            jurisdiction: { country: 'Sweden', level: JurisdictionLevel.FOURTEEN_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 200,
+                countries: 63,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false,
+                diskless: false
+            },
+            url: 'https://privatevpn.com/'
         },
     ];
 
