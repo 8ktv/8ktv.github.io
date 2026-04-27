@@ -1157,17 +1157,17 @@
                     </div>
                     <div className="flex gap-8 items-center text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
                         <button onClick={() => setView('browser')} className={`hover:text-white ${view === 'browser' ? 'text-gold' : ''}`}>Directory</button>
-                        <button onClick={() => setView('wizard')} className={`px-6 py-2 border border-white/10 text-white hover:bg-white/5 transition-all ${view === 'wizard' ? 'border-gold text-gold' : ''}`}>Launch</button>
+                        <button onClick={() => setView('wizard')} className={`px-6 py-2 border border-white/10 text-white hover:bg-white/5 transition-all ${view === 'wizard' ? 'border-gold text-gold' : ''}`}>Walkthrough</button>
                     </div>
                 </nav>
 
                 <main className="max-w-7xl mx-auto px-10 py-16">
                     {view === 'home' && (
-                        <div className="py-20 fade-in">
+                        <div className="min-h-[calc(100vh-200px)] flex flex-col items-center justify-center text-center fade-in">
                             <h1 className="text-7xl font-serif italic text-white mb-8 leading-[0.9]">Sovereignty is <br /> not a <span className="text-gold">Feature.</span></h1>
                             <p className="text-lg text-gray-400 max-w-xl mb-12 leading-relaxed opacity-70">Verity Index provides a technical audit of jurisdiction risk and encryption standards. No AI. Just Data.</p>
                             <div className="flex gap-4">
-                                <button onClick={() => setView('wizard')} className="px-10 py-4 bg-gold text-surface font-black text-xs uppercase tracking-[0.25em] hover:bg-gold-hover transition-all">Launch Intelligence</button>
+                                <button onClick={() => setView('wizard')} className="px-10 py-4 bg-gold text-surface font-black text-xs uppercase tracking-[0.25em] hover:bg-gold-hover transition-all">Walkthrough</button>
                                 <button onClick={() => setView('browser')} className="px-10 py-4 border border-white/10 text-white font-black text-xs uppercase tracking-[0.25em] hover:bg-white/5 transition-all">Browse Directory</button>
                             </div>
                         </div>
