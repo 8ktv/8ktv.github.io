@@ -789,14 +789,32 @@
         },
     ];
 
+    const LEXICON = {
+        'TRANS': { title: 'Transparency Audit', desc: 'An independent third-party investigation of a provider\'s systems to verify "No Logs" claims. It ensures that the VPN is technically incapable of logging your data.' },
+        '1ST': { title: '1st Party Infrastructure', desc: 'The provider owns and manages their own physical hardware instead of renting virtual space from giant data centers. This significantly reduces the risk of 3rd-party physical access or metadata collection.' },
+        'NATIVE': { title: 'Native Encryption', desc: 'Uses industry-standard AES-256 or ChaCha20 encryption with strong handshake protocols. "Native" implies the hardware can handle the encryption directly, ensuring maximum speed without security sacrifice.' },
+        'M': { title: 'Multi-hop Routing', desc: 'Connects you through two or more VPN servers in different locations. Even if one server is compromised, your original IP address remains protected by the subsequent nodes.' },
+        'Y': { title: 'Neutral Jurisdiction', desc: 'The company is based in a country with strict privacy laws and is not a member of major global surveillance alliances like 14-Eyes, 9-Eyes, or 5-Eyes.' },
+        'RAM': { title: 'Diskless RAM-Only', desc: 'Servers operate entirely in volatile memory (RAM). If seized, disconnected, or rebooted, all data is instantly destroyed. No data is ever written to a permanent hard drive.' },
+        'TOTAL CO': { title: 'Total Control', desc: 'Refers to advanced features like Open Source clients, custom CLI tools, or advanced protocol customization designed for maximum user sovereignty.' },
+        'Safe': { title: 'Safe Jurisdiction', desc: 'Strong privacy laws and outside major intelligence sharing agreements. Minimal risk of coordinated surveillance.' },
+        '14-Eyes': { title: '14-Eyes Alliance', desc: 'SIGINT Seniors Europe. A group of countries that share intelligence data, making it easier for governments to bypass domestic privacy laws.' },
+        '9-Eyes': { title: '9-Eyes Alliance', desc: 'An extension of 5-Eyes focused on automated intelligence sharing. Includes Denmark, France, Netherlands, and Norway.' },
+        '5-Eyes': { title: '5-Eyes Alliance', desc: 'US, UK, Canada, Australia, New Zealand. The most powerful intelligence sharing compact in existence. Extremely high surveillance risk.' },
+        'Risky': { title: 'Risky Jurisdiction', desc: 'Jurisdictions with opaque legal systems, high levels of corruption, or known patterns of political interference in private communications.' }
+    };
+
     const Icon = ({ name, ...props }) => {
         useEffect(() => { lucide.createIcons(); }, [name]);
         return <i data-lucide={name} {...props}></i>;
     };
 
-    const FeatureBadge = ({ label, tooltip }) => (
+    const FeatureBadge = ({ label, tooltip, onClick }) => (
         <div className="group/badge relative inline-block">
-            <div className="flex flex-col min-w-[36px] overflow-hidden rounded-[1px] border border-white/5 shadow-2xl cursor-help transition-all hover:border-gold/50">
+            <div
+                onClick={(e) => { e.stopPropagation(); onClick && onClick(label); }}
+                className="flex flex-col min-w-[36px] overflow-hidden rounded-[1px] border border-white/5 shadow-2xl cursor-help transition-all hover:border-gold/50 active:scale-95"
+            >
                 <div className="bg-gold text-[6px] font-black text-black px-2 py-0.5 text-center leading-none uppercase tracking-tighter">
                     {label}
                 </div>
@@ -804,12 +822,12 @@
             </div>
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-surface border border-white/20 text-[9px] text-gray-300 font-mono uppercase tracking-[0.2em] whitespace-nowrap opacity-0 group-hover/badge:opacity-100 transition-all pointer-events-none z-[100] shadow-2xl backdrop-blur-md scale-95 group-hover/badge:scale-100 origin-bottom">
                 <span className="text-gold mr-2 font-bold">•</span>
-                {tooltip}
+                {tooltip} (Click for Intel)
             </div>
         </div>
     );
 
-    const JurisdictionBadge = ({ level }) => {
+    const JurisdictionBadge = ({ level, onClick }) => {
         const colors = {
             [JurisdictionLevel.SAFE]: 'bg-[#14F195]/10 text-[#14F195] border-[#14F195]/20',
             [JurisdictionLevel.FOURTEEN_EYES]: 'bg-yellow-900/10 text-yellow-500 border-yellow-900/20',
@@ -828,11 +846,14 @@
 
         return (
             <div className="group/j relative inline-block">
-                    <span className={`px-2 py-0.5 text-[8px] font-bold uppercase tracking-widest border rounded-[1px] cursor-help ${colors[level]}`}>
+                    <span
+                        onClick={(e) => { e.stopPropagation(); onClick && onClick(level); }}
+                        className={`px-2 py-0.5 text-[8px] font-bold uppercase tracking-widest border rounded-[1px] cursor-help active:scale-95 transition-transform ${colors[level]}`}
+                    >
                         {level}
                     </span>
                 <div className="absolute top-full left-0 mt-2 w-48 p-2 bg-surface border border-white/10 text-[9px] text-gray-400 font-mono uppercase tracking-wider opacity-0 group-hover/j:opacity-100 transition-all pointer-events-none z-[90] shadow-2xl backdrop-blur-md scale-95 group-hover/j:scale-100 origin-top">
-                    {descriptions[level]}
+                    {descriptions[level]} (Click for Intel)
                 </div>
             </div>
         );
@@ -852,7 +873,7 @@
         </div>
     );
 
-    const VPNCard = ({ vpn, isSelected, onToggleSelect }) => {
+    const VPNCard = ({ vpn, isSelected, onToggleSelect, onOpenLexicon }) => {
         const [isExpanded, setIsExpanded] = useState(false);
 
         const calculateScore = () => {
@@ -899,16 +920,16 @@
                         <div className="flex-grow">
                             <div className="flex items-center gap-4 mb-3">
                                 <h3 className="text-xl font-medium tracking-tight text-white">{vpn.name}</h3>
-                                <JurisdictionBadge level={vpn.jurisdiction.level} />
+                                <JurisdictionBadge level={vpn.jurisdiction.level} onClick={onOpenLexicon} />
                             </div>
                             <div className="flex gap-1.5 flex-wrap">
-                                {vpn.metrics.logs === 'No Logs' && <FeatureBadge label="TRANS" tooltip="Transparency Audit" />}
-                                {(vpn.id === 'mullvad' || vpn.id === 'ivpn' || vpn.id === 'proton' || vpn.id === 'ovpn') && <FeatureBadge label="1ST" tooltip="1st Party Servers" />}
-                                {vpn.metrics.encryption.includes('256') && <FeatureBadge label="NATIVE" tooltip="Native Encryption" />}
-                                {vpn.metrics.features.some(f => f.toLowerCase().includes('core') || f.toLowerCase().includes('hop')) && <FeatureBadge label="M" tooltip="Multi-hop Ready" />}
-                                {vpn.jurisdiction.level === JurisdictionLevel.SAFE && <FeatureBadge label="Y" tooltip="Neutral Zone" />}
-                                {vpn.metrics.diskless && <FeatureBadge label="RAM" tooltip="Diskless / RAM-only Infrastructure" />}
-                                {vpn.metrics.features.length > 2 && <FeatureBadge label="TOTAL CO" tooltip="Total Control" />}
+                                {vpn.metrics.logs === 'No Logs' && <FeatureBadge label="TRANS" tooltip="Transparency Audit" onClick={onOpenLexicon} />}
+                                {(vpn.id === 'mullvad' || vpn.id === 'ivpn' || vpn.id === 'proton' || vpn.id === 'ovpn') && <FeatureBadge label="1ST" tooltip="1st Party Servers" onClick={onOpenLexicon} />}
+                                {vpn.metrics.encryption.includes('256') && <FeatureBadge label="NATIVE" tooltip="Native Encryption" onClick={onOpenLexicon} />}
+                                {vpn.metrics.features.some(f => f.toLowerCase().includes('core') || f.toLowerCase().includes('hop')) && <FeatureBadge label="M" tooltip="Multi-hop Ready" onClick={onOpenLexicon} />}
+                                {vpn.jurisdiction.level === JurisdictionLevel.SAFE && <FeatureBadge label="Y" tooltip="Neutral Zone" onClick={onOpenLexicon} />}
+                                {vpn.metrics.diskless && <FeatureBadge label="RAM" tooltip="Diskless / RAM-only Infrastructure" onClick={onOpenLexicon} />}
+                                {vpn.metrics.features.length > 2 && <FeatureBadge label="TOTAL CO" tooltip="Total Control" onClick={onOpenLexicon} />}
                             </div>
                         </div>
 
@@ -1102,6 +1123,39 @@
         );
     };
 
+    const LexiconModal = ({ termKey, onClose }) => {
+        const entry = LEXICON[termKey] || { title: termKey, desc: 'Detailed intelligence documentation pending.' };
+
+        return (
+            <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-surface/80 backdrop-blur-md animate-fade-in" onClick={onClose}>
+                <div
+                    className="bg-surface border border-gold/30 w-full max-w-lg p-10 relative shadow-2xl"
+                    onClick={e => e.stopPropagation()}
+                >
+                    <button onClick={onClose} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+                        <Icon name="x" className="w-5 h-5" />
+                    </button>
+
+                    <div className="mb-8">
+                        <span className="text-[10px] uppercase tracking-[0.4em] text-gold font-bold block mb-2">Technical Lexicon</span>
+                        <h2 className="text-3xl font-serif italic text-white leading-tight">{entry.title}</h2>
+                    </div>
+
+                    <p className="text-gray-400 font-serif italic text-lg leading-relaxed mb-10 opacity-90 border-l-2 border-gold/20 pl-6">
+                        "{entry.desc}"
+                    </p>
+
+                    <button
+                        onClick={onClose}
+                        className="w-full py-4 bg-gold text-surface font-black text-xs uppercase tracking-[0.3em] hover:bg-gold-hover transition-all"
+                    >
+                        Acknowledge Intelligence
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     const App = () => {
         const [view, setView] = useState('home');
         const [search, setSearch] = useState('');
@@ -1109,6 +1163,7 @@
         const [jurisdictionFilter, setJurisdictionFilter] = useState([]);
         const [activeFeatures, setActiveFeatures] = useState([]);
         const [freeOnly, setFreeOnly] = useState(false);
+        const [lexiconTarget, setLexiconTarget] = useState(null);
 
         const filteredVPNs = useMemo(() => {
             const results = VPN_DATA.filter(vpn => {
@@ -1245,6 +1300,7 @@
                                             vpn={vpn}
                                             isSelected={selectedIds.includes(vpn.id)}
                                             onToggleSelect={toggleSelection}
+                                            onOpenLexicon={(key) => setLexiconTarget(key)}
                                         />
                                     ))}
                                 </div>
@@ -1256,6 +1312,14 @@
                         <CompareView
                             providers={VPN_DATA.filter(v => selectedIds.includes(v.id))}
                             onBack={() => setView('browser')}
+                            onOpenLexicon={(key) => setLexiconTarget(key)}
+                        />
+                    )}
+
+                    {lexiconTarget && (
+                        <LexiconModal
+                            termKey={lexiconTarget}
+                            onClose={() => setLexiconTarget(null)}
                         />
                     )}
                 </main>
