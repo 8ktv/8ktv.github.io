@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verity Index</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+                        mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "monospace"],
+                        serif: ["Playfair Display", "serif"],
+                    },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#C5A059',
+                            hover: '#D5B069',
+                        },
+                        surface: '#0A0A0B',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        html, body {
+            background-color: #0A0A0B;
+            color: #E2E2E2;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0B; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C5A059; }
+
+        .bg-card { background: rgba(255, 255, 255, 0.03); }
+        .border-border { border-color: rgba(255, 255, 255, 0.1); }
+
+        .fade-right {
+            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+            mask-image: linear-gradient(to right, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    const JurisdictionLevel = {
+        SAFE: 'Safe',
+        FOURTEEN_EYES: '14-Eyes',
+        NINE_EYES: '9-Eyes',
+        FIVE_EYES: '5-Eyes',
+        RISKY: 'Risky'
+    };
+
+    const VPN_DATA = [
+        {
+            id: 'ivpn',
+            name: 'IVPN',
+            description: 'Privacy-focused VPN based in Gibraltar with a strong emphasis on transparency.',
+            jurisdiction: { country: 'Gibraltar', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['DoH'],
+                paymentMethods: ['Cash', 'XMR', 'Crypto'],
+                servers: 165,
+                countries: 37,
+                maxDevices: 7,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://ivpn.net'
+        },
+        {
+            id: 'protonvpn',
+            name: 'ProtonVPN',
+            description: 'Swiss-based secure VPN service built by the scientists who met at CERN.',
+            jurisdiction: { country: 'Switzerland', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['IPV4', 'Secure Core'],
+                paymentMethods: ['Cash', 'Crypto'],
+                servers: 11191,
+                countries: 117,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: true
+            },
+            url: 'https://protonvpn.com'
+        },
+        {
+            id: 'nordvpn',
+            name: 'NordVPN',
+            description: 'Popular VPN service based in Panama with a large server network.',
+            jurisdiction: { country: 'Panama', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 6500,
+                countries: 113,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://nordvpn.com'
+        },
+        {
+            id: 'adguard-vpn',
+            name: 'AdGuard VPN',
+            description: 'VPN that uses its own protocol for better performance and stealth.',
+            jurisdiction: { country: 'Cyprus', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'Bandwidth',
+                encryption: 'AES 256',
+                handshake: 'AdGuard Protocol',
+                features: ['AdGuard Protocol'],
+                paymentMethods: ['Crypto'],
+                servers: 53,
+                countries: 10,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: true
+            },
+            url: 'https://adguard-vpn.com'
+        },
+        {
+            id: 'mullvad',
+            name: 'Mullvad',
+            description: 'Swedish VPN with a radical focus on anonymity and fixed pricing.',
+            jurisdiction: { country: 'Sweden', level: JurisdictionLevel.FOURTEEN_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['IPV6'],
+                paymentMethods: ['Cash', 'XMR', 'Crypto'],
+                servers: 634,
+                countries: 48,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://mullvad.net'
+        },
+        {
+            id: 'windscribe',
+            name: 'Windscribe',
+            description: 'Canadian VPN with powerful blocking features and a generous free tier.',
+            jurisdiction: { country: 'Canada', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['DoH', 'Canada'],
+                paymentMethods: ['XMR', 'Crypto'],
+                servers: 69,
+                countries: 69,
+                maxDevices: 'Unlimited',
+                interfaceType: 'GUI',
+                hasFreeTier: true
+            },
+            url: 'https://windscribe.com'
+        },
+        {
+            id: 'airvpn',
+            name: 'AirVPN',
+            description: 'VPN created by activists in defense of net neutrality and online privacy.',
+            jurisdiction: { country: 'Italy', level: JurisdictionLevel.FOURTEEN_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['XMR', 'Crypto'],
+                servers: 256,
+                countries: 23,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://airvpn.org'
+        },
+        {
+            id: 'surfshark',
+            name: 'Surfshark',
+            description: 'Fast VPN with unlimited devices and high speeds.',
+            jurisdiction: { country: 'Netherlands', level: JurisdictionLevel.NINE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: '3072-bit Diffie Hellmann',
+                features: [],
+                paymentMethods: ['XMR', 'Crypto'],
+                servers: 3200,
+                countries: 100,
+                maxDevices: 'Unlimited',
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://surfshark.com'
+        },
+        {
+            id: 'torguard',
+            name: 'TorGuard',
+            description: 'VPN specialized for bittorrent users and heavy traffic.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 2048',
+                features: [],
+                paymentMethods: ['Gift Card', 'Crypto'],
+                servers: 3000,
+                countries: 68,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://torguard.net'
+        },
+        {
+            id: 'ovpn',
+            name: 'OVPN',
+            description: 'Swedish VPN with strong hardware security and transparency.',
+            jurisdiction: { country: 'Sweden', level: JurisdictionLevel.FOURTEEN_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['Hardware Security'],
+                paymentMethods: ['Cash', 'Crypto'],
+                servers: 130,
+                countries: 32,
+                maxDevices: 6,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://ovpn.com'
+        },
+        {
+            id: 'azirevpn',
+            name: 'AzireVPN',
+            description: 'Focus on privacy through owned hardware and zero logging.',
+            jurisdiction: { country: 'Sweden', level: JurisdictionLevel.FOURTEEN_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 60,
+                countries: 15,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://azirevpn.com'
+        },
+        {
+            id: 'expressvpn',
+            name: 'ExpressVPN',
+            description: 'High-speed VPN based in British Virgin Islands with large network.',
+            jurisdiction: { country: 'BVI', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['Lightway'],
+                paymentMethods: ['Crypto'],
+                servers: 3000,
+                countries: 105,
+                maxDevices: 8,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://expressvpn.com'
+        }
+    ];
+
+    const Icon = ({ name, ...props }) => {
+        useEffect(() => { lucide.createIcons(); }, [name]);
+        return <i data-lucide={name} {...props}></i>;
+    };
+
+    const JurisdictionBadge = ({ level }) => {
+        const colors = {
+            [JurisdictionLevel.SAFE]: 'bg-emerald-900/20 text-emerald-400 border-emerald-900/40',
+            [JurisdictionLevel.FOURTEEN_EYES]: 'bg-yellow-900/20 text-yellow-400 border-yellow-900/40',
+            [JurisdictionLevel.NINE_EYES]: 'bg-orange-900/20 text-orange-400 border-orange-900/40',
+            [JurisdictionLevel.FIVE_EYES]: 'bg-red-900/20 text-red-400 border-red-900/40',
+            [JurisdictionLevel.RISKY]: 'bg-purple-900/20 text-purple-400 border-purple-900/40',
+        };
+
+        return (
+            <span className={`px-2 py-0.5 text-[10px] uppercase font-mono tracking-wider border ${colors[level]}`}>
+                    {level}
+                </span>
+        );
+    };
+
+    const VPNCard = ({ vpn, isSelected, onToggleSelect }) => {
+        const [isExpanded, setIsExpanded] = useState(false);
+        const integrityScore = (vpn.metrics.logs === 'No Logs' ? 8.5 : 5.0) +
+            (vpn.jurisdiction.level === JurisdictionLevel.SAFE ? 1.0 : 0.5);
+
+        return (
+            <div className={`bg-card border ${isSelected ? 'border-gold shadow-[0_0_15px_rgba(197,160,89,0.15)]' : 'border-border'} rounded-sm overflow-hidden hover:border-gold/30 transition-all duration-500 fade-in`}>
+                <div className="p-6">
+                    <div className="grid grid-cols-12 items-center gap-4">
+                        <div className="col-span-1 flex justify-center">
+                            <button
+                                onClick={() => onToggleSelect(vpn.id)}
+                                className={`w-5 h-5 border rounded flex items-center justify-center transition-all ${isSelected ? 'bg-gold border-gold text-surface' : 'border-white/10 hover:border-white/30'}`}
+                            >
+                                {isSelected && <Icon name="check" className="w-3 h-3" />}
+                            </button>
+                        </div>
+
+                        <div className="col-span-11 md:col-span-4 flex items-center gap-4">
+                            <div className="w-10 h-10 bg-gold/10 border border-gold/20 rounded flex items-center justify-center text-gold font-serif italic text-lg">
+                                {vpn.name.charAt(0)}
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-medium tracking-tight text-white">{vpn.name}</h3>
+                                <p className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">
+                                    {vpn.jurisdiction.country} • {vpn.metrics.interfaceType}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="col-span-6 md:col-span-2">
+                            <JurisdictionBadge level={vpn.jurisdiction.level} />
+                        </div>
+
+                        <div className="col-span-6 md:col-span-3 flex flex-col items-center md:items-start gap-1">
+                            <div className="flex gap-1">
+                                {[1, 2, 3].map((i) => (
+                                    <div
+                                        key={i}
+                                        className={`w-1.5 h-1.5 ${i <= (vpn.metrics.logs === 'No Logs' ? 3 : 1) ? 'bg-emerald-500' : 'bg-white/10'}`}
+                                    />
+                                ))}
+                            </div>
+                            <span className="text-[10px] text-gray-500 font-mono uppercase tracking-[0.1em]">{vpn.metrics.logs}</span>
+                        </div>
+
+                        <div className="col-span-12 md:col-span-2 text-right">
+                            <span className="text-3xl font-serif italic text-gold">{integrityScore.toFixed(1)}</span>
+                            <span className="text-[9px] text-gray-600 block uppercase tracking-tighter -mt-1">Technical Rank</span>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 flex justify-between items-center">
+                        <p className="text-sm text-gray-400 italic font-serif line-clamp-1 opacity-60">{vpn.description}</p>
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-gold hover:text-gold-hover transition-colors font-bold whitespace-nowrap ml-4"
+                        >
+                            {isExpanded ? 'Collapse' : 'Details'}
+                            <Icon name="arrow-right" className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                        </button>
+                    </div>
+
+                    {isExpanded && (
+                        <div className="pt-6 border-t border-white/5 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 fade-in">
+                            <div className="space-y-6">
+                                <section>
+                                    <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-3 flex items-center gap-2">
+                                        <Icon name="shield" className="w-3 h-3" /> Security
+                                    </h4>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs border-b border-white/5 pb-1">
+                                            <span className="text-gray-500">Encryption</span>
+                                            <span className="text-gray-200 font-mono">{vpn.metrics.encryption}</span>
+                                        </div>
+                                        <div className="flex justify-between text-xs border-b border-white/5 pb-1">
+                                            <span className="text-gray-500">Handshake</span>
+                                            <span className="text-gray-200 font-mono">{vpn.metrics.handshake}</span>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div className="space-y-6">
+                                <section>
+                                    <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-3">Methods</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {vpn.metrics.paymentMethods.map(p => (
+                                            <span key={p} className="px-2 py-1 bg-gold/5 border border-gold/20 text-[10px] text-gold font-mono">{p}</span>
+                                        ))}
+                                    </div>
+                                </section>
+                                <a href={vpn.url} target="_blank" className="block w-full py-3 bg-gold text-surface font-bold text-xs uppercase tracking-widest text-center hover:bg-gold-hover transition-all">Intel Sheet</a>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+    const CompareView = ({ providers, onBack }) => (
+        <div className="space-y-12 fade-in">
+            <div className="flex items-center justify-between border-b border-white/5 pb-8">
+                <div>
+                    <h2 className="text-4xl font-serif italic text-gold">Comparative Analysis</h2>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 mt-2">TECHNICAL SPECIFICATION BREAKDOWN</p>
+                </div>
+                <button onClick={onBack} className="px-6 py-3 border border-white/10 text-white text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all flex items-center gap-2">
+                    <Icon name="arrow-left" className="w-3 h-3" /> Back
+                </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px bg-white/5 border border-white/5">
+                {providers.map(vpn => (
+                    <div key={vpn.id} className="bg-surface p-8 space-y-8 min-w-[300px]">
+                        <div className="text-center space-y-4">
+                            <div className="w-16 h-16 bg-gold/10 border border-gold/20 rounded-full flex items-center justify-center text-gold font-serif italic text-2xl mx-auto">{vpn.name.charAt(0)}</div>
+                            <h3 className="text-xl font-medium tracking-tight text-white">{vpn.name}</h3>
+                            <JurisdictionBadge level={vpn.jurisdiction.level} />
+                        </div>
+                        <div className="space-y-4 text-xs font-mono">
+                            <div className="border-b border-white/5 pb-2">
+                                <span className="text-gold block mb-1">Logs</span>
+                                {vpn.metrics.logs}
+                            </div>
+                            <div className="border-b border-white/5 pb-2">
+                                <span className="text-gold block mb-1">Encryption</span>
+                                {vpn.metrics.encryption}
+                            </div>
+                            <div className="border-b border-white/5 pb-2">
+                                <span className="text-gold block mb-1">Nodes</span>
+                                {vpn.metrics.servers}
+                            </div>
+                        </div>
+                        <a href={vpn.url} target="_blank" className="block w-full py-3 bg-white/5 border border-white/10 text-[10px] uppercase tracking-widest text-center text-gray-400 hover:text-white transition-all">Intel</a>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    const Wizard = ({ onComplete }) => {
+        const [step, setStep] = useState(0);
+        const [answers, setAnswers] = useState([]);
+
+        const questions = [
+            {
+                id: 'objective',
+                q: "Select Primary Objective",
+                options: ["Technical Privacy", "Media Access", "Network Velocity", "Maximum Sovereignty"]
+            },
+            {
+                id: 'proficiency',
+                q: "Network Proficiency",
+                options: ["Basic Usage", "Advanced Config Labs"]
+            },
+            {
+                id: 'allocation',
+                q: "Resource Allocation",
+                options: ["Zero Cost Required", "Maximum Sovereignty"]
+            }
+        ];
+
+        const handleAnswer = (option) => {
+            const newAnswers = [...answers, option];
+            if (step < questions.length - 1) {
+                setAnswers(newAnswers);
+                setStep(step + 1);
+            } else {
+                const filters = {
+                    jurisdiction: [],
+                    features: [],
+                    payment: [],
+                    free: false
+                };
+                if (newAnswers.includes("Technical Privacy")) filters.features.push("No Logs");
+                if (newAnswers.includes("Maximum Sovereignty")) {
+                    filters.jurisdiction = [JurisdictionLevel.SAFE];
+                    filters.payment.push("XMR");
+                }
+                if (newAnswers.includes("Zero Cost Required")) filters.free = true;
+                onComplete(filters);
+            }
+        };
+
+        return (
+            <div className="max-w-2xl mx-auto py-20 fade-in">
+                <div className="space-y-12">
+                    <div className="space-y-4">
+                        <span className="text-[10px] uppercase tracking-[0.4em] text-gold font-bold">Step 0{step + 1} / 03</span>
+                        <h2 className="text-4xl font-serif italic text-white">{questions[step].q}</h2>
+                    </div>
+                    <div className="grid gap-4">
+                        {questions[step].options.map(opt => (
+                            <button
+                                key={opt}
+                                onClick={() => handleAnswer(opt)}
+                                className="p-6 border border-white/10 bg-white/[0.02] text-left hover:border-gold/50 hover:bg-gold/5 transition-all group"
+                            >
+                                <div className="flex justify-between items-center">
+                                    <span className="text-sm uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">{opt}</span>
+                                    <Icon name="chevron-right" className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-all" />
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const App = () => {
+        const [view, setView] = useState('home');
+        const [search, setSearch] = useState('');
+        const [selectedIds, setSelectedIds] = useState([]);
+        const [jurisdictionFilter, setJurisdictionFilter] = useState([]);
+        const [activeFeatures, setActiveFeatures] = useState([]);
+        const [freeOnly, setFreeOnly] = useState(false);
+
+        const filteredVPNs = useMemo(() => {
+            return VPN_DATA.filter(vpn => {
+                const matchesSearch = vpn.name.toLowerCase().includes(search.toLowerCase());
+                const matchesJurisdiction = jurisdictionFilter.length === 0 || jurisdictionFilter.includes(vpn.jurisdiction.level);
+                const matchesFeatures = activeFeatures.length === 0 || activeFeatures.every(f => vpn.metrics.features.includes(f) || vpn.metrics.logs === f);
+                const matchesFree = !freeOnly || vpn.metrics.hasFreeTier;
+                return matchesSearch && matchesJurisdiction && matchesFeatures && matchesFree;
+            });
+        }, [search, jurisdictionFilter, activeFeatures, freeOnly]);
+
+        const toggleSelection = (id) => {
+            setSelectedIds(prev => prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]);
+        };
+
+        const handleWizardComplete = (filters) => {
+            if (filters.jurisdiction.length > 0) setJurisdictionFilter(filters.jurisdiction);
+            if (filters.features.length > 0) setActiveFeatures(filters.features);
+            if (filters.free) setFreeOnly(true);
+            setView('browser');
+        };
+
+        return (
+            <div className="min-h-screen bg-surface text-gray-200">
+                <nav className="sticky top-0 z-50 border-b border-white/10 bg-surface/90 backdrop-blur-md px-10 h-20 flex items-center justify-between">
+                    <div className="cursor-pointer group" onClick={() => { setView('home'); setJurisdictionFilter([]); setActiveFeatures([]); setFreeOnly(false); }}>
+                        <h1 className="text-2xl font-serif italic text-gold tracking-tight fade-right group-hover:mask-none transition-all duration-700">Verity Index</h1>
+                        <p className="text-[9px] uppercase tracking-[0.25em] text-gray-600 -mt-1">Independent Privacy Audit</p>
+                    </div>
+                    <div className="flex gap-8 items-center text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
+                        <button onClick={() => setView('browser')} className={`hover:text-white ${view === 'browser' ? 'text-gold' : ''}`}>Directory</button>
+                        <button onClick={() => setView('wizard')} className={`px-6 py-2 border border-white/10 text-white hover:bg-white/5 transition-all ${view === 'wizard' ? 'border-gold text-gold' : ''}`}>Launch</button>
+                    </div>
+                </nav>
+
+                <main className="max-w-7xl mx-auto px-10 py-16">
+                    {view === 'home' && (
+                        <div className="py-20 fade-in">
+                            <h1 className="text-7xl font-serif italic text-white mb-8 leading-[0.9]">Sovereignty is <br /> not a <span className="text-gold">Feature.</span></h1>
+                            <p className="text-lg text-gray-400 max-w-xl mb-12 leading-relaxed opacity-70">Verity Index provides a technical audit of jurisdiction risk and encryption standards. No AI. Just Data.</p>
+                            <div className="flex gap-4">
+                                <button onClick={() => setView('wizard')} className="px-10 py-4 bg-gold text-surface font-black text-xs uppercase tracking-[0.25em] hover:bg-gold-hover transition-all">Launch Intelligence</button>
+                                <button onClick={() => setView('browser')} className="px-10 py-4 border border-white/10 text-white font-black text-xs uppercase tracking-[0.25em] hover:bg-white/5 transition-all">Browse Directory</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {view === 'wizard' && (
+                        <Wizard onComplete={handleWizardComplete} />
+                    )}
+
+                    {view === 'browser' && (
+                        <div className="flex gap-12 fade-in">
+                            <aside className="w-80 hidden lg:block space-y-12">
+                                <section>
+                                    <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-2">
+                                        <h3 className="text-[10px] uppercase tracking-[0.25em] text-gold">Jurisdiction Risk</h3>
+                                        {(jurisdictionFilter.length > 0 || freeOnly || activeFeatures.length > 0) && (
+                                            <button
+                                                onClick={() => { setJurisdictionFilter([]); setFreeOnly(false); setActiveFeatures([]); }}
+                                                className="text-[9px] uppercase tracking-widest text-gold hover:text-white transition-colors underline decoration-gold/30 underline-offset-4"
+                                            >
+                                                Reset
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="space-y-4">
+                                        {Object.values(JurisdictionLevel).map(level => (
+                                            <label key={level} className="flex items-center gap-3 text-xs uppercase tracking-widest cursor-pointer hover:text-white">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={jurisdictionFilter.includes(level)}
+                                                    onChange={(e) => {
+                                                        const checked = e.target.checked;
+                                                        setJurisdictionFilter(prev => checked ? [...prev, level] : prev.filter(l => l !== level));
+                                                    }}
+                                                    className="accent-gold h-4 w-4"
+                                                />
+                                                <span className={`${jurisdictionFilter.includes(level) ? 'text-white' : 'text-gray-500'}`}>{level}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </section>
+
+                                <section className="p-6 border border-white/5 bg-white/[0.02]">
+                                    <h4 className="text-[9px] uppercase tracking-[0.3em] text-gold mb-4 font-bold flex items-center gap-2">
+                                        <Icon name="info" className="w-3 h-3" /> Intelligence Brief
+                                    </h4>
+                                    <div className="space-y-4 text-[10px] text-gray-500 leading-relaxed font-mono uppercase tracking-tighter">
+                                        <p><span className="text-white">5-Eyes:</span> Deep integration. US, UK, CA, AU, NZ.</p>
+                                        <p><span className="text-white">9-Eyes:</span> Extended sharing. Core + FR, NL, DK, NO.</p>
+                                        <p><span className="text-white">14-Eyes:</span> Collaborative. Core + DE, BE, IT, ES, SE.</p>
+                                        <p className="border-t border-white/10 pt-4 italic">VPNs in these zones can be compelled to share metadata under secret subpoenas.</p>
+                                    </div>
+                                </section>
+                            </aside>
+                            <div className="flex-1 space-y-8">
+                                <div className="flex gap-4">
+                                    <input
+                                        type="text"
+                                        placeholder="Search providers..."
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        className="flex-1 bg-white/[0.02] border border-white/10 rounded-sm py-4 px-6 outline-none focus:border-gold/30"
+                                    />
+                                    <button
+                                        onClick={() => view === 'browser' && selectedIds.length > 0 && setView('compare')}
+                                        className={`px-8 py-4 ${selectedIds.length > 0 ? 'bg-gold text-surface' : 'bg-white/5 text-gray-600'} transition-all text-xs font-bold uppercase tracking-widest`}
+                                    >
+                                        Compare ({selectedIds.length})
+                                    </button>
+                                </div>
+                                <div className="space-y-4">
+                                    {filteredVPNs.map(vpn => (
+                                        <VPNCard
+                                            key={vpn.id}
+                                            vpn={vpn}
+                                            isSelected={selectedIds.includes(vpn.id)}
+                                            onToggleSelect={toggleSelection}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {view === 'compare' && (
+                        <CompareView
+                            providers={VPN_DATA.filter(v => selectedIds.includes(v.id))}
+                            onBack={() => setView('browser')}
+                        />
+                    )}
+                </main>
+
+                <footer className="border-t border-white/5 py-12 px-10 text-center opacity-30">
+                    <p className="text-[10px] tracking-widest uppercase">&copy; 2026 Verity Index - Independent Audit</p>
+                </footer>
+            </div>
+        );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+</script>
+</body>
+</html>
