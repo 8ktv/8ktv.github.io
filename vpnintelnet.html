@@ -90,7 +90,8 @@
                 countries: 37,
                 maxDevices: 7,
                 interfaceType: 'GUI',
-                hasFreeTier: false
+                hasFreeTier: false,
+                diskless: true
             },
             url: 'https://ivpn.net'
         },
@@ -105,11 +106,12 @@
                 handshake: 'RSA 4096',
                 features: ['IPV4', 'Secure Core'],
                 paymentMethods: ['Cash', 'Crypto'],
-                servers: 11191,
-                countries: 117,
+                servers: 20022,
+                countries: 145,
                 maxDevices: 10,
                 interfaceType: 'GUI',
-                hasFreeTier: true
+                hasFreeTier: true,
+                diskless: true
             },
             url: 'https://protonvpn.com'
         },
@@ -128,7 +130,8 @@
                 countries: 113,
                 maxDevices: 10,
                 interfaceType: 'GUI',
-                hasFreeTier: false
+                hasFreeTier: false,
+                diskless: true
             },
             url: 'https://nordvpn.com'
         },
@@ -147,28 +150,10 @@
                 countries: 10,
                 maxDevices: 10,
                 interfaceType: 'GUI',
-                hasFreeTier: true
+                hasFreeTier: true,
+                diskless: false
             },
             url: 'https://adguard-vpn.com'
-        },
-        {
-            id: 'mullvad',
-            name: 'Mullvad',
-            description: 'Swedish VPN with a radical focus on anonymity and fixed pricing.',
-            jurisdiction: { country: 'Sweden', level: JurisdictionLevel.FOURTEEN_EYES },
-            metrics: {
-                logs: 'No Logs',
-                encryption: 'AES 256',
-                handshake: 'RSA 4096',
-                features: ['IPV6'],
-                paymentMethods: ['Cash', 'XMR', 'Crypto'],
-                servers: 634,
-                countries: 48,
-                maxDevices: 5,
-                interfaceType: 'GUI',
-                hasFreeTier: false
-            },
-            url: 'https://mullvad.net'
         },
         {
             id: 'windscribe',
@@ -223,7 +208,8 @@
                 countries: 100,
                 maxDevices: 'Unlimited',
                 interfaceType: 'GUI',
-                hasFreeTier: false
+                hasFreeTier: false,
+                diskless: true
             },
             url: 'https://surfshark.com'
         },
@@ -287,22 +273,520 @@
         {
             id: 'expressvpn',
             name: 'ExpressVPN',
-            description: 'High-speed VPN based in British Virgin Islands with large network.',
+            description: 'High-speed VPN based in British Virgin Islands with large network. Now offering up to 14 simultaneous connections.',
             jurisdiction: { country: 'BVI', level: JurisdictionLevel.SAFE },
             metrics: {
                 logs: 'No Logs',
-                encryption: 'AES 256',
+                encryption: 'AES 256 / ChaCha20',
                 handshake: 'RSA 4096',
                 features: ['Lightway'],
                 paymentMethods: ['Crypto'],
                 servers: 3000,
                 countries: 105,
-                maxDevices: 8,
+                maxDevices: 14,
+                interfaceType: 'GUI',
+                hasFreeTier: false,
+                diskless: true
+            },
+            url: 'https://expressvpn.com'
+        },
+        {
+            id: 'pia',
+            name: 'PIA',
+            description: 'Private Internet Access is a long-standing VPN with a proven no-logs policy.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Gift Card', 'Crypto'],
+                servers: 16500,
+                countries: 84,
+                maxDevices: 'Unlimited',
                 interfaceType: 'GUI',
                 hasFreeTier: false
             },
-            url: 'https://expressvpn.com'
-        }
+            url: 'https://privateinternetaccess.com'
+        },
+        {
+            id: 'cyberghost',
+            name: 'CyberGhost',
+            description: 'Romanian VPN known for its large server network and streaming optimization.',
+            jurisdiction: { country: 'Romania', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['NoSpy'],
+                paymentMethods: ['Crypto'],
+                servers: 9106,
+                countries: 91,
+                maxDevices: 7,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://cyberghostvpn.com'
+        },
+        {
+            id: 'ipvanish',
+            name: 'IPVanish',
+            description: 'USA-based VPN providing high-speed connections and multi-platform support.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 2048',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 2200,
+                countries: 75,
+                maxDevices: 'Unlimited',
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://ipvanish.com'
+        },
+        {
+            id: 'tunnelbear',
+            name: 'TunnelBear',
+            description: 'Simple and easy-to-use VPN based in Canada.',
+            jurisdiction: { country: 'Canada', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 5000,
+                countries: 47,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: true
+            },
+            url: 'https://tunnelbear.com'
+        },
+        {
+            id: 'hideme',
+            name: 'hide.me',
+            description: 'Malaysia-based VPN offering strong privacy features and a free plan.',
+            jurisdiction: { country: 'Malaysia', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 8192',
+                features: ['Linux'],
+                paymentMethods: ['Cash', 'XMR', 'Crypto'],
+                servers: 2600,
+                countries: 56,
+                maxDevices: 10,
+                interfaceType: 'CLI',
+                hasFreeTier: true
+            },
+            url: 'https://hide.me'
+        },
+        {
+            id: 'cryptostorm',
+            name: 'cryptostorm',
+            description: 'Anarchist-founded darknet VPN with extreme focus on security.',
+            jurisdiction: { country: 'Iceland', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 8192',
+                features: ['DNSCrypt'],
+                paymentMethods: ['XMR', 'Crypto'],
+                servers: 387,
+                countries: 38,
+                maxDevices: '1-6',
+                interfaceType: 'CLI',
+                hasFreeTier: false
+            },
+            url: 'https://cryptostorm.is'
+        },
+        {
+            id: 'nymvpn',
+            name: 'NymVPN',
+            description: 'Next-generation mixnet VPN based in Switzerland.',
+            jurisdiction: { country: 'Switzerland', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES-256 / ChaCha20',
+                handshake: 'X25519',
+                features: [],
+                paymentMethods: ['XMR', 'Crypto'],
+                servers: 220,
+                countries: 70,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://nymvpn.com'
+        },
+        {
+            id: 'strongvpn',
+            name: 'StrongVPN',
+            description: 'Reliable VPN service with a focus on speed and security.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 2048',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 950,
+                countries: 30,
+                maxDevices: 12,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://strongvpn.com'
+        },
+        {
+            id: 'astrillvpn',
+            name: 'AstrillVPN',
+            description: 'Fast and secure VPN service based in Seychelles, popular in highly restricted regions.',
+            jurisdiction: { country: 'Seychelles', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'Keep Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 2048',
+                features: [],
+                paymentMethods: ['XMR', 'Crypto'],
+                servers: 113,
+                countries: 57,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://astrill.com'
+        },
+        {
+            id: 'purevpn',
+            name: 'PureVPN',
+            description: 'Hong Kong based VPN with a large server network and multi-login capability.',
+            jurisdiction: { country: 'Hong Kong', level: JurisdictionLevel.RISKY },
+            metrics: {
+                logs: 'Timestamps',
+                encryption: 'AES 256',
+                handshake: 'RSA 2048',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 6500,
+                countries: 70,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://purevpn.com'
+        },
+        {
+            id: 'ivacy',
+            name: 'Ivacy',
+            description: 'Cost-effective VPN based in Singapore with focus on privacy and high speed.',
+            jurisdiction: { country: 'Singapore', level: JurisdictionLevel.RISKY },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 5700,
+                countries: 60,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://ivacy.com'
+        },
+        {
+            id: 'vyprvpn',
+            name: 'VyprVPN',
+            description: 'VPN service with proprietary Chameleon protocol to bypass censorship.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 2048',
+                features: ['Chameleon'],
+                paymentMethods: ['Crypto'],
+                servers: 700,
+                countries: 64,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://vyprvpn.com'
+        },
+        {
+            id: 'mozillavpn',
+            name: 'Mozilla VPN',
+            description: 'Open-source VPN from the makers of Firefox, built on top of the WireGuard protocol and Mullvad infrastructure.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'X25519',
+                features: ['Multi-hop', 'Open Source', 'WireGuard', 'Split Tunneling'],
+                paymentMethods: ['Credit Card'],
+                servers: 500,
+                countries: 30,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false,
+                diskless: true
+            },
+            url: 'https://mozilla.org/vpn'
+        },
+        {
+            id: 'mullvad',
+            name: 'Mullvad',
+            description: 'Swedish VPN with a radical focus on anonymity and fixed pricing.',
+            jurisdiction: { country: 'Sweden', level: JurisdictionLevel.FOURTEEN_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['IPV6', 'Port Forwarding'],
+                paymentMethods: ['Cash', 'XMR', 'Crypto'],
+                servers: 634,
+                countries: 48,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false,
+                diskless: true
+            },
+            url: 'https://mullvad.net'
+        },
+        {
+            id: 'riseupvpn',
+            name: 'RiseupVPN',
+            description: 'A community-run VPN for activists and human rights defenders.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['Open Source', 'Activism'],
+                paymentMethods: ['Donation'],
+                servers: 16,
+                countries: 4,
+                maxDevices: 'Unlimited',
+                interfaceType: 'GUI',
+                hasFreeTier: true
+            },
+            url: 'https://riseup.net/vpn'
+        },
+        {
+            id: 'perfectprivacy',
+            name: 'Perfect Privacy',
+            description: 'High-end Swiss/German VPN focusing on cascaded multi-hop connections.',
+            jurisdiction: { country: 'Germany', level: JurisdictionLevel.FOURTEEN_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['Multi-hop', 'RAM Disk'],
+                paymentMethods: ['Crypto'],
+                servers: 52,
+                countries: 23,
+                maxDevices: 'Unlimited',
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://perfect-privacy.com'
+        },
+        {
+            id: 'oeck',
+            name: 'OECK',
+            description: 'Hong Kong based VPN with high-speed performance focus.',
+            jurisdiction: { country: 'Hong Kong', level: JurisdictionLevel.RISKY },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'DHE 4096',
+                features: [],
+                paymentMethods: ['Cash', 'Crypto'],
+                servers: 400,
+                countries: 4,
+                maxDevices: 6,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://oeck.com'
+        },
+        {
+            id: 'slickvpn',
+            name: 'SlickVPN',
+            description: 'USA-based VPN providing advanced protocol switching.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 150,
+                countries: 40,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://slickvpn.com'
+        },
+        {
+            id: 'hidemyass',
+            name: 'HideMyAss',
+            description: 'Famous UK-based VPN with a massive country selection.',
+            jurisdiction: { country: 'UK', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'Keep Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 1080,
+                countries: 210,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://hidemyass.com'
+        },
+        {
+            id: 'librem',
+            name: 'Librem Tunnel',
+            description: 'Privacy-focused VPN from Purism, integrated into the Librem ecosystem.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['Open Source'],
+                paymentMethods: ['Crypto'],
+                servers: 77,
+                countries: 17,
+                maxDevices: 'Unlimited',
+                interfaceType: 'CLI',
+                hasFreeTier: false
+            },
+            url: 'https://puri.sm/products/librem-one/librem-tunnel/'
+        },
+        {
+            id: 'shockvpn',
+            name: 'Shock VPN',
+            description: 'USA-based VPN utilizing custom security implementations.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Cash', 'Crypto'],
+                servers: 28,
+                countries: 8,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://shockvpn.com'
+        },
+        {
+            id: 'purevpn',
+            name: 'PureVPN',
+            description: 'Hong Kong based VPN with a large server network.',
+            jurisdiction: { country: 'Hong Kong', level: JurisdictionLevel.RISKY },
+            metrics: {
+                logs: 'Timestamps/Bandwidth',
+                encryption: 'AES 256',
+                handshake: 'RSA 2048',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 6500,
+                countries: 70,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://purevpn.com'
+        },
+        {
+            id: 'ivacy',
+            name: 'Ivacy',
+            description: 'Cost-effective VPN based in Singapore with focus on privacy and high speed.',
+            jurisdiction: { country: 'Singapore', level: JurisdictionLevel.RISKY },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 5700,
+                countries: 60,
+                maxDevices: 10,
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://ivacy.com'
+        },
+        {
+            id: 'umnv',
+            name: 'Umnetwork',
+            description: 'Decentralized VPN solution with focus on privacy and security.',
+            jurisdiction: { country: 'Malta', level: JurisdictionLevel.SAFE },
+            metrics: {
+                logs: 'No Logs',
+                encryption: '?',
+                handshake: '?',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 0,
+                countries: 0,
+                maxDevices: '?',
+                interfaceType: 'CLI',
+                hasFreeTier: false
+            },
+            url: 'https://umnv.net'
+        },
+        {
+            id: 'bytz',
+            name: 'Bytz VPN',
+            description: 'Privacy-focused VPN with advanced encryption techniques.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: [],
+                paymentMethods: ['Crypto'],
+                servers: 1,
+                countries: 6,
+                maxDevices: '?',
+                interfaceType: 'GUI',
+                hasFreeTier: false
+            },
+            url: 'https://bytz.v-p-n'
+        },
+        {
+            id: 'vp-net',
+            name: 'VP.net',
+            description: 'VPN run by the original PIA team with a focus on honest marketing and security.',
+            jurisdiction: { country: 'USA', level: JurisdictionLevel.FIVE_EYES },
+            metrics: {
+                logs: 'No Logs',
+                encryption: 'AES 256',
+                handshake: 'RSA 4096',
+                features: ['Open Source', 'Diskless', 'IPv6 Protection', '1st Party DNS', 'P2P Friendly'],
+                paymentMethods: ['Gift card'],
+                servers: 300,
+                countries: 8,
+                maxDevices: 5,
+                interfaceType: 'GUI',
+                hasFreeTier: false,
+                diskless: true
+            },
+            url: 'https://vp.net/l/en-US/'
+        },
     ];
 
     const Icon = ({ name, ...props }) => {
@@ -310,114 +794,196 @@
         return <i data-lucide={name} {...props}></i>;
     };
 
+    const FeatureBadge = ({ label, tooltip }) => (
+        <div className="group/badge relative inline-block">
+            <div className="flex flex-col min-w-[36px] overflow-hidden rounded-[1px] border border-white/5 shadow-2xl cursor-help transition-all hover:border-gold/50">
+                <div className="bg-gold text-[6px] font-black text-black px-2 py-0.5 text-center leading-none uppercase tracking-tighter">
+                    {label}
+                </div>
+                <div className="bg-white/90 h-0.5 w-full"></div>
+            </div>
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-surface border border-white/20 text-[9px] text-gray-300 font-mono uppercase tracking-[0.2em] whitespace-nowrap opacity-0 group-hover/badge:opacity-100 transition-all pointer-events-none z-[100] shadow-2xl backdrop-blur-md scale-95 group-hover/badge:scale-100 origin-bottom">
+                <span className="text-gold mr-2 font-bold">•</span>
+                {tooltip}
+            </div>
+        </div>
+    );
+
     const JurisdictionBadge = ({ level }) => {
         const colors = {
-            [JurisdictionLevel.SAFE]: 'bg-emerald-900/20 text-emerald-400 border-emerald-900/40',
-            [JurisdictionLevel.FOURTEEN_EYES]: 'bg-yellow-900/20 text-yellow-400 border-yellow-900/40',
-            [JurisdictionLevel.NINE_EYES]: 'bg-orange-900/20 text-orange-400 border-orange-900/40',
-            [JurisdictionLevel.FIVE_EYES]: 'bg-red-900/20 text-red-400 border-red-900/40',
-            [JurisdictionLevel.RISKY]: 'bg-purple-900/20 text-purple-400 border-purple-900/40',
+            [JurisdictionLevel.SAFE]: 'bg-[#14F195]/10 text-[#14F195] border-[#14F195]/20',
+            [JurisdictionLevel.FOURTEEN_EYES]: 'bg-yellow-900/10 text-yellow-500 border-yellow-900/20',
+            [JurisdictionLevel.NINE_EYES]: 'bg-orange-900/10 text-orange-500 border-orange-900/20',
+            [JurisdictionLevel.FIVE_EYES]: 'bg-red-900/10 text-red-500 border-red-900/20',
+            [JurisdictionLevel.RISKY]: 'bg-purple-900/10 text-purple-400 border-purple-900/20',
+        };
+
+        const descriptions = {
+            [JurisdictionLevel.SAFE]: 'Minimal surveillance risk. Data isolation.',
+            [JurisdictionLevel.FOURTEEN_EYES]: 'Collaborative intelligence sharing zone.',
+            [JurisdictionLevel.NINE_EYES]: 'Extended intelligence sharing agreement.',
+            [JurisdictionLevel.FIVE_EYES]: 'Highest data-sharing integration. Extreme surveillance.',
+            [JurisdictionLevel.RISKY]: 'Opaque legal landscape or high interference risk.',
         };
 
         return (
-            <span className={`px-2 py-0.5 text-[10px] uppercase font-mono tracking-wider border ${colors[level]}`}>
-                    {level}
-                </span>
+            <div className="group/j relative inline-block">
+                    <span className={`px-2 py-0.5 text-[8px] font-bold uppercase tracking-widest border rounded-[1px] cursor-help ${colors[level]}`}>
+                        {level}
+                    </span>
+                <div className="absolute top-full left-0 mt-2 w-48 p-2 bg-surface border border-white/10 text-[9px] text-gray-400 font-mono uppercase tracking-wider opacity-0 group-hover/j:opacity-100 transition-opacity z-[90] shadow-2xl backdrop-blur-md">
+                    {descriptions[level]}
+                </div>
+            </div>
         );
     };
 
+    const MetricDots = ({ label, active }) => (
+        <div className="flex flex-col items-end gap-1">
+            <div className="flex gap-1">
+                {[1, 2, 3].map((i) => (
+                    <div
+                        key={i}
+                        className={`w-1.5 h-1.5 rounded-[1px] ${i <= active ? 'bg-[#14F195]' : 'bg-white/10'}`}
+                    />
+                ))}
+            </div>
+            <span className="text-[9px] text-gray-600 font-bold uppercase tracking-widest">{label}</span>
+        </div>
+    );
+
     const VPNCard = ({ vpn, isSelected, onToggleSelect }) => {
         const [isExpanded, setIsExpanded] = useState(false);
-        const integrityScore = (vpn.metrics.logs === 'No Logs' ? 8.5 : 5.0) +
-            (vpn.jurisdiction.level === JurisdictionLevel.SAFE ? 1.0 : 0.5);
+
+        const calculateScore = () => {
+            let score = 0;
+
+            // Logs Audit (Max 8.0)
+            if (vpn.metrics.logs === 'No Logs') score += 8.0;
+            else if (vpn.metrics.logs === 'Timestamps' || vpn.metrics.logs.includes('Bandwidth')) score += 5.0;
+            else score += 3.0;
+
+            // Jurisdiction (Max 1.0)
+            if (vpn.jurisdiction.level === JurisdictionLevel.SAFE) score += 1.0;
+            else if (vpn.jurisdiction.level === JurisdictionLevel.FOURTEEN_EYES) score += 0.5;
+            else score += 0.2;
+
+            // Infrastructure (Max 0.5)
+            if (vpn.metrics.diskless) score += 0.5;
+
+            // Transparency/Open Source (Max 0.5)
+            if (vpn.metrics.features.includes('Open Source')) score += 0.5;
+
+            return Math.min(10, score);
+        };
+
+        const score = calculateScore();
 
         return (
-            <div className={`bg-card border ${isSelected ? 'border-gold shadow-[0_0_15px_rgba(197,160,89,0.15)]' : 'border-border'} rounded-sm overflow-hidden hover:border-gold/30 transition-all duration-500 fade-in`}>
-                <div className="p-6">
-                    <div className="grid grid-cols-12 items-center gap-4">
-                        <div className="col-span-1 flex justify-center">
+            <div className={`bg-card/40 border ${isSelected ? 'border-gold shadow-[0_0_20px_rgba(197,160,89,0.05)]' : 'border-white/5'} rounded-[1px] hover:border-gold/20 transition-all duration-300 fade-in group`}>
+                <div className="p-8">
+                    <div className="flex items-center gap-10">
+                        <div className="shrink-0">
                             <button
                                 onClick={() => onToggleSelect(vpn.id)}
-                                className={`w-5 h-5 border rounded flex items-center justify-center transition-all ${isSelected ? 'bg-gold border-gold text-surface' : 'border-white/10 hover:border-white/30'}`}
+                                className={`w-5 h-5 border rounded-[1px] flex items-center justify-center transition-all ${isSelected ? 'bg-gold border-gold text-surface' : 'border-white/10 hover:border-gold/30'}`}
                             >
                                 {isSelected && <Icon name="check" className="w-3 h-3" />}
                             </button>
                         </div>
 
-                        <div className="col-span-11 md:col-span-4 flex items-center gap-4">
-                            <div className="w-10 h-10 bg-gold/10 border border-gold/20 rounded flex items-center justify-center text-gold font-serif italic text-lg">
-                                {vpn.name.charAt(0)}
+                        <div className="w-12 h-12 shrink-0 bg-white/[0.03] border border-white/10 flex items-center justify-center text-gold font-serif italic text-xl group-hover:border-gold/40 transition-colors">
+                            {vpn.name.charAt(0)}
+                        </div>
+
+                        <div className="flex-grow">
+                            <div className="flex items-center gap-4 mb-3">
+                                <h3 className="text-xl font-medium tracking-tight text-white">{vpn.name}</h3>
+                                <JurisdictionBadge level={vpn.jurisdiction.level} />
                             </div>
-                            <div>
-                                <h3 className="text-lg font-medium tracking-tight text-white">{vpn.name}</h3>
-                                <p className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">
-                                    {vpn.jurisdiction.country} • {vpn.metrics.interfaceType}
-                                </p>
+                            <div className="flex gap-1.5 flex-wrap">
+                                {vpn.metrics.logs === 'No Logs' && <FeatureBadge label="TRANS" tooltip="Transparency Audit" />}
+                                {(vpn.id === 'mullvad' || vpn.id === 'ivpn' || vpn.id === 'proton' || vpn.id === 'ovpn') && <FeatureBadge label="1ST" tooltip="1st Party Servers" />}
+                                {vpn.metrics.encryption.includes('256') && <FeatureBadge label="NATIVE" tooltip="Native Encryption" />}
+                                {vpn.metrics.features.some(f => f.toLowerCase().includes('core') || f.toLowerCase().includes('hop')) && <FeatureBadge label="M" tooltip="Multi-hop Ready" />}
+                                {vpn.jurisdiction.level === JurisdictionLevel.SAFE && <FeatureBadge label="Y" tooltip="Neutral Zone" />}
+                                {vpn.metrics.diskless && <FeatureBadge label="RAM" tooltip="Diskless / RAM-only Infrastructure" />}
+                                {vpn.metrics.features.length > 2 && <FeatureBadge label="TOTAL CO" tooltip="Total Control" />}
                             </div>
                         </div>
 
-                        <div className="col-span-6 md:col-span-2">
-                            <JurisdictionBadge level={vpn.jurisdiction.level} />
-                        </div>
+                        <div className="shrink-0 flex items-center gap-16">
+                            <MetricDots
+                                label={vpn.metrics.logs === 'No Logs' ? "No Logs" : "Bandwidth"}
+                                active={vpn.metrics.logs === 'No Logs' ? 3 : (vpn.id === 'nord' ? 2 : 1)}
+                            />
 
-                        <div className="col-span-6 md:col-span-3 flex flex-col items-center md:items-start gap-1">
-                            <div className="flex gap-1">
-                                {[1, 2, 3].map((i) => (
-                                    <div
-                                        key={i}
-                                        className={`w-1.5 h-1.5 ${i <= (vpn.metrics.logs === 'No Logs' ? 3 : 1) ? 'bg-emerald-500' : 'bg-white/10'}`}
-                                    />
-                                ))}
+                            <div className="text-right min-w-[100px]">
+                                <div className="text-3xl font-serif italic text-gold mb-0">{score.toFixed(1)}</div>
+                                <div className="text-[9px] text-gray-600 block uppercase tracking-widest font-bold">Technical Rank</div>
                             </div>
-                            <span className="text-[10px] text-gray-500 font-mono uppercase tracking-[0.1em]">{vpn.metrics.logs}</span>
-                        </div>
 
-                        <div className="col-span-12 md:col-span-2 text-right">
-                            <span className="text-3xl font-serif italic text-gold">{integrityScore.toFixed(1)}</span>
-                            <span className="text-[9px] text-gray-600 block uppercase tracking-tighter -mt-1">Technical Rank</span>
+                            <div className="min-w-[80px] text-right">
+                                <button
+                                    onClick={() => setIsExpanded(!isExpanded)}
+                                    className="flex items-center gap-2 text-[9px] uppercase tracking-[0.3em] text-gray-500 hover:text-gold transition-all font-bold group/details ml-auto"
+                                >
+                                    Details
+                                    <Icon name={isExpanded ? "chevron-up" : "chevron-right"} className="w-3 h-3 group-hover/details:translate-x-1" />
+                                </button>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="mt-4 flex justify-between items-center">
-                        <p className="text-sm text-gray-400 italic font-serif line-clamp-1 opacity-60">{vpn.description}</p>
-                        <button
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-gold hover:text-gold-hover transition-colors font-bold whitespace-nowrap ml-4"
-                        >
-                            {isExpanded ? 'Collapse' : 'Details'}
-                            <Icon name="arrow-right" className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
-                        </button>
                     </div>
 
                     {isExpanded && (
-                        <div className="pt-6 border-t border-white/5 mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 fade-in">
+                        <div className="pt-8 border-t border-white/5 mt-8 grid grid-cols-1 md:grid-cols-3 gap-12 fade-in">
                             <div className="space-y-6">
                                 <section>
-                                    <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-3 flex items-center gap-2">
+                                    <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-4 flex items-center gap-2">
                                         <Icon name="shield" className="w-3 h-3" /> Security
                                     </h4>
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between text-xs border-b border-white/5 pb-1">
-                                            <span className="text-gray-500">Encryption</span>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between text-[11px] border-b border-white/5 pb-2">
+                                            <span className="text-gray-500 uppercase tracking-widest">Protocol</span>
+                                            <span className="text-gray-200 font-mono italic">WireGuard / IKEv2</span>
+                                        </div>
+                                        <div className="flex justify-between text-[11px] border-b border-white/5 pb-2">
+                                            <span className="text-gray-500 uppercase tracking-widest">Encryption</span>
                                             <span className="text-gray-200 font-mono">{vpn.metrics.encryption}</span>
                                         </div>
-                                        <div className="flex justify-between text-xs border-b border-white/5 pb-1">
-                                            <span className="text-gray-500">Handshake</span>
-                                            <span className="text-gray-200 font-mono">{vpn.metrics.handshake}</span>
+                                        <div className="flex justify-between text-[11px] border-b border-white/5 pb-2">
+                                            <span className="text-gray-500 uppercase tracking-widest">Infrastructure</span>
+                                            <span className="text-gray-200 font-mono italic tracking-tighter">{vpn.metrics.diskless ? 'Diskless RAM-Only Nodes' : 'Standard Disk Infrastructure'}</span>
                                         </div>
                                     </div>
                                 </section>
                             </div>
                             <div className="space-y-6">
                                 <section>
-                                    <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-3">Methods</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {vpn.metrics.paymentMethods.map(p => (
-                                            <span key={p} className="px-2 py-1 bg-gold/5 border border-gold/20 text-[10px] text-gold font-mono">{p}</span>
-                                        ))}
+                                    <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-4 flex items-center gap-2">
+                                        <Icon name="globe" className="w-3 h-3" /> Network
+                                    </h4>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between text-[11px] border-b border-white/5 pb-2">
+                                            <span className="text-gray-500 uppercase tracking-widest">Nodes</span>
+                                            <span className="text-gray-200 font-mono">{vpn.metrics.servers.toLocaleString()}+</span>
+                                        </div>
+                                        <div className="flex justify-between text-[11px] border-b border-white/5 pb-2">
+                                            <span className="text-gray-500 uppercase tracking-widest">Territories</span>
+                                            <span className="text-gray-200 font-mono">{vpn.metrics.countries} Countries</span>
+                                        </div>
+                                        <div className="flex justify-between text-[11px] border-b border-white/5 pb-2">
+                                            <span className="text-gray-500 uppercase tracking-widest">Devices</span>
+                                            <span className="text-gray-200 font-mono">{vpn.metrics.maxDevices}</span>
+                                        </div>
                                     </div>
                                 </section>
-                                <a href={vpn.url} target="_blank" className="block w-full py-3 bg-gold text-surface font-bold text-xs uppercase tracking-widest text-center hover:bg-gold-hover transition-all">Intel Sheet</a>
+                            </div>
+                            <div className="col-span-1 flex flex-col justify-between">
+                                <p className="text-xs text-gray-500 font-serif italic leading-relaxed opacity-60 mb-8">
+                                    {vpn.description}
+                                </p>
+                                <a href={vpn.url} target="_blank" className="block w-full py-3 border border-gold/30 text-gold font-bold text-[10px] uppercase tracking-[0.3em] text-center hover:bg-gold hover:text-surface transition-all">Intel Access</a>
                             </div>
                         </div>
                     )}
@@ -545,12 +1111,29 @@
         const [freeOnly, setFreeOnly] = useState(false);
 
         const filteredVPNs = useMemo(() => {
-            return VPN_DATA.filter(vpn => {
+            const results = VPN_DATA.filter(vpn => {
                 const matchesSearch = vpn.name.toLowerCase().includes(search.toLowerCase());
                 const matchesJurisdiction = jurisdictionFilter.length === 0 || jurisdictionFilter.includes(vpn.jurisdiction.level);
                 const matchesFeatures = activeFeatures.length === 0 || activeFeatures.every(f => vpn.metrics.features.includes(f) || vpn.metrics.logs === f);
                 const matchesFree = !freeOnly || vpn.metrics.hasFreeTier;
                 return matchesSearch && matchesJurisdiction && matchesFeatures && matchesFree;
+            });
+
+            // Calculate score-based sort
+            return results.sort((a, b) => {
+                const getScore = (v) => {
+                    let score = 0;
+                    if (v.metrics.logs === 'No Logs') score += 8.0;
+                    else if (v.metrics.logs === 'Timestamps' || v.metrics.logs.includes('Bandwidth')) score += 5.0;
+                    else score += 3.0;
+                    if (v.jurisdiction.level === JurisdictionLevel.SAFE) score += 1.0;
+                    else if (v.jurisdiction.level === JurisdictionLevel.FOURTEEN_EYES) score += 0.5;
+                    else score += 0.2;
+                    if (v.metrics.diskless) score += 0.5;
+                    if (v.metrics.features.includes('Open Source')) score += 0.5;
+                    return score;
+                };
+                return getScore(b) - getScore(a);
             });
         }, [search, jurisdictionFilter, activeFeatures, freeOnly]);
 
@@ -632,10 +1215,10 @@
                                         <Icon name="info" className="w-3 h-3" /> Intelligence Brief
                                     </h4>
                                     <div className="space-y-4 text-[10px] text-gray-500 leading-relaxed font-mono uppercase tracking-tighter">
-                                        <p><span className="text-white">5-Eyes:</span> Deep integration. US, UK, CA, AU, NZ.</p>
-                                        <p><span className="text-white">9-Eyes:</span> Extended sharing. Core + FR, NL, DK, NO.</p>
-                                        <p><span className="text-white">14-Eyes:</span> Collaborative. Core + DE, BE, IT, ES, SE.</p>
-                                        <p className="border-t border-white/10 pt-4 italic">VPNs in these zones can be compelled to share metadata under secret subpoenas.</p>
+                                        <p><span className="text-white">5-Eyes:</span> Deep integration and bulk data sharing. (US, UK, CA, AU, NZ).</p>
+                                        <p><span className="text-white">9-Eyes:</span> 5-Eyes + FR, NL, DK, NO. Broad EU collaboration.</p>
+                                        <p><span className="text-white">14-Eyes:</span> SIGINT Seniors Europe. Collaborative intelligence exchange.</p>
+                                        <p className="border-t border-white/10 pt-4 italic text-gray-600">VPNs in these zones are subject to secret subpoenas and gag orders that can bypass 'No Logs' claims.</p>
                                     </div>
                                 </section>
                             </aside>
