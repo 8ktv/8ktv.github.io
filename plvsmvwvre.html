@@ -27,14 +27,44 @@
         .cursor-blink {
             animation: blink 1s step-end infinite;
         }
+        .premium-glow {
+            text-shadow: 0 0 18px rgba(245, 245, 243, 0.22), 0 0 35px rgba(245, 245, 243, 0.12), 0 0 4px rgba(245, 245, 243, 0.08);
+        }
+        .scanline-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(
+                    rgba(245, 245, 243, 0) 50%,
+                    rgba(0, 0, 0, 0.18) 50%
+            );
+            background-size: 100% 3.5px;
+            z-index: 5;
+            opacity: 0.35;
+        }
+        .grain-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
     </style>
 </head>
-<body class="h-screen w-screen bg-[#F5F5F3] text-[#1A1A1A] selection:bg-[#1A1A1A] selection:text-[#F5F5F3] font-sans flex items-center justify-center overflow-hidden m-0 p-0">
+<body class="h-screen w-screen bg-[#1A1A1A] text-[#F5F5F3] selection:bg-[#F5F5F3] selection:text-[#1A1A1A] font-sans flex items-center justify-center overflow-hidden m-0 p-0 relative">
 
-<div class="select-none px-6 text-center">
+<div class="scanline-overlay"></div>
+<div class="grain-overlay"></div>
+
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+    <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="max-w-[70vw] max-h-[70vh] object-contain opacity-5 transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)" referrerpolicy="no-referrer" />
+</div>
+
+<div class="select-none px-6 text-center flex flex-col items-center justify-center gap-8 relative z-10">
     <div class="inline-flex items-center justify-center min-h-[5rem]">
-        <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em]">
-            <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[3.5px] h-[0.9em] bg-[#1A1A1A] cursor-blink ml-1 align-middle"></span>
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em] premium-glow">
+            <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[3.5px] h-[0.9em] bg-[#F5F5F3] cursor-blink ml-1 align-middle"></span>
         </h1>
     </div>
 </div>
@@ -43,19 +73,42 @@
     document.addEventListener("DOMContentLoaded", () => {
         const text = "PLVSMVWVRE";
         const target = document.getElementById("typewriter-target");
+        const logo = document.getElementById("background-logo");
         let index = 0;
 
-        function type() {
-            if (index < text.length) {
-                target.textContent += text.charAt(index);
-                index++;
+        let isDeleting = false;
 
-                const organicDelay = Math.floor(Math.random() * 100) + 80;
-                setTimeout(type, organicDelay);
+        function type() {
+            if (!isDeleting) {
+                if (index < text.length) {
+                    target.textContent += text.charAt(index);
+                    index++;
+                    const organicDelay = Math.floor(Math.random() * 100) + 80;
+                    setTimeout(type, organicDelay);
+                } else {
+                    isDeleting = true;
+                    setTimeout(type, 2000);
+                }
+            } else {
+                if (index > 0) {
+                    target.textContent = text.substring(0, index - 1);
+                    index--;
+                    const organicDelay = Math.floor(Math.random() * 50) + 40;
+                    setTimeout(type, organicDelay);
+                } else {
+                    isDeleting = false;
+                    setTimeout(type, 800);
+                }
             }
         }
 
         setTimeout(type, 800);
+
+        document.addEventListener("mousemove", (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * -18;
+            const moveY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2) * -18;
+            logo.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
     });
 </script>
 
