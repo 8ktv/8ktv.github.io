@@ -1,0 +1,63 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PLVSMVWVRE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen bg-[#F5F5F3] text-[#1A1A1A] selection:bg-[#1A1A1A] selection:text-[#F5F5F3] font-sans flex items-center justify-center overflow-hidden m-0 p-0">
+
+<div class="select-none px-6 text-center">
+    <div class="inline-flex items-center justify-center min-h-[5rem]">
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em]">
+            <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[3.5px] h-[0.9em] bg-[#1A1A1A] cursor-blink ml-1 align-middle"></span>
+        </h1>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const text = "PLVSMVWVRE";
+        const target = document.getElementById("typewriter-target");
+        let index = 0;
+
+        function type() {
+            if (index < text.length) {
+                target.textContent += text.charAt(index);
+                index++;
+
+                const organicDelay = Math.floor(Math.random() * 100) + 80;
+                setTimeout(type, organicDelay);
+            }
+        }
+
+        setTimeout(type, 800);
+    });
+</script>
+
+</body>
+</html>
