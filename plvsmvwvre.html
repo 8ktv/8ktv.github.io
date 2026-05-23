@@ -30,6 +30,10 @@
         .premium-glow {
             text-shadow: 0 0 18px rgba(245, 245, 243, 0.22), 0 0 35px rgba(245, 245, 243, 0.12), 0 0 4px rgba(245, 245, 243, 0.08);
         }
+        .masked-logo {
+            mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 100%);
+            -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 100%);
+        }
         .scanline-overlay {
             position: fixed;
             inset: 0;
@@ -42,23 +46,40 @@
             z-index: 5;
             opacity: 0.35;
         }
+        @keyframes noise-shift {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(-1%, -2%); }
+            20% { transform: translate(-3%, 1%); }
+            30% { transform: translate(2%, -1%); }
+            40% { transform: translate(-1%, 3%); }
+            50% { transform: translate(-2%, -3%); }
+            60% { transform: translate(3%, 1%); }
+            70% { transform: translate(1%, 2%); }
+            80% { transform: translate(-2%, -2%); }
+            90% { transform: translate(2%, 3%); }
+            100% { transform: translate(-1%, -1%); }
+        }
         .grain-overlay {
             position: fixed;
-            inset: 0;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
             pointer-events: none;
             z-index: 20;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.20;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            animation: noise-shift 0.12s infinite steps(2);
         }
     </style>
 </head>
-<body class="h-screen w-screen bg-[#1A1A1A] text-[#F5F5F3] selection:bg-[#F5F5F3] selection:text-[#1A1A1A] font-sans flex items-center justify-center overflow-hidden m-0 p-0 relative">
+<body class="h-screen w-screen bg-black text-[#F5F5F3] selection:bg-[#F5F5F3] selection:text-black font-sans flex items-center justify-center overflow-hidden m-0 p-0 relative">
 
 <div class="scanline-overlay"></div>
 <div class="grain-overlay"></div>
 
-<div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-    <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="max-w-[70vw] max-h-[70vh] object-contain opacity-5 transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)" referrerpolicy="no-referrer" />
+<div class="absolute inset-y-0 left-0 w-full md:w-[60vw] flex items-center justify-start pointer-events-none select-none z-0 overflow-hidden">
+    <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="w-auto h-[120vh] max-w-none object-contain opacity-[0.14] transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1) masked-logo -translate-x-[10%]" referrerpolicy="no-referrer" />
 </div>
 
 <div class="select-none px-6 text-center flex flex-col items-center justify-center gap-8 relative z-10">
@@ -107,7 +128,7 @@
         document.addEventListener("mousemove", (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * -18;
             const moveY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2) * -18;
-            logo.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            logo.style.transform = `translate(calc(-10% + ${moveX}px), ${moveY}px)`;
         });
     });
 </script>
