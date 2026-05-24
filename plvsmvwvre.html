@@ -68,6 +68,19 @@
             z-index: 1;
             animation: vignette-pulse 10s ease-in-out infinite;
         }
+        @keyframes entry-fade-scale {
+            0% {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .entry-animate {
+            animation: entry-fade-scale 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
         .scanline-overlay {
             position: fixed;
             inset: 0;
@@ -105,6 +118,27 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: noise-shift 0.12s infinite steps(2);
         }
+        @keyframes eq-height {
+            0%, 100% { height: 3px; }
+            50% { height: 10px; }
+        }
+        .animate-eq1 { animation: eq-height 0.8s ease-in-out infinite; }
+        .animate-eq2 { animation: eq-height 1.2s ease-in-out infinite 0.2s; }
+        .animate-eq3 { animation: eq-height 1.0s ease-in-out infinite 0.4s; }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(245, 245, 243, 0.15);
+            border-radius: 99px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 245, 243, 0.3);
+        }
     </style>
 </head>
 <body class="h-screen w-screen bg-black text-[#F5F5F3] selection:bg-[#F5F5F3] selection:text-black font-sans flex items-center justify-center overflow-hidden m-0 p-0 relative">
@@ -112,32 +146,143 @@
 <div class="scanline-overlay"></div>
 <div class="grain-overlay"></div>
 <div class="vignette-overlay"></div>
+<div id="white-flash" class="fixed inset-0 bg-white pointer-events-none z-[100] opacity-0"></div>
 
-<div id="logo-parallax" class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)">
-    <div class="w-[45vw] h-[45vw] max-w-[320px] max-h-[320px] md:max-w-[400px] md:max-h-[400px]">
-        <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="w-full h-full object-contain breathing-opacity spinning-logo" referrerpolicy="no-referrer" />
+<!-- SoundCloud Background Music Widget -->
+<div class="absolute bottom-6 right-6 z-50 flex flex-col items-end gap-2 font-mono">
+    <div id="spotify-panel" class="w-[330px] h-[400px] bg-black/75 border border-[#F5F5F3]/10 backdrop-blur-xl rounded-xl overflow-hidden shadow-2xl transition-all duration-300 transform translate-y-3 opacity-0 pointer-events-none flex flex-col p-2 gap-2">
+        <iframe id="spotify-iframe" class="opacity-90 hover:opacity-100 transition-opacity duration-300 rounded-lg shrink-0" src="" width="100%" height="120" frameBorder="no" scrolling="no" allow="autoplay" loading="lazy"></iframe>
+
+        <div class="flex flex-col gap-1 text-[10px] select-none font-mono mt-0.5 overflow-hidden flex-1">
+            <div class="text-[8px] tracking-[0.18em] text-[#F5F5F3]/40 uppercase px-1 pb-1 border-b border-[#F5F5F3]/5">
+                Select Track
+            </div>
+            <div class="flex flex-col gap-1 overflow-y-auto pr-0.5 custom-scrollbar pb-1">
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/1-lucifer-batmobile">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">1 - lucifer batmobile</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">01</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/sha666y/tweakin-w-4jay-prod-4jay">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">tweakin'</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">2shanez, 4Jay</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">02</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/devcapoo/dev-capo-chrome-gutz-p">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">Chrome Gutz</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">Dev Capo</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">03</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/close-my-eyes-w-bacleo">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">close My Eyes</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel, Bacleo</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">04</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/1006-anthem">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">1006 anthem</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">Luci4</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">05</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/3-lucifer-x-naamah-vampiric-assault-prod-deemo">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">3 - lucifer x naamah (vampiric assault)</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">06</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/noktifer-speaks">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">noktifer speaks</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">07</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/topsdollarsign/put-it-on-a-t-shirt-mono">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">put it on a t-shirt (mono)</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">topsdollarsign</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">08</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/siptilwedie/kult-w-hav7c-skecthers">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">kult w/ hav7c</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">skecthers</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">09</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/noid4l/still-flexin-still-steppin">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">still flexin still steppin</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">noid4l</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">10</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/noid4l/internet-gangsters">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">internet gangsters</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">noid4l</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">11</span>
+                </button>
+                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/slimegetem/gears-of-wars">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">gears of wars</span>
+                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">slimegetem</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">12</span>
+                </button>
+            </div>
+        </div>
     </div>
+
+    <button id="soundtrack-toggle" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/25 transition-all duration-300 cursor-pointer backdrop-blur-md select-none text-[10px] tracking-widest uppercase text-[#F5F5F3]/80 hover:text-[#F5F5F3]">
+        <div class="flex items-end gap-[2px] h-[10px] w-[10px] mr-1">
+            <div class="w-[2px] bg-[#F5F5F3] animate-eq1" style="height: 3px;"></div>
+            <div class="w-[2px] bg-[#F5F5F3] animate-eq2" style="height: 3px;"></div>
+            <div class="w-[2px] bg-[#F5F5F3] animate-eq3" style="height: 3px;"></div>
+        </div>
+        <span id="soundtrack-text">Soundtrack</span>
+    </button>
 </div>
 
-<div class="select-none px-6 text-center flex flex-col items-center justify-center gap-8 relative z-10">
-    <div class="inline-flex items-center justify-center min-h-[5rem]">
-        <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em] premium-glow">
-            <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[5px] h-[0.9em] bg-[#F5F5F3] border border-black cursor-blink ml-1 align-middle"></span>
-        </h1>
+<div class="entry-animate absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+    <div id="logo-parallax" class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)">
+        <div id="logo-image-container" class="w-[45vw] h-[45vw] max-w-[320px] max-h-[320px] md:max-w-[400px] md:max-h-[400px]">
+            <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="w-full h-full object-contain breathing-opacity spinning-logo" referrerpolicy="no-referrer" />
+        </div>
     </div>
 
-    <div class="flex flex-col items-center gap-3">
-        <div class="flex items-center justify-center gap-6 text-xs sm:text-sm tracking-[0.25em] uppercase text-[#F5F5F3]/60 font-mono">
-            <a href="https://discord.gg/kFseSHUgAE" id="community-link" target="_blank" rel="noopener noreferrer" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5">
-                Community
-            </a>
-            <span class="text-[#F5F5F3]/25 select-none">||</span>
-            <button id="download-btn" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5 uppercase font-mono">
-                Download
-            </button>
+    <div class="select-none px-6 text-center flex flex-col items-center justify-center gap-8 relative z-10 pointer-events-auto">
+        <div class="inline-flex items-center justify-center min-h-[5rem]">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em] premium-glow">
+                <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[5px] h-[0.9em] bg-[#F5F5F3] border border-black cursor-blink ml-1 align-middle"></span>
+            </h1>
         </div>
-        <div id="download-tip" class="text-[10px] tracking-widest text-[#F5F5F3]/40 font-mono opacity-0 translate-y-1 transition-all duration-300 pointer-events-none">
-            Download option will be configured soon
+
+        <div class="flex flex-col items-center gap-3">
+            <div class="flex items-center justify-center gap-6 text-xs sm:text-sm tracking-[0.25em] uppercase text-[#F5F5F3]/60 font-mono">
+                <a href="https://discord.gg/kFseSHUgAE" id="community-link" target="_blank" rel="noopener noreferrer" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5">
+                    Community
+                </a>
+                <span class="text-[#F5F5F3]/25 select-none">||</span>
+                <button id="download-btn" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5 uppercase font-mono">
+                    Download
+                </button>
+            </div>
+            <div id="download-tip" class="text-[10px] tracking-widest text-[#F5F5F3]/40 font-mono opacity-0 translate-y-1 transition-all duration-300 pointer-events-none">
+                Download option will be configured soon
+            </div>
         </div>
     </div>
 </div>
@@ -177,20 +322,153 @@
 
         setTimeout(type, 800);
 
+        const communityLink = document.getElementById("community-link");
         const downloadBtn = document.getElementById("download-btn");
         const downloadTip = document.getElementById("download-tip");
+        const whiteFlash = document.getElementById("white-flash");
+        const logoImageContainer = document.getElementById("logo-image-container");
         let tipTimeout;
+        let isAnimating = false;
+
+        function triggerFlashAnimation(clickedElement, onPeak) {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // Save original styles
+            const originalTransition = clickedElement.style.transition;
+            const originalTransform = clickedElement.style.transform;
+            const originalFilter = clickedElement.style.filter;
+            const originalColor = clickedElement.style.color;
+
+            // Fast zoom scale and white fade on clicked element
+            clickedElement.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1), filter 400ms, color 400ms";
+            clickedElement.style.transform = "scale(18)";
+            clickedElement.style.filter = "brightness(10) blur(1px)";
+            clickedElement.style.color = "#ffffff";
+            clickedElement.style.zIndex = "50";
+
+            // Logo zooms in/scales up concurrently
+            if (logoImageContainer) {
+                logoImageContainer.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+                logoImageContainer.style.transform = "scale(1.8)";
+            }
+
+            // Bring in white flash to 100% opacity
+            whiteFlash.style.transition = "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+            whiteFlash.classList.remove("pointer-events-none");
+            whiteFlash.classList.remove("opacity-0");
+            whiteFlash.classList.add("opacity-100");
+
+            // Peak trigger
+            setTimeout(() => {
+                if (onPeak) onPeak();
+
+                // Slower recovery fade out
+                setTimeout(() => {
+                    whiteFlash.style.transition = "opacity 850ms cubic-bezier(0.16, 1, 0.3, 1)";
+                    whiteFlash.classList.remove("opacity-100");
+                    whiteFlash.classList.add("opacity-0");
+                    whiteFlash.classList.add("pointer-events-none");
+
+                    clickedElement.style.transition = "transform 850ms cubic-bezier(0.16, 1, 0.3, 1), filter 850ms, color 850ms";
+                    clickedElement.style.transform = originalTransform || "scale(1)";
+                    clickedElement.style.filter = originalFilter || "";
+                    clickedElement.style.color = originalColor || "";
+
+                    if (logoImageContainer) {
+                        logoImageContainer.style.transition = "transform 850ms cubic-bezier(0.16, 1, 0.3, 1)";
+                        logoImageContainer.style.transform = "scale(1)";
+                    }
+
+                    // Fully restore interaction
+                    setTimeout(() => {
+                        clickedElement.style.transition = originalTransition;
+                        clickedElement.style.zIndex = "";
+                        isAnimating = false;
+                    }, 850);
+                }, 100);
+            }, 400);
+        }
+
+        communityLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            triggerFlashAnimation(communityLink, () => {
+                window.open(communityLink.href, "_blank");
+            });
+        });
 
         downloadBtn.addEventListener("click", () => {
-            clearTimeout(tipTimeout);
-            downloadTip.classList.remove("opacity-0", "translate-y-1");
-            downloadTip.classList.add("opacity-100", "translate-y-0");
+            triggerFlashAnimation(downloadBtn, () => {
+                clearTimeout(tipTimeout);
+                downloadTip.classList.remove("opacity-0", "translate-y-1");
+                downloadTip.classList.add("opacity-100", "translate-y-0");
 
-            tipTimeout = setTimeout(() => {
-                downloadTip.classList.remove("opacity-100", "translate-y-0");
-                downloadTip.classList.add("opacity-0", "translate-y-1");
-            }, 3000);
+                tipTimeout = setTimeout(() => {
+                    downloadTip.classList.remove("opacity-100", "translate-y-0");
+                    downloadTip.classList.add("opacity-0", "translate-y-1");
+                }, 3000);
+            });
         });
+
+        const soundtrackToggle = document.getElementById("soundtrack-toggle");
+        const spotifyPanel = document.getElementById("spotify-panel");
+        const spotifyIframe = document.getElementById("spotify-iframe");
+        const trackItems = document.querySelectorAll(".track-item");
+        let isSpotifyOpen = false;
+
+        soundtrackToggle.addEventListener("click", () => {
+            isSpotifyOpen = !isSpotifyOpen;
+            if (isSpotifyOpen) {
+                spotifyPanel.classList.remove("translate-y-3", "opacity-0", "pointer-events-none");
+                spotifyPanel.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
+                soundtrackToggle.classList.add("bg-[#F5F5F3]/15", "border-[#F5F5F3]/40");
+            } else {
+                spotifyPanel.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
+                spotifyPanel.classList.add("translate-y-3", "opacity-0", "pointer-events-none");
+                soundtrackToggle.classList.remove("bg-[#F5F5F3]/15", "border-[#F5F5F3]/40");
+            }
+        });
+
+        function playTrack(btn) {
+            // Reset all track items styling
+            trackItems.forEach((item) => {
+                item.className = "track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer";
+                const titleSp = item.querySelector("span:first-child");
+                const artistSp = item.querySelector("span:nth-child(2)");
+                if (titleSp) titleSp.className = "text-[#F5F5F3]/70 font-medium truncate text-[10px]";
+                if (artistSp) artistSp.className = "text-[#F5F5F3]/40 text-[8px] truncate mt-0.5";
+            });
+
+            // Activate current item styling
+            btn.className = "track-item active w-full flex items-center justify-between p-2 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/10 text-left transition-all duration-200 cursor-pointer";
+            const btnTitle = btn.querySelector("span:first-child");
+            const btnArtist = btn.querySelector("span:nth-child(2)");
+            if (btnTitle) btnTitle.className = "text-[#F5F5F3] font-medium truncate text-[10px]";
+            if (btnArtist) btnArtist.className = "text-[#F5F5F3]/50 text-[8px] truncate mt-0.5";
+
+            // Dynamic Now Playing soundtrack label
+            const soundtrackTextEle = document.getElementById("soundtrack-text");
+            if (soundtrackTextEle && btnTitle) {
+                soundtrackTextEle.textContent = `Now playing: ${btnTitle.textContent}`;
+            }
+
+            // Update embedded player source
+            const rawUrl = btn.getAttribute("data-url");
+            const encodedUrl = encodeURIComponent(rawUrl);
+            spotifyIframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23121212&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
+        }
+
+        trackItems.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                playTrack(btn);
+            });
+        });
+
+        // Play random song on entry
+        if (trackItems.length > 0) {
+            const randomIndex = Math.floor(Math.random() * trackItems.length);
+            playTrack(trackItems[randomIndex]);
+        }
 
         document.addEventListener("mousemove", (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * -18;
