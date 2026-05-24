@@ -13,7 +13,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Impact', 'Haettenschweiler', 'Arial Narrow Bold', 'sans-serif'],
                     }
                 }
             }
@@ -28,11 +28,32 @@
             animation: blink 1s step-end infinite;
         }
         .premium-glow {
-            text-shadow: 0 0 18px rgba(245, 245, 243, 0.22), 0 0 35px rgba(245, 245, 243, 0.12), 0 0 4px rgba(245, 245, 243, 0.08);
+            -webkit-text-stroke: 1.5px #000000;
+            text-shadow:
+                    -2px -2px 0 #000000,
+                    2px -2px 0 #000000,
+                    -2px  2px 0 #000000,
+                    2px  2px 0 #000000,
+                    0 0 12px rgba(0, 0, 0, 0.85),
+                    0 0 25px rgba(0, 0, 0, 0.95),
+                    0 0 18px rgba(245, 245, 243, 0.22),
+                    0 0 35px rgba(245, 245, 243, 0.12),
+                    0 0 4px rgba(245, 245, 243, 0.08);
         }
-        .masked-logo {
-            mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 100%);
-            -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 15%, rgba(0, 0, 0, 0) 100%);
+        @keyframes breathe {
+            0%, 100% { opacity: 0.10; }
+            50% { opacity: 0.18; }
+        }
+        .breathing-opacity {
+            animation: breathe 8s ease-in-out infinite;
+        }
+        @keyframes spin {
+            from { transform: perspective(1500px) rotateY(0deg); }
+            to { transform: perspective(1500px) rotateY(360deg); }
+        }
+        .spinning-logo {
+            animation: spin 45s linear infinite;
+            transform-style: preserve-3d;
         }
         .scanline-overlay {
             position: fixed;
@@ -78,14 +99,16 @@
 <div class="scanline-overlay"></div>
 <div class="grain-overlay"></div>
 
-<div class="absolute inset-y-0 left-0 w-full md:w-[60vw] flex items-center justify-start pointer-events-none select-none z-0 overflow-hidden">
-    <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="w-auto h-[120vh] max-w-none object-contain opacity-[0.14] transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1) masked-logo -translate-x-[10%]" referrerpolicy="no-referrer" />
+<div id="logo-parallax" class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)">
+    <div class="w-[45vw] h-[45vw] max-w-[320px] max-h-[320px] md:max-w-[400px] md:max-h-[400px]">
+        <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="w-full h-full object-contain breathing-opacity spinning-logo" referrerpolicy="no-referrer" />
+    </div>
 </div>
 
 <div class="select-none px-6 text-center flex flex-col items-center justify-center gap-8 relative z-10">
     <div class="inline-flex items-center justify-center min-h-[5rem]">
         <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em] premium-glow">
-            <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[3.5px] h-[0.9em] bg-[#F5F5F3] cursor-blink ml-1 align-middle"></span>
+            <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[5px] h-[0.9em] bg-[#F5F5F3] border border-black cursor-blink ml-1 align-middle"></span>
         </h1>
     </div>
 </div>
@@ -94,7 +117,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         const text = "PLVSMVWVRE";
         const target = document.getElementById("typewriter-target");
-        const logo = document.getElementById("background-logo");
+        const logoParallax = document.getElementById("logo-parallax");
         let index = 0;
 
         let isDeleting = false;
@@ -128,7 +151,7 @@
         document.addEventListener("mousemove", (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * -18;
             const moveY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2) * -18;
-            logo.style.transform = `translate(calc(-10% + ${moveX}px), ${moveY}px)`;
+            logoParallax.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
     });
 </script>
