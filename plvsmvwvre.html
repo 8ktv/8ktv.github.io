@@ -291,15 +291,16 @@
     </div>
 </div>
 
-<div id="download-modal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[80] opacity-0 pointer-events-none flex items-center justify-center p-4 transition-all duration-300">
-    <div class="relative w-full max-w-4xl bg-[#0a0a0a] border border-[#F5F5F3]/10 rounded-2xl flex flex-col h-[85vh] md:h-[70vh] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+<div id="download-modal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[80] opacity-0 pointer-events-none flex items-center justify-center transition-all duration-300">
+    <div id="modal-background" class="absolute inset-0 z-0 opacity-30 pointer-events-none" style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2768430/header.jpg?t=1764521441'); background-size: cover; background-position: right top; -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0)); mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0));"></div>
+    <div class="relative w-full h-full bg-transparent border-none flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
 
         <div class="flex items-center justify-between px-6 py-4 border-b border-[#F5F5F3]/10 shrink-0">
-            <div class="flex flex-col">
+            <div class="flex flex-col relative z-10">
                 <h2 class="font-mono text-[10px] tracking-[0.2em] text-[#F5F5F3] uppercase">Downlink Core</h2>
                 <p class="font-mono text-[8px] text-[#F5F5F3]/40 uppercase tracking-widest mt-0.5">Select target workspace build</p>
             </div>
-            <button id="close-download-btn" class="font-mono text-[8px] tracking-widest uppercase px-3 py-1.5 rounded border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/5 transition-all text-[#F5F5F3]/60 hover:text-[#F5F5F3] cursor-pointer">
+            <button id="close-download-btn" class="font-mono text-[8px] tracking-widest uppercase px-3 py-1.5 rounded border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/5 transition-all text-[#F5F5F3]/60 hover:text-[#F5F5F3] cursor-pointer relative z-10">
                 Close [esc]
             </button>
         </div>
@@ -338,8 +339,9 @@
 
             <div class="flex-1 flex flex-col p-6 overflow-y-auto custom-scrollbar min-h-0 justify-between">
 
-                <div id="content-atlyss" class="game-tab-content flex flex-col gap-6">
-                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0">
+                <div id="content-atlyss" class="game-tab-content flex flex-col gap-6 relative">
+
+                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0 relative z-10">
                         <div class="flex flex-col gap-1">
                             <h3 class="font-sans text-xl font-bold tracking-widest uppercase">ATLYSS Modded</h3>
                             <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package</p>
@@ -605,6 +607,12 @@
             }
         });
 
+        const gameBackgrounds = {
+            'game-btn-atlyss': 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2768430/header.jpg?t=1764521441',
+            'game-btn-sbg': 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4069520/2e90632f818b8f7457edee5b5be38bc0ebcfd5b3/ss_2e90632f818b8f7457edee5b5be38bc0ebcfd5b3.1920x1080.jpg?t=1776717543',
+            'game-btn-roblox': 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Frobloxdb.com%2Fimg%2Fcategories%2Fgame-codes.webp&f=1&nofb=1&ipt=99cb34d858be8238f6f7262747617ea6ac2bb86ff60aac77b31b071b34426b81'
+        };
+
         gameTabBtns.forEach((btn) => {
             btn.addEventListener("click", () => {
                 gameTabBtns.forEach((b) => {
@@ -629,6 +637,12 @@
                 const targetContent = document.getElementById(targetId);
                 if (targetContent) {
                     targetContent.classList.remove("hidden");
+                }
+
+                // Background change
+                const modalBackground = document.getElementById('modal-background');
+                if (modalBackground && gameBackgrounds[btn.id]) {
+                    modalBackground.style.backgroundImage = `url('${gameBackgrounds[btn.id]}')`;
                 }
             });
         });
