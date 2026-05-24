@@ -345,7 +345,7 @@ async function startServer() {
     });
 
     // 4. Secure Download proxy to keep direct storage linkages obscured
-    app.get("/api/download/sbg", (req: any, res) => {
+    app.get("/download/sbg", (req: any, res) => {
         const sessionToken = req.cookies.discord_session;
         const session = verifyPayload(sessionToken);
 
