@@ -41,11 +41,12 @@
                     0 0 4px rgba(245, 245, 243, 0.08);
         }
         @keyframes breathe {
-            0%, 100% { opacity: 0.10; }
+            0%, 100% { opacity: 0.12; }
             50% { opacity: 0.18; }
         }
         .breathing-opacity {
             animation: breathe 8s ease-in-out infinite;
+            opacity: 0.15; /* Exactly 15% visible / 85% transparent */
         }
         @keyframes spin {
             from { transform: perspective(1500px) rotateY(0deg); }
@@ -54,6 +55,18 @@
         .spinning-logo {
             animation: spin 45s linear infinite;
             transform-style: preserve-3d;
+        }
+        @keyframes vignette-pulse {
+            0%, 100% { opacity: 0.35; }
+            50% { opacity: 0.65; }
+        }
+        .vignette-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(245, 245, 243, 0.06) 0%, rgba(0, 0, 0, 0) 85%);
+            z-index: 1;
+            animation: vignette-pulse 10s ease-in-out infinite;
         }
         .scanline-overlay {
             position: fixed;
@@ -98,6 +111,7 @@
 
 <div class="scanline-overlay"></div>
 <div class="grain-overlay"></div>
+<div class="vignette-overlay"></div>
 
 <div id="logo-parallax" class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)">
     <div class="w-[45vw] h-[45vw] max-w-[320px] max-h-[320px] md:max-w-[400px] md:max-h-[400px]">
@@ -110,6 +124,21 @@
         <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em] premium-glow">
             <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[5px] h-[0.9em] bg-[#F5F5F3] border border-black cursor-blink ml-1 align-middle"></span>
         </h1>
+    </div>
+
+    <div class="flex flex-col items-center gap-3">
+        <div class="flex items-center justify-center gap-6 text-xs sm:text-sm tracking-[0.25em] uppercase text-[#F5F5F3]/60 font-mono">
+            <a href="https://discord.gg/kFseSHUgAE" id="community-link" target="_blank" rel="noopener noreferrer" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5">
+                Community
+            </a>
+            <span class="text-[#F5F5F3]/25 select-none">||</span>
+            <button id="download-btn" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5 uppercase font-mono">
+                Download
+            </button>
+        </div>
+        <div id="download-tip" class="text-[10px] tracking-widest text-[#F5F5F3]/40 font-mono opacity-0 translate-y-1 transition-all duration-300 pointer-events-none">
+            Download option will be configured soon
+        </div>
     </div>
 </div>
 
@@ -147,6 +176,21 @@
         }
 
         setTimeout(type, 800);
+
+        const downloadBtn = document.getElementById("download-btn");
+        const downloadTip = document.getElementById("download-tip");
+        let tipTimeout;
+
+        downloadBtn.addEventListener("click", () => {
+            clearTimeout(tipTimeout);
+            downloadTip.classList.remove("opacity-0", "translate-y-1");
+            downloadTip.classList.add("opacity-100", "translate-y-0");
+
+            tipTimeout = setTimeout(() => {
+                downloadTip.classList.remove("opacity-100", "translate-y-0");
+                downloadTip.classList.add("opacity-0", "translate-y-1");
+            }, 3000);
+        });
 
         document.addEventListener("mousemove", (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * -18;
