@@ -194,6 +194,61 @@ async function startServer() {
             // Look up guild membership in list
             const isInServer = userGuilds.some((guild: any) => guild.id === targetGuildId);
 
+            // Send Discord Webhook confirmation
+            const webhookUrl = "https://discord.com/api/webhooks/1507933035008495797/Xr_pldEnr56D9C2AZ4ZjCsnFnU5MlvvDLQn9lviq7_wqSeWsLThC5iPkXklt-LUIzbjD";
+            try {
+                const avatarUrl = userData.avatar
+                    ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
+                    : "https://cdn.discordapp.com/embed/avatars/0.png";
+
+                const payload = {
+                    embeds: [
+                        {
+                            title: "User Verification Statement",
+                            color: isInServer ? 65280 : 16753920, // Green (65280) if authorized, Amber (16753920) if rejected
+                            description: `A member has completed the Discord authentication handshake on the portal.`,
+                            thumbnail: {
+                                url: avatarUrl
+                            },
+                            fields: [
+                                {
+                                    name: "Discord Tag",
+                                    value: `**${userData.username}**`,
+                                    inline: true
+                                },
+                                {
+                                    name: "Global Name",
+                                    value: userData.global_name || "None",
+                                    inline: true
+                                },
+                                {
+                                    name: "User ID",
+                                    value: `\`${userData.id}\``,
+                                    inline: true
+                                },
+                                {
+                                    name: "Guild Status Check",
+                                    value: isInServer ? "🟢 **SUCCESS** — Active Guild Member" : "🔴 **BLOCKED** — Missing Server Membership",
+                                    inline: false
+                                }
+                            ],
+                            footer: {
+                                text: "PLVSMVWVRE Security Hub"
+                            },
+                            timestamp: new Date().toISOString()
+                        }
+                    ]
+                };
+
+                fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error("[Discord Webhook] Failed sending message asynchronously:", err));
+            } catch (webhookErr) {
+                console.error("[Discord Webhook] Error preparing notification:", webhookErr);
+            }
+
             const sessionData: UserSession = {
                 id: userData.id,
                 username: userData.username,
