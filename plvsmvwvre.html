@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -46,7 +47,7 @@
         }
         .breathing-opacity {
             animation: breathe 8s ease-in-out infinite;
-            opacity: 0.15; /* Exactly 15% visible / 85% transparent */
+            opacity: 0.15;
         }
         @keyframes spin {
             from { transform: perspective(1500px) rotateY(0deg); }
@@ -148,10 +149,9 @@
 <div class="vignette-overlay"></div>
 <div id="white-flash" class="fixed inset-0 bg-white pointer-events-none z-[100] opacity-0"></div>
 
-<!-- SoundCloud Background Music Widget -->
 <div class="absolute bottom-6 right-6 z-50 flex flex-col items-end gap-2 font-mono">
     <div id="spotify-panel" class="w-[330px] h-[400px] bg-black/75 border border-[#F5F5F3]/10 backdrop-blur-xl rounded-xl overflow-hidden shadow-2xl transition-all duration-300 transform translate-y-3 opacity-0 pointer-events-none flex flex-col p-2 gap-2">
-        <iframe id="spotify-iframe" class="opacity-90 hover:opacity-100 transition-opacity duration-300 rounded-lg shrink-0" src="" width="100%" height="120" frameBorder="no" scrolling="no" allow="autoplay" loading="lazy"></iframe>
+        <iframe id="spotify-iframe" class="opacity-90 hover:opacity-100 transition-opacity duration-300 rounded-lg shrink-0" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/axxturel/1-lucifer-batmobile&color=%23121212&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" width="100%" height="120" frameBorder="no" scrolling="no" allow="autoplay" loading="lazy"></iframe>
 
         <div class="flex flex-col gap-1 text-[10px] select-none font-mono mt-0.5 overflow-hidden flex-1">
             <div class="text-[8px] tracking-[0.18em] text-[#F5F5F3]/40 uppercase px-1 pb-1 border-b border-[#F5F5F3]/5">
@@ -287,8 +287,233 @@
                     Download
                 </button>
             </div>
-            <div id="download-tip" class="text-[10px] tracking-widest text-[#F5F5F3]/40 font-mono opacity-0 translate-y-1 transition-all duration-300 pointer-events-none">
-                Download option will be configured soon
+        </div>
+    </div>
+</div>
+
+<div id="download-modal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[80] opacity-0 pointer-events-none flex items-center justify-center p-4 transition-all duration-300">
+    <div class="relative w-full max-w-4xl bg-[#0a0a0a] border border-[#F5F5F3]/10 rounded-2xl flex flex-col h-[85vh] md:h-[70vh] shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+
+        <div class="flex items-center justify-between px-6 py-4 border-b border-[#F5F5F3]/10 shrink-0">
+            <div class="flex flex-col">
+                <h2 class="font-mono text-[10px] tracking-[0.2em] text-[#F5F5F3] uppercase">Downlink Core</h2>
+                <p class="font-mono text-[8px] text-[#F5F5F3]/40 uppercase tracking-widest mt-0.5">Select target workspace build</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="user-badge" class="hidden items-center gap-2 font-mono text-[9px] uppercase tracking-wider px-2.5 py-1 rounded bg-[#F5F5F3]/5 border border-[#F5F5F3]/10">
+                    <img id="user-avatar" src="" alt="" class="w-4.5 h-4.5 rounded-full border border-[#F5F5F3]/20" />
+                    <span id="user-name" class="text-[#F5F5F3]/70 font-medium">...</span>
+                    <span class="text-[#F5F5F3]/20">|</span>
+                    <button id="logout-btn" class="text-amber-500 hover:text-amber-400 transition-colors duration-200 cursor-pointer uppercase text-[8px] tracking-widest bg-transparent border-0 p-0">Logout</button>
+                </div>
+                <button id="close-download-btn" class="font-mono text-[8px] tracking-widest uppercase px-3 py-1.5 rounded border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/5 transition-all text-[#F5F5F3]/60 hover:text-[#F5F5F3] cursor-pointer">
+                    Close [esc]
+                </button>
+            </div>
+        </div>
+
+        <!-- Lock Card Overlay -->
+        <div id="auth-lock-card" class="hidden flex-1 flex-col items-center justify-center p-8 text-center font-mono gap-5 select-none my-auto">
+            <div class="w-14 h-14 rounded-full border border-[#F5F5F3]/15 flex items-center justify-center bg-[#F5F5F3]/5 relative mb-1 text-amber-500 animate-pulse">
+                <span id="lock-status-badge" class="absolute -top-1 -right-1 text-[7px] px-1 py-0.5 rounded bg-amber-500/20 text-amber-500 border border-amber-500/30 font-semibold tracking-widest uppercase">LOCKED</span>
+                <!-- Lock Screen Icon -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.12 2.12 0 002.126 2.13h10.5" />
+                </svg>
+            </div>
+
+            <div class="flex flex-col gap-1 max-w-md">
+                <h3 id="lock-title" class="text-xs sm:text-sm tracking-[0.25em] text-[#F5F5F3] uppercase font-bold">Verification Level 1 Required</h3>
+                <p id="lock-subtitle" class="text-[8px] tracking-widest text-amber-500/70 uppercase">Community Membership Sync</p>
+                <p id="lock-description" class="text-[10px] text-[#F5F5F3]/50 font-sans font-light leading-relaxed mt-2 max-w-sm mx-auto">
+                    To fetch ATLYSS/SBG client mod-packages and access functional Roblox execution scripts, you must verify active membership in our community server.
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center gap-3 w-full max-w-xs mt-2">
+                <button id="discord-login-btn" class="w-full flex items-center justify-center gap-2 font-mono text-[9px] tracking-widest uppercase px-5 py-3 rounded bg-[#5865F2] hover:bg-[#4752C4] hover:scale-[1.01] active:scale-[0.99] transition-all text-white font-semibold cursor-pointer border-0 shadow-[0_0_15px_rgba(88,101,242,0.2)]">
+                    <!-- Discord Icon SVG -->
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 127.14 96.36">
+                        <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.43-5c.87-.64,1.72-1.32,2.53-2a75.7,75.7,0,0,0,72.77,0c.81.7,1.66,1.38,2.53,2a68.43,68.43,0,0,1-10.43,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129,54.65,122.94,31.58,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
+                    </svg>
+                    Login via Discord
+                </button>
+                <a id="discord-join-btn" href="https://discord.gg/kFseSHUgAE" target="_blank" rel="noopener noreferrer" class="hidden w-full flex items-center justify-center gap-2 font-mono text-[9px] tracking-widest uppercase px-5 py-3 rounded bg-transparent border border-[#F5F5F3]/15 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/5 transition-all text-[#F5F5F3]/80 hover:text-white font-semibold cursor-pointer text-center no-underline">
+                    Join Discord Server
+                </a>
+                <div id="auth-warning-msg" class="text-[8px] text-[#F5F5F3]/30 tracking-wider uppercase text-center font-mono mt-1"></div>
+            </div>
+        </div>
+
+        <div id="modal-main-content" class="flex flex-1 min-h-0 divide-y md:divide-y-0 md:divide-x divide-[#F5F5F3]/10 flex-col md:flex-row">
+
+            <div class="w-full md:w-1/3 flex flex-col p-4 gap-2 overflow-y-auto custom-scrollbar shrink-0">
+                <div class="font-mono text-[8px] tracking-[0.15em] text-[#F5F5F3]/30 uppercase px-1 pb-1">
+                    Select Modded Environment
+                </div>
+
+                <button id="game-btn-atlyss" class="game-tab-btn active w-full flex items-center justify-between p-3 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 text-left transition-all duration-200 cursor-pointer">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3] font-medium text-[11px] uppercase tracking-wider">ATLYSS</span>
+                        <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvre</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-amber-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-amber-500/20 bg-amber-500/5">Pending</span>
+                </button>
+
+                <button id="game-btn-sbg" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider">Super Battle Golf</span>
+                        <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvreSBG</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
+                </button>
+
+                <button id="game-btn-roblox" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
+                    <div class="flex flex-col min-w-0 pr-2">
+                        <span class="text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider">Roblox Script</span>
+                        <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">PLWVRE Roblox Tool</span>
+                    </div>
+                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/50 shrink-0 uppercase px-1.5 py-0.5 rounded border border-[#F5F5F3]/20 bg-[#F5F5F3]/5">Script</span>
+                </button>
+            </div>
+
+            <div class="flex-1 flex flex-col p-6 overflow-y-auto custom-scrollbar min-h-0 justify-between">
+
+                <div id="content-atlyss" class="game-tab-content flex flex-col gap-6">
+                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0">
+                        <div class="flex flex-col gap-1">
+                            <h3 class="font-sans text-xl font-bold tracking-widest uppercase">ATLYSS Modded</h3>
+                            <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package</p>
+                        </div>
+                        <div class="flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            Out of Date / Pending Version Sync
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-5">
+                        <div class="flex gap-4">
+                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">01</div>
+                            <div class="flex flex-col gap-2">
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Choose & Download a Mod Manager</span>
+                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Select your preferred Thunderstore-compatible manager to handle automatic or manual installations.</p>
+                                <div class="flex flex-wrap gap-2 mt-1">
+                                    <a href="https://github.com/Kesomannen/gale/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Gale Mod Manager</a>
+                                    <a href="https://github.com/ebkr/r2modmanPlus/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">r2modman (r2mm)</a>
+                                    <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Thunderstore App</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">02</div>
+                            <div class="flex flex-col gap-2">
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
+                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvre</span> directly inside your mod manager or click below (mod file currently updating for the latest game build).</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <button disabled class="font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3]/5 border border-[#F5F5F3]/5 text-[#F5F5F3]/30 cursor-not-allowed">Direct Download Unavailable</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">03</div>
+                            <div class="flex flex-col gap-1">
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Import & Boot</span>
+                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Click "Install Mod" inside your manager or manually drag standard local zips directly to the launcher. Hit "Start Modded" from the launcher tool.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-sbg" class="game-tab-content hidden flex flex-col gap-6">
+                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0">
+                        <div class="flex flex-col gap-1">
+                            <h3 class="font-sans text-xl font-bold tracking-widest uppercase">Super Battle Golf</h3>
+                            <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package (Shorthand: SBG)</p>
+                        </div>
+                        <div class="flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Online - Version 1.1.1
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-5">
+                        <div class="flex gap-4">
+                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">01</div>
+                            <div class="flex flex-col gap-2">
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Select & Get Mod Manager</span>
+                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Obtain your manager launcher build:</p>
+                                <div class="flex flex-wrap gap-2 mt-1">
+                                    <a href="https://github.com/Kesomannen/gale/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Gale Mod Manager</a>
+                                    <a href="https://github.com/ebkr/r2modmanPlus/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">r2modman (r2mm)</a>
+                                    <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Thunderstore App</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">02</div>
+                            <div class="flex flex-col gap-2">
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Download SBG Build File</span>
+                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Retrieve the official active mod package file for Super Battle Golf (Shorthand SBG):</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <a href="/api/download/sbg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase px-4 py-2.5 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                                        Download meowijuana.lol-plvsmvwvreSBG-1.1.1.zip
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">03</div>
+                            <div class="flex flex-col gap-1">
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Drag to Mod Manager & Play</span>
+                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Open your selected mod manager tool and drop or import the downloaded archive locally. Start Modded to launch the game with active features.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-roblox" class="game-tab-content hidden flex flex-col gap-6">
+                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0">
+                        <div class="flex flex-col gap-1">
+                            <h3 class="font-sans text-xl font-bold tracking-widest uppercase">Roblox Executor Build</h3>
+                            <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Script Execution Payload</p>
+                        </div>
+                        <div class="flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Active Build Online
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-5">
+                        <div class="flex flex-col gap-2">
+                            <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Copy & Execute Script</span>
+                            <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Copy the execution code script below, paste it directly in your preferred script injection executor utility inside Roblox client during gameplay.</p>
+
+                            <div class="relative mt-2 border border-[#F5F5F3]/10 rounded-lg overflow-hidden bg-black/80">
+                                <div class="flex items-center justify-between px-3 py-1.5 bg-[#F5F5F3]/5 border-b border-[#F5F5F3]/10 select-none">
+                                    <span class="font-mono text-[8px] uppercase tracking-wider text-[#F5F5F3]/45">Execution script</span>
+                                    <button id="copy-script-btn" class="font-mono text-[8px] tracking-widest uppercase px-2 py-0.5 rounded border border-[#F5F5F3]/20 bg-transparent hover:bg-[#F5F5F3]/10 text-[#F5F5F3] transition-all cursor-pointer">
+                                        Copy to Clipboard
+                                    </button>
+                                </div>
+                                <div class="p-3 text-[9px] font-mono text-[#F5F5F3]/80 leading-normal overflow-x-auto select-text whitespace-pre-wrap select-all">repeat task.wait() until game:IsLoaded()
+                                    loadstring(game:HttpGet("https://raw.githubusercontent.com/hollyntt/PLWVRE-Roblox-Script/refs/heads/main/Meowijuana_Auth.lua"))()</div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">i</div>
+                            <div class="flex flex-col gap-1">
+                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80 text-amber-500 font-semibold">Note</span>
+                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light font-sans">Make sure your Roblox environment is fully active and client-loaded before running the hook trigger executor sequence.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -331,46 +556,38 @@
 
         const communityLink = document.getElementById("community-link");
         const downloadBtn = document.getElementById("download-btn");
-        const downloadTip = document.getElementById("download-tip");
         const whiteFlash = document.getElementById("white-flash");
         const logoImageContainer = document.getElementById("logo-image-container");
-        let tipTimeout;
         let isAnimating = false;
 
         function triggerFlashAnimation(clickedElement, onPeak) {
             if (isAnimating) return;
             isAnimating = true;
 
-            // Save original styles
             const originalTransition = clickedElement.style.transition;
             const originalTransform = clickedElement.style.transform;
             const originalFilter = clickedElement.style.filter;
             const originalColor = clickedElement.style.color;
 
-            // Fast zoom scale and white fade on clicked element
             clickedElement.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1), filter 400ms, color 400ms";
             clickedElement.style.transform = "scale(18)";
             clickedElement.style.filter = "brightness(10) blur(1px)";
             clickedElement.style.color = "#ffffff";
             clickedElement.style.zIndex = "50";
 
-            // Logo zooms in/scales up concurrently
             if (logoImageContainer) {
                 logoImageContainer.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)";
                 logoImageContainer.style.transform = "scale(1.8)";
             }
 
-            // Bring in white flash to 100% opacity
             whiteFlash.style.transition = "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1)";
             whiteFlash.classList.remove("pointer-events-none");
             whiteFlash.classList.remove("opacity-0");
             whiteFlash.classList.add("opacity-100");
 
-            // Peak trigger
             setTimeout(() => {
                 if (onPeak) onPeak();
 
-                // Slower recovery fade out
                 setTimeout(() => {
                     whiteFlash.style.transition = "opacity 850ms cubic-bezier(0.16, 1, 0.3, 1)";
                     whiteFlash.classList.remove("opacity-100");
@@ -387,7 +604,6 @@
                         logoImageContainer.style.transform = "scale(1)";
                     }
 
-                    // Fully restore interaction
                     setTimeout(() => {
                         clickedElement.style.transition = originalTransition;
                         clickedElement.style.zIndex = "";
@@ -404,24 +620,278 @@
             });
         });
 
-        downloadBtn.addEventListener("click", () => {
-            triggerFlashAnimation(downloadBtn, () => {
-                clearTimeout(tipTimeout);
-                downloadTip.classList.remove("opacity-0", "translate-y-1");
-                downloadTip.classList.add("opacity-100", "translate-y-0");
+        const downloadModal = document.getElementById("download-modal");
+        const closeDownloadBtn = document.getElementById("close-download-btn");
+        const gameTabBtns = document.querySelectorAll(".game-tab-btn");
+        const gameTabContents = document.querySelectorAll(".game-tab-content");
+        const copyScriptBtn = document.getElementById("copy-script-btn");
 
-                tipTimeout = setTimeout(() => {
-                    downloadTip.classList.remove("opacity-100", "translate-y-0");
-                    downloadTip.classList.add("opacity-0", "translate-y-1");
-                }, 3000);
+        // Auth related declarations
+        const userBadge = document.getElementById("user-badge");
+        const userAvatar = document.getElementById("user-avatar");
+        const userName = document.getElementById("user-name");
+        const logoutBtn = document.getElementById("logout-btn");
+        const authLockCard = document.getElementById("auth-lock-card");
+        const modalMainContent = document.getElementById("modal-main-content");
+        const discordLoginBtn = document.getElementById("discord-login-btn");
+        const discordJoinBtn = document.getElementById("discord-join-btn");
+        const authWarningMsg = document.getElementById("auth-warning-msg");
+
+        const lockTitle = document.getElementById("lock-title");
+        const lockSubtitle = document.getElementById("lock-subtitle");
+        const lockDescription = document.getElementById("lock-description");
+        const lockStatusBadge = document.getElementById("lock-status-badge");
+
+        let authState = {
+            configured: false,
+            authenticated: false,
+            authorized: false,
+            user: null,
+            guildId: "",
+            guildName: ""
+        };
+
+        async function fetchAuthStatus() {
+            try {
+                const res = await fetch("/api/auth/status");
+                if (res.ok) {
+                    authState = await res.json();
+                    applyAuthUI();
+                }
+            } catch (err) {
+                console.error("Failed fetching authentication status:", err);
+            }
+        }
+
+        function applyAuthUI() {
+            if (!authState.configured) {
+                authLockCard.className = "flex-1 flex flex-col items-center justify-center p-8 text-center font-mono gap-5 select-none my-auto";
+                modalMainContent.classList.add("hidden");
+
+                lockTitle.textContent = "Configuration Required";
+                lockSubtitle.textContent = "Server Admin Setup";
+                lockSubtitle.className = "text-[8px] tracking-widest text-amber-500 uppercase";
+                lockDescription.textContent = "Discord OAuth client settings are missing in server environment variables. Please configure DISCORD_CLIENT_ID and DISCORD_CLIENT_SECRET inside settings secrets.";
+                lockStatusBadge.textContent = "UNCONFIGURED";
+                lockStatusBadge.className = "absolute -top-1 -right-1 text-[7px] px-1 py-0.5 rounded bg-amber-500/20 text-amber-500 border border-amber-500/30 font-semibold tracking-widest uppercase";
+
+                discordLoginBtn.classList.add("hidden");
+                discordJoinBtn.classList.add("hidden");
+                userBadge.classList.add("hidden");
+                return;
+            }
+
+            if (authState.authenticated && authState.authorized) {
+                authLockCard.classList.add("hidden");
+                modalMainContent.classList.remove("hidden");
+
+                userBadge.classList.remove("hidden");
+                userBadge.classList.add("flex");
+                if (authState.user.avatar) {
+                    userAvatar.src = authState.user.avatar;
+                    userAvatar.classList.remove("hidden");
+                } else {
+                    userAvatar.classList.add("hidden");
+                }
+                userName.textContent = authState.user.globalName || authState.user.username;
+            } else if (authState.authenticated && !authState.authorized) {
+                authLockCard.className = "flex-1 flex flex-col items-center justify-center p-8 text-center font-mono gap-5 select-none my-auto";
+                modalMainContent.classList.add("hidden");
+
+                lockTitle.textContent = "Membership Required";
+                lockSubtitle.innerHTML = `Signed in as <span class="text-white">${authState.user.globalName || authState.user.username}</span>`;
+                lockSubtitle.className = "text-[8px] tracking-widest uppercase text-amber-500";
+                lockDescription.textContent = `You authenticated successfully, but you are not a member of our community server. You must join our Discord server to unlock downloadable builds.`;
+                lockStatusBadge.textContent = "PENDING SYNC";
+                lockStatusBadge.className = "absolute -top-1 -right-1 text-[7px] px-1 py-0.5 rounded bg-amber-500/20 text-amber-500 border border-amber-500/30 font-semibold tracking-widest uppercase";
+
+                discordLoginBtn.innerHTML = `
+              <svg class="w-3.5 h-3.5 fill-current animate-spin" viewBox="0 0 24 24" style="animation: spin 3s linear infinite">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Re-Verify Status
+            `;
+                discordJoinBtn.classList.remove("hidden");
+                discordJoinBtn.classList.add("inline-flex");
+
+                userBadge.classList.remove("hidden");
+                userBadge.classList.add("flex");
+                if (authState.user.avatar) {
+                    userAvatar.src = authState.user.avatar;
+                    userAvatar.classList.remove("hidden");
+                } else {
+                    userAvatar.classList.add("hidden");
+                }
+                userName.textContent = authState.user.globalName || authState.user.username;
+            } else {
+                authLockCard.className = "flex-1 flex flex-col items-center justify-center p-8 text-center font-mono gap-5 select-none my-auto";
+                modalMainContent.classList.add("hidden");
+
+                lockTitle.textContent = "Verification Level 1 Required";
+                lockSubtitle.textContent = "Community Membership Sync";
+                lockSubtitle.className = "text-[8px] tracking-widest text-amber-500/70 uppercase";
+                lockDescription.textContent = "To fetch ATLYSS/SBG client mod-packages and access functional Roblox execution scripts, you must verify active membership in our community server.";
+                lockStatusBadge.textContent = "LOCKED";
+                lockStatusBadge.className = "absolute -top-1 -right-1 text-[7px] px-1 py-0.5 rounded bg-amber-500/20 text-amber-500 border border-amber-500/30 font-semibold tracking-widest uppercase";
+
+                discordLoginBtn.innerHTML = `
+              <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 127.14 96.36">
+                <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.43-5c.87-.64,1.72-1.32,2.53-2a75.7,75.7,0,0,0,72.77,0c.81.7,1.66,1.38,2.53,2a68.43,68.43,0,0,1-10.43,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129,54.65,122.94,31.58,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
+              </svg>
+              Login via Discord
+            `;
+                discordLoginBtn.classList.remove("hidden");
+                discordJoinBtn.classList.add("hidden");
+                userBadge.classList.add("hidden");
+            }
+        }
+
+        discordLoginBtn.addEventListener("click", () => {
+            if (authState.authenticated && !authState.authorized) {
+                fetchAuthStatus();
+                return;
+            }
+
+            authWarningMsg.textContent = "Opening authentication portal...";
+            const width = 500;
+            const height = 750;
+            const left = window.screen.width / 2 - width / 2;
+            const top = window.screen.height / 2 - height / 2;
+
+            const popup = window.open(
+                "/api/auth/discord/login",
+                "Discord_OAuth_Verify",
+                `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
+            );
+
+            if (!popup) {
+                authWarningMsg.textContent = "Popup blocked! Please allow popups for Discord Login.";
+                authWarningMsg.classList.add("text-amber-500");
+            } else {
+                authWarningMsg.textContent = "Verification in progress...";
+                const timer = setInterval(() => {
+                    if (popup.closed) {
+                        clearInterval(timer);
+                        fetchAuthStatus();
+                    }
+                }, 1000);
+            }
+        });
+
+        // Listen for message from child popup or callback page
+        window.addEventListener("message", (event) => {
+            if (event.data?.type === "OAUTH_AUTH_SUCCESS") {
+                fetchAuthStatus();
+                authWarningMsg.textContent = "";
+            }
+        });
+
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                const res = await fetch("/api/auth/logout", { method: "POST" });
+                if (res.ok) {
+                    fetchAuthStatus();
+                }
+            } catch (err) {
+                console.error("Logout error:", err);
+            }
+        });
+
+        downloadBtn.addEventListener("click", () => {
+            fetchAuthStatus();
+            triggerFlashAnimation(downloadBtn, () => {
+                downloadModal.classList.remove("opacity-0", "pointer-events-none");
+                downloadModal.classList.add("opacity-100", "pointer-events-auto");
             });
         });
+
+        function closeDownloadModal() {
+            downloadModal.classList.remove("opacity-100", "pointer-events-auto");
+            downloadModal.classList.add("opacity-0", "pointer-events-none");
+        }
+
+        closeDownloadBtn.addEventListener("click", closeDownloadModal);
+
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closeDownloadModal();
+            }
+        });
+
+        gameTabBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                gameTabBtns.forEach((b) => {
+                    b.className = "game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer";
+                    const titleNode = b.querySelector("span:first-child");
+                    if (titleNode) {
+                        titleNode.className = "text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider";
+                    }
+                });
+
+                btn.className = "game-tab-btn active w-full flex items-center justify-between p-3 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 text-left transition-all duration-200 cursor-pointer";
+                const currentTitleNode = btn.querySelector("span:first-child");
+                if (currentTitleNode) {
+                    currentTitleNode.className = "text-[#F5F5F3] font-medium text-[11px] uppercase tracking-wider";
+                }
+
+                gameTabContents.forEach((content) => {
+                    content.classList.add("hidden");
+                });
+
+                const targetId = btn.id.replace("game-btn-", "content-");
+                const targetContent = document.getElementById(targetId);
+                if (targetContent) {
+                    targetContent.classList.remove("hidden");
+                }
+            });
+        });
+
+        if (copyScriptBtn) {
+            copyScriptBtn.addEventListener("click", async () => {
+                try {
+                    copyScriptBtn.textContent = "ACQUIRING PAYLOAD...";
+                    const res = await fetch("/api/download/roblox-script");
+                    if (!res.ok) {
+                        throw new Error("Verification failed.");
+                    }
+                    const codeToCopy = await res.text();
+                    navigator.clipboard.writeText(codeToCopy).then(() => {
+                        const originalText = "Copy to Clipboard";
+                        copyScriptBtn.textContent = "COPIED";
+                        copyScriptBtn.classList.add("bg-[#F5F5F3]/15");
+                        setTimeout(() => {
+                            copyScriptBtn.textContent = originalText;
+                            copyScriptBtn.classList.remove("bg-[#F5F5F3]/15");
+                        }, 2000);
+                    });
+                } catch (err) {
+                    console.error(err);
+                    copyScriptBtn.textContent = "ACCESS EXPIRED - RE-VERIFY DISCORD";
+                    copyScriptBtn.classList.add("bg-red-500/20", "text-red-400");
+                    setTimeout(() => {
+                        copyScriptBtn.textContent = "Copy to Clipboard";
+                        copyScriptBtn.classList.remove("bg-red-500/20", "text-red-400");
+                    }, 3000);
+                }
+            });
+        }
 
         const soundtrackToggle = document.getElementById("soundtrack-toggle");
         const spotifyPanel = document.getElementById("spotify-panel");
         const spotifyIframe = document.getElementById("spotify-iframe");
         const trackItems = document.querySelectorAll(".track-item");
         let isSpotifyOpen = false;
+        let currentTrackIndex = 0;
+        let widget = null;
+
+        if (typeof SC !== "undefined" && SC.Widget) {
+            widget = SC.Widget(spotifyIframe);
+            widget.bind(SC.Widget.Events.FINISH, () => {
+                const nextIndex = (currentTrackIndex + 1) % trackItems.length;
+                playTrack(trackItems[nextIndex]);
+            });
+        }
 
         soundtrackToggle.addEventListener("click", () => {
             isSpotifyOpen = !isSpotifyOpen;
@@ -437,7 +907,12 @@
         });
 
         function playTrack(btn) {
-            // Reset all track items styling
+            trackItems.forEach((item, idx) => {
+                if (item === btn) {
+                    currentTrackIndex = idx;
+                }
+            });
+
             trackItems.forEach((item) => {
                 item.className = "track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer";
                 const titleSp = item.querySelector("span:first-child");
@@ -446,23 +921,33 @@
                 if (artistSp) artistSp.className = "text-[#F5F5F3]/40 text-[8px] truncate mt-0.5";
             });
 
-            // Activate current item styling
             btn.className = "track-item active w-full flex items-center justify-between p-2 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/10 text-left transition-all duration-200 cursor-pointer";
             const btnTitle = btn.querySelector("span:first-child");
             const btnArtist = btn.querySelector("span:nth-child(2)");
             if (btnTitle) btnTitle.className = "text-[#F5F5F3] font-medium truncate text-[10px]";
             if (btnArtist) btnArtist.className = "text-[#F5F5F3]/50 text-[8px] truncate mt-0.5";
 
-            // Dynamic Now Playing soundtrack label
             const soundtrackTextEle = document.getElementById("soundtrack-text");
             if (soundtrackTextEle && btnTitle) {
                 soundtrackTextEle.textContent = `Now playing: ${btnTitle.textContent}`;
             }
 
-            // Update embedded player source
             const rawUrl = btn.getAttribute("data-url");
-            const encodedUrl = encodeURIComponent(rawUrl);
-            spotifyIframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23121212&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
+            if (widget) {
+                widget.load(rawUrl, {
+                    color: "121212",
+                    auto_play: true,
+                    hide_related: true,
+                    show_comments: false,
+                    show_user: false,
+                    show_reposts: false,
+                    show_teaser: false,
+                    visual: false
+                });
+            } else {
+                const encodedUrl = encodeURIComponent(rawUrl);
+                spotifyIframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23121212&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
+            }
         }
 
         trackItems.forEach((btn) => {
@@ -471,7 +956,6 @@
             });
         });
 
-        // Play random song on entry
         if (trackItems.length > 0) {
             const randomIndex = Math.floor(Math.random() * trackItems.length);
             playTrack(trackItems[randomIndex]);
