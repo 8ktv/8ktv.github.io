@@ -317,7 +317,7 @@
                         <span class="text-[#F5F5F3] font-medium text-[11px] uppercase tracking-wider">ATLYSS</span>
                         <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvre</span>
                     </div>
-                    <span class="font-mono text-[8px] tracking-wider text-amber-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-amber-500/20 bg-amber-500/5">Pending</span>
+                    <span class="btn-status-badge font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
                 </button>
 
                 <button id="game-btn-sbg" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
@@ -325,7 +325,7 @@
                         <span class="text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider">Super Battle Golf</span>
                         <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvreSBG</span>
                     </div>
-                    <span class="font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
+                    <span class="btn-status-badge font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
                 </button>
 
                 <button id="game-btn-roblox" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
@@ -346,9 +346,9 @@
                             <h3 class="font-sans text-xl font-bold tracking-widest uppercase">ATLYSS Modded</h3>
                             <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package</p>
                         </div>
-                        <div class="flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                            Out of Date / Pending Version Sync
+                        <div class="content-status-badge flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Active - Version 3.1.2
                         </div>
                     </div>
 
@@ -372,7 +372,9 @@
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
                                 <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvre</span> directly inside your mod manager or click below (mod file currently updating for the latest game build).</p>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <button disabled class="font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3]/5 border border-[#F5F5F3]/5 text-[#F5F5F3]/30 cursor-not-allowed">Direct Download Unavailable</button>
+                                    <button onclick="checkAndDownload('https://catnip.at.ua/meowijuana.lol-plvsmvwvre-3.1.2.zip', '3.1.2')" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                                        Download meowijuana.lol-plvsmvwvre-3.1.2.zip
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -393,7 +395,7 @@
                             <h3 class="font-sans text-xl font-bold tracking-widest uppercase">Super Battle Golf</h3>
                             <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package (Shorthand: SBG)</p>
                         </div>
-                        <div class="flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+                        <div class="content-status-badge flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                             Online - Version 1.1.1
                         </div>
@@ -612,6 +614,104 @@
             'game-btn-sbg': 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4069520/2e90632f818b8f7457edee5b5be38bc0ebcfd5b3/ss_2e90632f818b8f7457edee5b5be38bc0ebcfd5b3.1920x1080.jpg?t=1776717543',
             'game-btn-roblox': 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Frobloxdb.com%2Fimg%2Fcategories%2Fgame-codes.webp&f=1&nofb=1&ipt=99cb34d858be8238f6f7262747617ea6ac2bb86ff60aac77b31b071b34426b81'
         };
+
+        const games = {
+            'atlyss': { btn: 'game-btn-atlyss', content: 'content-atlyss', base: 'https://catnip.at.ua/meowijuana.lol-plvsmvwvre-{{version}}.zip', current: '3.1.2' },
+            'sbg': { btn: 'game-btn-sbg', content: 'content-sbg', base: 'https://catnip.at.ua/meowijuana.lol-plvsmvwvreSBG-{{version}}.zip', current: '1.1.1' }
+        };
+
+        async function updateGameStatus() {
+            for (const [key, info] of Object.entries(games)) {
+                let foundVersions = [];
+                let parts = info.current.split('.');
+                let patch = parseInt(parts[2]);
+
+                for (let i = 0; i <= 5; i++) {
+                    let v = `${parts[0]}.${parts[1]}.${patch + i}`;
+                    let url = info.base.replace('{{version}}', v);
+                    try {
+                        const res = await fetch('/api/check-url?url=' + encodeURIComponent(url));
+                        const data = await res.json();
+                        if (data.exists) foundVersions.push(v);
+                    } catch(e) {}
+                }
+
+                const btn = document.getElementById(info.btn);
+                const content = document.getElementById(info.content);
+                if (!btn || !content) continue;
+                const btnBadge = btn.querySelector('.btn-status-badge');
+                const contentBadge = content.querySelector('.content-status-badge');
+
+                if (foundVersions.length === 0) {
+                    updateBadge(btnBadge, contentBadge, 'Inactive', 'red');
+                } else if (foundVersions.length === 1) {
+                    updateBadge(btnBadge, contentBadge, `Active - Version ${foundVersions[0]}`, 'emerald');
+                } else {
+                    updateBadge(btnBadge, contentBadge, 'Updating', 'amber');
+                }
+            }
+        }
+
+        function updateBadge(btnBadge, contentBadge, text, color) {
+            const classes = {
+                emerald: 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5',
+                red: 'text-red-500 border-red-500/20 bg-red-500/5',
+                amber: 'text-amber-500 border-amber-500/20 bg-amber-500/5'
+            };
+
+            [btnBadge, contentBadge].forEach(b => {
+                if (!b) return;
+
+                if (b.classList.contains('btn-status-badge')) {
+                    b.textContent = text;
+                } else {
+                    const icon = b.querySelector('span');
+                    b.innerHTML = '';
+                    if (icon) b.appendChild(icon);
+                    b.appendChild(document.createTextNode(' ' + text));
+                }
+
+                const badgeClass = b.classList.contains('btn-status-badge') ? 'btn-status-badge' : 'content-status-badge';
+                b.className = `${badgeClass} font-mono text-[8px] tracking-wider shrink-0 uppercase px-1.5 py-0.5 rounded border ${classes[color]}`;
+            });
+        }
+
+        updateGameStatus();
+
+        async function checkAndDownload(url, currentVersion) {
+            try {
+                const response = await fetch(url, { method: "HEAD" });
+
+                if (response.ok) {
+                    window.open(url, "_blank");
+                    return;
+                }
+            } catch (e) {
+                console.log("Direct check failed for current version.");
+            }
+
+            let parts = currentVersion.split('.');
+            let vPatch = parseInt(parts[2]);
+
+            for(let i=1; i<=5; i++) {
+                let nextVersion = `${parts[0]}.${parts[1]}.${vPatch + i}`;
+                let nextUrl = url.replace(currentVersion, nextVersion);
+
+                try {
+                    const nextResponse = await fetch(nextUrl, { method: "HEAD" });
+
+                    if (nextResponse.ok) {
+                        window.open(nextUrl, "_blank");
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Direct check failed for version:", nextVersion);
+                }
+            }
+
+            alert("Download link not found for current or newer versions. Please check back later.");
+        }
+
 
         gameTabBtns.forEach((btn) => {
             btn.addEventListener("click", () => {
