@@ -372,7 +372,7 @@
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
                                 <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvre</span> directly inside your mod manager or click below (mod file currently updating for the latest game build).</p>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <button onclick="window.open('https://catnip.at.ua/meowijuana.lol-plvsmvwvre-3.1.2.zip', '_blank')" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                                    <button onclick="window.open('https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-3.1.2.zip', '_blank')" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
                                         Download meowijuana.lol-plvsmvwvre-3.1.2.zip
                                     </button>
                                 </div>
@@ -422,7 +422,7 @@
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
                                 <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvreSBG</span> directly inside your mod manager or click below.</p>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <a href="https://catnip.at.ua/meowijuana.lol-plvsmvwvreSBG-1.1.1.zip" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                                    <a href="https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-1.1.1.zip" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
                                         Download meowijuana.lol-plvsmvwvreSBG-1.1.1.zip
                                     </a>
                                 </div>
@@ -617,8 +617,8 @@
         };
 
         const games = {
-            'atlyss': { btn: 'game-btn-atlyss', content: 'content-atlyss', base: 'https://catnip.at.ua/meowijuana.lol-plvsmvwvre-{{version}}.zip', current: '3.1.2' },
-            'sbg': { btn: 'game-btn-sbg', content: 'content-sbg', base: 'https://catnip.at.ua/meowijuana.lol-plvsmvwvreSBG-{{version}}.zip', current: '1.1.1' }
+            'atlyss': { btn: 'game-btn-atlyss', content: 'content-atlyss', base: 'https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-{{version}}.zip', start: '3.1.0' },
+            'sbg': { btn: 'game-btn-sbg', content: 'content-sbg', base: 'https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-{{version}}.zip', start: '1.1.0' }
         };
 
         async function updateGameStatus() {
@@ -629,8 +629,30 @@
                 const btnBadge = btn.querySelector('.btn-status-badge');
                 const contentBadge = content.querySelector('.content-status-badge');
 
-                // Force active if static link is provided for current version
-                updateBadge(btnBadge, contentBadge, `Active - Version ${info.current}`, 'emerald');
+                // Helper function to check URL
+                async function checkUrl(url) {
+                    try {
+                        const res = await fetch(url, { method: 'HEAD' });
+                        return res.ok;
+                    } catch(e) { return false; }
+                }
+
+                // Exhaustive Search - Find highest version starting from start
+                let [major, minor, patch] = info.start.split('.').map(Number);
+                let latestVersion = info.start;
+
+                for (let M = major; M <= major + 3; M++) {
+                    for (let m = (M === major ? minor : 0); m <= (M === major ? minor + 20 : 20); m++) {
+                        for (let p = (M === major && m === minor ? patch : 0); p <= (M === major && m === minor ? patch + 100 : 100); p++) {
+                            let nextVersion = `${M}.${m}.${p}`;
+                            if (await checkUrl(info.base.replace('{{version}}', nextVersion))) {
+                                latestVersion = nextVersion;
+                            }
+                        }
+                    }
+                }
+
+                updateBadge(btnBadge, contentBadge, `Active - Version ${latestVersion}`, 'emerald');
             }
         }
 
@@ -661,10 +683,9 @@
         updateGameStatus();
 
         window.checkAndDownload = async function(url, currentVersion) {
-            const proxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
-            console.log("Checking:", proxiedUrl);
+            console.log("Checking:", url);
             try {
-                const response = await fetch(proxiedUrl, { method: "HEAD" });
+                const response = await fetch(url, { method: "HEAD" });
 
                 if (response.ok) {
                     window.open(url, "_blank");
@@ -682,9 +703,8 @@
                 let nextUrl = url.replace(currentVersion, nextVersion);
 
                 try {
-                    const nextProxiedUrl = 'https://corsproxy.io/?' + encodeURIComponent(nextUrl);
-                    console.log("Checking:", nextProxiedUrl);
-                    const nextResponse = await fetch(nextProxiedUrl, { method: "HEAD" });
+                    console.log("Checking:", nextUrl);
+                    const nextResponse = await fetch(nextUrl, { method: "HEAD" });
 
                     if (nextResponse.ok) {
                         window.open(nextUrl, "_blank");
