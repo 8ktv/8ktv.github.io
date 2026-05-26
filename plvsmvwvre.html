@@ -642,12 +642,16 @@
                 let [major, minor, patch] = info.start.split('.').map(Number);
                 let latestVersion = info.start;
 
+                // Log start of search
+                console.log(`Checking versions for ${key} from ${latestVersion}`);
+
                 for (let M = major; M <= major + 1; M++) {
                     for (let m = (M === major ? minor : 0); m <= (M === major ? minor + 5 : 5); m++) {
                         for (let p = (M === major && m === minor ? patch : 0); p <= (M === major && m === minor ? patch + 20 : 20); p++) {
                             let nextVersion = `${M}.${m}.${p}`;
                             let url = info.base.replace('{{version}}', nextVersion);
                             if (await checkUrl(url)) {
+                                console.log(`Found version: ${nextVersion}`);
                                 latestVersion = nextVersion;
                             }
                         }
