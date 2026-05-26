@@ -372,7 +372,7 @@
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
                                 <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvre</span> directly inside your mod manager or click below (mod file currently updating for the latest game build).</p>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <button onclick="window.open('https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-3.1.2.zip', '_blank')" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                                    <button id="atlyss-dl-btn" onclick="window.open('https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-3.1.2.zip', '_blank')" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
                                         Download meowijuana.lol-plvsmvwvre-3.1.2.zip
                                     </button>
                                 </div>
@@ -422,7 +422,7 @@
                                 <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
                                 <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvreSBG</span> directly inside your mod manager or click below.</p>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <a href="https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-1.1.1.zip" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                                    <a id="sbg-dl-btn" href="https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-1.1.1.zip" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
                                         Download meowijuana.lol-plvsmvwvreSBG-1.1.1.zip
                                     </a>
                                 </div>
@@ -617,8 +617,8 @@
         };
 
         const games = {
-            'atlyss': { btn: 'game-btn-atlyss', content: 'content-atlyss', base: 'https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-{{version}}.zip', start: '3.1.0' },
-            'sbg': { btn: 'game-btn-sbg', content: 'content-sbg', base: 'https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-{{version}}.zip', start: '1.1.0' }
+            'atlyss': { btn: 'game-btn-atlyss', content: 'content-atlyss', dlBtn: 'atlyss-dl-btn', base: 'https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-{{version}}.zip', start: '3.1.0' },
+            'sbg': { btn: 'game-btn-sbg', content: 'content-sbg', dlBtn: 'sbg-dl-btn', base: 'https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-{{version}}.zip', start: '1.1.0' }
         };
 
         async function updateGameStatus() {
@@ -628,6 +628,7 @@
                 if (!btn || !content) continue;
                 const btnBadge = btn.querySelector('.btn-status-badge');
                 const contentBadge = content.querySelector('.content-status-badge');
+                const dlBtn = document.getElementById(info.dlBtn);
 
                 // Helper function to check URL
                 async function checkUrl(url) {
@@ -641,18 +642,35 @@
                 let [major, minor, patch] = info.start.split('.').map(Number);
                 let latestVersion = info.start;
 
-                for (let M = major; M <= major + 3; M++) {
-                    for (let m = (M === major ? minor : 0); m <= (M === major ? minor + 20 : 20); m++) {
-                        for (let p = (M === major && m === minor ? patch : 0); p <= (M === major && m === minor ? patch + 100 : 100); p++) {
+                for (let M = major; M <= major + 1; M++) {
+                    for (let m = (M === major ? minor : 0); m <= (M === major ? minor + 5 : 5); m++) {
+                        for (let p = (M === major && m === minor ? patch : 0); p <= (M === major && m === minor ? patch + 20 : 20); p++) {
                             let nextVersion = `${M}.${m}.${p}`;
-                            if (await checkUrl(info.base.replace('{{version}}', nextVersion))) {
+                            let url = info.base.replace('{{version}}', nextVersion);
+                            if (await checkUrl(url)) {
                                 latestVersion = nextVersion;
                             }
                         }
                     }
                 }
 
+                const latestUrl = info.base.replace('{{version}}', latestVersion);
+
+                // Update badge
                 updateBadge(btnBadge, contentBadge, `Active - Version ${latestVersion}`, 'emerald');
+
+                // Update download button
+                if (dlBtn) {
+                    if (dlBtn.tagName === 'BUTTON') {
+                        dlBtn.onclick = () => window.open(latestUrl, "_blank");
+                        dlBtn.textContent = `Download meowijuana.lol-plvsmvwvre-${latestVersion}.zip`;
+                        // Need to fix the text content to match the specific file name structure
+                        if(key === 'sbg') dlBtn.textContent = dlBtn.textContent.replace('plvsmvwvre-', 'plvsmvwvreSBG-');
+                    } else {
+                        dlBtn.href = latestUrl;
+                        dlBtn.textContent = `Download ${latestUrl.split('/').pop()}`;
+                    }
+                }
             }
         }
 
