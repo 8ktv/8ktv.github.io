@@ -638,9 +638,11 @@
                     } catch(e) { return false; }
                 }
 
+                updateBadge(btnBadge, contentBadge, `Updating...`, 'amber');
+
                 // Exhaustive Search - Find highest version starting from start
                 let [major, minor, patch] = info.start.split('.').map(Number);
-                let latestVersion = info.start;
+                let latestVersion = null;
 
                 for (let M = major; M <= major + 1; M++) {
                     for (let m = (M === major ? minor : 0); m <= (M === major ? minor + 5 : 5); m++) {
@@ -652,6 +654,11 @@
                             }
                         }
                     }
+                }
+
+                if (!latestVersion) {
+                    updateBadge(btnBadge, contentBadge, `Down`, 'red');
+                    continue;
                 }
 
                 const latestUrl = info.base.replace('{{version}}', latestVersion);
