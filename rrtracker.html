@@ -265,6 +265,22 @@
 </head>
 <body class="bg-zinc-950 text-white min-h-screen bg-gradient-radial selection:bg-orange-500/30 relative">
 
+<!-- EOL Preview Banner -->
+<div id="eolPreviewBanner" class="hidden bg-red-600/95 border-b border-red-500/30 backdrop-blur-md text-white text-xs sm:text-sm font-semibold py-3 px-4 sticky top-0 z-[1000] shadow-xl">
+    <div class="max-w-3xl mx-auto flex justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+                <span class="flex h-2.5 w-2.5 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
+                </span>
+            <span class="tracking-wide">EOL PREVIEW ACTIVE — This is what the site looks like after EOL (June 3rd, 2026)</span>
+        </div>
+        <button onclick="toggleEolPreview(false)" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-xl text-xs font-bold transition-colors shrink-0">
+            Exit Preview
+        </button>
+    </div>
+</div>
+
 <div id="defaultBg" class="fixed inset-0 z-[-2] bg-gradient-radial transition-opacity duration-[3000ms]"></div>
 <div id="starsBg" class="fixed inset-0 z-[-2] bg-black opacity-0 transition-opacity duration-[3000ms]">
     <div class="absolute inset-0 stars-bg"></div>
@@ -313,7 +329,10 @@
         <div id="headerSection" class="text-center mb-12">
             <h1 class="text-5xl font-bold tracking-tighter mb-2 text-orange-400">School’s Out... Forever</h1>
             <p class="text-zinc-400 text-xl">Rec Room has officially shut down. (June 1st, 2026)</p>
-            <div class="mt-4 text-xs text-zinc-500">Made with pain by Plasma • Finalized • EOL 12/25/26</div>
+            <div class="mt-4 text-xs text-zinc-500">Made with pain by Plasma • Finalized • EOL 06/03/26</div>
+            <button onclick="toggleEolPreview()" id="eolPreviewBtn" class="mt-4 bg-zinc-800/80 hover:bg-zinc-700 text-orange-400 border border-zinc-700/50 hover:border-orange-500/30 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 inline-flex items-center gap-1.5 shadow-md active:scale-95">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i> Preview EOL Mode
+            </button>
         </div>
 
         <div id="countdownSection" class="glass-card rounded-3xl p-8 mb-10">
@@ -701,7 +720,7 @@
 
 <div class="text-center text-xs text-zinc-500 mt-12">
     Not affiliated with Rec Room. Just a dude who wasted too many hours here.<br>
-    plasma was here • 2026 • EOL December 25th
+    plasma was here • 2026 • EOL June 3rd
 </div>
 </div>
 
@@ -710,7 +729,7 @@
 
 <script>
     const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00');
-    const EOL_DATE = new Date('2026-12-25T12:00:00-07:00');
+    const EOL_DATE = new Date('2026-06-03T12:00:00-07:00');
 
     const stages = [
         { name: "The Big Layoff", date: new Date('2025-08-25'), description: "Half the team got cut. We all pretended it was fine.", videoId: "HJl-i58SuW4", theme: "default" },
@@ -852,8 +871,9 @@
     }
 
     let lastSeconds = -1;
+    let isEolPreview = false;
     function updateCountdown() {
-        const now = new Date();
+        const now = isEolPreview ? new Date('2026-06-04T12:00:00-07:00') : new Date();
         let target = SHUTDOWN_DATE;
         let label = "Time left until we lose the dumbest best game ever";
         let prefix = "Shutdown";
@@ -1285,6 +1305,71 @@
 
     setTimeout(() => { pingAll(); }, 800);
 
+    function toggleEolPreview(forceState) {
+        isEolPreview = (forceState !== undefined) ? forceState : !isEolPreview;
+
+        const banner = document.getElementById('eolPreviewBanner');
+        const headerBtn = document.getElementById('eolPreviewBtn');
+
+        if (isEolPreview) {
+            if (banner) banner.classList.remove('hidden');
+            if (headerBtn) {
+                headerBtn.innerHTML = `<i data-lucide="eye-off" class="w-3.5 h-3.5"></i> Exit Preview`;
+                headerBtn.classList.remove('text-orange-400', 'border-zinc-700/50');
+                headerBtn.classList.add('text-red-400', 'border-red-500/30');
+            }
+
+            // Hide normal tabs navigation to focus fully on EOL simulation
+            const nav = document.querySelector('nav');
+            if (nav) nav.classList.add('hidden');
+
+            // Switch current view to Home since EOL is overlayed on Home tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                if (tab.id !== 'tab-home') {
+                    tab.classList.add('hidden');
+                } else {
+                    tab.classList.remove('hidden');
+                }
+            });
+        } else {
+            if (banner) banner.classList.add('hidden');
+            if (headerBtn) {
+                headerBtn.innerHTML = `<i data-lucide="eye" class="w-3.5 h-3.5"></i> Preview EOL Mode`;
+                headerBtn.classList.add('text-orange-400', 'border-zinc-700/50');
+                headerBtn.classList.remove('text-red-400', 'border-red-500/30');
+            }
+
+            const nav = document.querySelector('nav');
+            if (nav) nav.classList.remove('hidden');
+
+            // Restore sections hidden by EOL
+            const sectionsToRestore = ['headerSection', 'countdownSection', 'stagesSection', 'whySection', 'rageSection', 'faqSection', 'feedbackSection', 'serverList', 'pingLog'];
+            sectionsToRestore.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = '';
+            });
+
+            const eolSection = document.getElementById('eolSection');
+            if (eolSection) eolSection.classList.add('hidden');
+
+            // Ensure correct tab content is shown for active button
+            const activeBtn = document.querySelector('.nav-btn.active');
+            if (activeBtn) {
+                const targetId = activeBtn.getAttribute('data-target');
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    if (tab.id === targetId) {
+                        tab.classList.remove('hidden');
+                    } else {
+                        tab.classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        lucide.createIcons();
+        updateCountdown();
+    }
+
     function downloadSource() {
         const html = document.documentElement.outerHTML;
         const blob = new Blob([html], { type: 'text/html' });
@@ -1311,6 +1396,7 @@
     window.openLegendModal = openLegendModal;
     window.closeLegendModal = closeLegendModal;
     window.downloadSource = downloadSource;
+    window.toggleEolPreview = toggleEolPreview;
 </script>
 </body>
 </html>
