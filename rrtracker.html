@@ -990,7 +990,7 @@
 
 <script>
     const SHUTDOWN_DATE = new Date('2026-06-01T12:00:00-07:00');
-    const EOL_DATE = new Date('2026-06-03T12:00:00-07:00');
+    let EOL_DATE = new Date('2026-06-03T12:00:00-07:00');
 
     const stages = [
         { name: "The Big Layoff", date: new Date('2025-08-25'), description: "Half the team got cut. We all pretended it was fine.", videoId: "HJl-i58SuW4", theme: "default" },
@@ -1204,6 +1204,14 @@
             survivalStatus = "dead";
         } else {
             survivalStatus = (onlineCount === 0) ? "dead" : "alive";
+        }
+
+        // If any servers are still pinging, actual EOL should follow along
+        if (onlineCount > 0 && !isEolPreview) {
+            const minimumEol = new Date(Date.now() + 48 * 60 * 60 * 1000);
+            if (EOL_DATE < minimumEol) {
+                EOL_DATE = minimumEol;
+            }
         }
         updateSurvivalTimer();
     }
@@ -1660,6 +1668,7 @@
     }, 1000);
 
     setTimeout(() => { pingAll(); }, 800);
+    setInterval(() => { pingAll(); }, 30000);
 
     function toggleEolPreview(forceState) {
         isEolPreview = (forceState !== undefined) ? forceState : !isEolPreview;
