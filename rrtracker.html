@@ -684,6 +684,242 @@
     </div>
 </div>
 
+<!-- Revival Servers Modal -->
+<div id="revivalModal" class="hidden fixed inset-0 bg-black/85 flex items-center justify-center z-50 p-4 transition-opacity">
+    <div class="glass-card rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto relative border border-emerald-500/30">
+        <button onclick="closeRevivalModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors bg-zinc-800 p-2 rounded-full z-10 shadow-md">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-2">
+            <div class="text-left">
+                <h2 class="text-2xl font-bold text-emerald-400 flex items-center gap-2">
+                    <i data-lucide="shield-alert" class="w-6 h-6 text-emerald-400"></i>
+                    Survivor's Signal: Revival Directory
+                </h2>
+                <p class="text-zinc-400 text-xs mt-1">Official servers are dead, but the community is keeping the flame alive. Here is where to play now.</p>
+            </div>
+            <span class="text-xs bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-mono font-medium flex items-center gap-1.5 shrink-0 w-fit">
+                    <span class="flex h-1.5 w-1.5 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
+                    COMMUNITY REBORN
+                </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+            <!-- Radium Card -->
+            <div class="glass-card rounded-2xl p-5 border border-emerald-500/10 hover:border-emerald-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>Radium</span>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-medium tracking-wide">ACTIVE</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">PCVR</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Steam</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Desktop</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        Recreates prime 2016-2018 Rec Room with private multiplayer lobbies, full dorm customizability, and interactive nostalgic rooms. The largest community project currently online.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-orange-400/85 font-semibold tracking-wider uppercase">Extremely Popular</span>
+                    <a href="https://discord.gg/radium-rr" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 hover:border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Join Discord <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- VanillaRec Card -->
+            <div class="glass-card rounded-2xl p-5 border border-amber-500/10 hover:border-amber-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>VanillaRec</span>
+                            <span class="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-medium tracking-wide">LIVE / RELEASING TODAY</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest 2</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest 3</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        A highly reliable Android standalone Quest-specific private server reviving old-school Rec Room builds. Ideal for those who play without a PC tether.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-amber-400 font-semibold tracking-wider uppercase">Standalone Release</span>
+                    <a href="https://discord.gg/vanillarec" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 hover:border-amber-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Join Discord <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- RebornRec Card -->
+            <div class="glass-card rounded-2xl p-5 border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>RebornRec</span>
+                            <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full font-medium tracking-wide">PUBLIC BETA</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">PCVR</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Desktop</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        Offers private servers and matchmaking across multiple old-school patches. Dedicated development team hosting active nostalgic lobbies.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-blue-400 font-semibold tracking-wider uppercase">Active Beta</span>
+                    <a href="https://discord.com/invite/rebornrec-1076782953109131376" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 hover:border-blue-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Join Discord <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- OpenRec (Openlabs) Card -->
+            <div class="glass-card rounded-2xl p-5 border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>OpenRec</span>
+                            <span class="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full font-medium tracking-wide">OPEN SOURCE</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">PC</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Self-Host</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        An entirely open-source framework and client modification designed to allow anyone to host their own custom multiplayer instances of classic 2017-2018 Rec Room.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-purple-400 font-semibold tracking-wider uppercase">FOSS Architecture</span>
+                    <a href="https://discord.com/invite/daC8QUhnFP" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 hover:border-purple-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Join Discord <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stella Card -->
+            <div class="glass-card rounded-2xl p-5 border border-indigo-500/10 hover:border-indigo-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>Stella</span>
+                            <span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-medium tracking-wide">EARLY ACCESS</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">PCVR</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Android</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        A proprietary full custom backend emulating mid-era Rec Room. Highly optimized and featuring extremely low network latency for standard dorm game modes.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-indigo-400 font-semibold tracking-wider uppercase">Active Development</span>
+                    <a href="https://discord.gg/QFPvapDYUR" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 hover:border-indigo-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Join Discord <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- meow.net Card -->
+            <div class="glass-card rounded-2xl p-5 border border-red-500/10 hover:border-red-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>meow.net / RecNet Archive</span>
+                            <span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full font-medium tracking-wide">ARCHIVE</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Web</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Discord</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Profiles</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        Officially supported by Runeskate. Dedicated to preserving historic player directories, forum threads, image backups, and classic player leaderboards from Rec.net.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-red-400 font-semibold tracking-wider uppercase">Historical Preservation</span>
+                    <a href="https://discord.gg/recnet" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 hover:border-red-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Join Discord <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- EpicQuest Card -->
+            <div class="glass-card rounded-2xl p-5 border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>EpicQuest</span>
+                            <span class="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full font-medium tracking-wide">STABLE</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">PCVR</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Web App</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        A persistent standalone Quest and PCVR client with active web interface, custom lobby tracking, and building tools. Extremely friendly micro-community.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-purple-400 font-semibold tracking-wider uppercase">Website & Lobby</span>
+                    <a href="https://epicquest.app/Home" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Visit Site <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- RecPlace Card -->
+            <div class="glass-card rounded-2xl p-5 border border-pink-500/10 hover:border-pink-500/30 transition-all duration-300 flex flex-col justify-between bg-zinc-900/40">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                            <span>RecPlace</span>
+                            <span class="text-[10px] bg-pink-500/20 text-pink-400 px-2 py-0.5 rounded-full font-medium tracking-wide">GROWING</span>
+                        </h3>
+                        <div class="flex gap-1 text-[10px] text-zinc-500">
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">PCVR</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Quest</span>
+                            <span class="bg-zinc-800/80 px-1.5 py-0.5 rounded">Socials</span>
+                        </div>
+                    </div>
+                    <p class="text-zinc-400 text-xs leading-relaxed mb-4">
+                        Revival program specializing in TikTok marketing loops and classic custom rooms. Home to thousands of younger vintage players seeking a revival space.
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-auto">
+                    <span class="text-[10px] text-pink-400 font-semibold tracking-wider uppercase">Trending Revival</span>
+                    <a href="https://discord.gg/kH598uaKwY" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700/50 hover:border-pink-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                        Join Discord <i data-lucide="external-link" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="mb-6 flex items-center justify-between">
     <h2 class="text-2xl font-semibold">RecNet Death Watch</h2>
     <button onclick="pingAll()" class="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 px-6 py-2 rounded-2xl text-sm font-medium">
@@ -691,6 +927,26 @@
         REFRESH
     </button>
 </div>
+
+<!-- Survival Status Board -->
+<div id="survivalBoard" class="mb-6 rounded-3xl p-6 border transition-all duration-500 bg-zinc-900/50 border-zinc-800">
+    <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+        <div id="survivalIconContainer" class="bg-zinc-800/80 p-4 rounded-2xl text-zinc-400 shrink-0">
+            <i data-lucide="pulse" class="w-8 h-8 animate-pulse text-orange-400"></i>
+        </div>
+        <div class="flex-1">
+            <div class="text-[10px] uppercase tracking-widest font-bold text-zinc-500" id="survivalBadge">SURVIVAL STATUS</div>
+            <h3 class="text-xl font-bold text-white mt-1" id="survivalTitle">AWAITING SIGNAL PING...</h3>
+            <p class="text-zinc-400 text-xs mt-1 leading-relaxed" id="survivalDesc">Initiating real-time connection checks with official Rec Room backend endpoints to track survival after shutdown.</p>
+        </div>
+    </div>
+    <!-- Survival Timer element -->
+    <div id="survivalTimerRow" class="hidden mt-4 pt-4 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-center sm:text-left">
+        <span class="text-zinc-500 text-xs font-mono tracking-wider uppercase" id="survivalTimerLabel">Survival Time (Post-Shutdown)</span>
+        <span class="font-mono text-lg sm:text-xl font-extrabold text-orange-400 drop-shadow-[0_0_10px_rgba(251,146,60,0.2)]" id="survivalTimer">00d 00h 00m 00s</span>
+    </div>
+</div>
+
 <div id="serverList" class="space-y-3 mb-8"></div>
 <div id="pingLog" class="glass-card rounded-3xl p-6 h-64 overflow-auto text-sm font-mono text-zinc-400"></div>
 
@@ -715,6 +971,11 @@
                 <i data-lucide="users" class="w-5 h-5"></i>
                 Community
                 </a>
+
+                <button onclick="openRevivalModal()" class="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 bg-emerald-600/25 hover:bg-emerald-600/35 text-emerald-400 border border-emerald-500/30 py-4 rounded-2xl font-semibold transition-all">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-emerald-400 animate-pulse"></i>
+                    View Revival Servers Directory
+                </button>
     </div>
 </div>
 
@@ -824,6 +1085,7 @@
         { name: "api.rec.net", url: "https://api.rec.net/", location: "US-East" }
     ];
     let logs = [];
+    let survivalStatus = "unknown"; // "unknown", "alive", "dead"
 
     function addLog(msg, isError = false) {
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -851,23 +1113,99 @@
         }
     }
 
+    function updateSurvivalTimer() {
+        const timerRow = document.getElementById('survivalTimerRow');
+        const timerVal = document.getElementById('survivalTimer');
+        const timerLabel = document.getElementById('survivalTimerLabel');
+        const board = document.getElementById('survivalBoard');
+        const iconContainer = document.getElementById('survivalIconContainer');
+        const badge = document.getElementById('survivalBadge');
+        const title = document.getElementById('survivalTitle');
+        const desc = document.getElementById('survivalDesc');
+
+        if (!timerRow || !timerVal) return;
+
+        if (survivalStatus === "unknown") {
+            timerRow.classList.add('hidden');
+            return;
+        }
+
+        timerRow.classList.remove('hidden');
+
+        const now = isEolPreview ? new Date('2026-06-04T12:00:00-07:00') : new Date();
+        const diff = Math.max(0, now - SHUTDOWN_DATE);
+
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff % 86400000) / 3600000);
+        const minutes = Math.floor((diff % 3600000) / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+
+        const timeText = `${String(days).padStart(2, '0')}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+        timerVal.textContent = timeText;
+
+        if (survivalStatus === "dead") {
+            if (board) board.className = "mb-6 rounded-3xl p-6 border transition-all duration-500 bg-red-500/10 border-red-500/30";
+            if (iconContainer) {
+                iconContainer.className = "bg-red-500/10 text-red-500 p-4 rounded-2xl shrink-0";
+                iconContainer.innerHTML = `<i data-lucide="heart-off" class="w-8 h-8 animate-pulse text-red-500"></i>`;
+            }
+            if (badge) badge.innerHTML = `<span class="bg-red-500/20 text-red-400 px-2.5 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase">DEATH CONFIRMED</span>`;
+            if (title) title.textContent = "FLATLINE DETECTED";
+            if (desc) desc.textContent = "All 3 official RecNet server endpoints are 100% unreachable. Rec Room's virtual heart has stopped beating.";
+            if (timerLabel) timerLabel.textContent = "TIME SINCE FLATLINE";
+            timerVal.className = "font-mono text-lg sm:text-xl font-extrabold text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.2)]";
+        } else if (survivalStatus === "alive") {
+            if (board) board.className = "mb-6 rounded-3xl p-6 border transition-all duration-500 bg-emerald-500/10 border-emerald-500/30";
+            if (iconContainer) {
+                iconContainer.className = "bg-emerald-500/10 text-emerald-400 p-4 rounded-2xl shrink-0";
+                iconContainer.innerHTML = `<i data-lucide="heart" class="w-8 h-8 animate-pulse text-emerald-400"></i>`;
+            }
+            if (badge) badge.innerHTML = `<span class="bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase">SURVIVING POST-SHUTDOWN</span>`;
+            if (title) title.textContent = "RECNET IS STILL BREATHING";
+            if (desc) desc.textContent = "At least one official backend server endpoint is responsive. Standby, we are still getting a pulse!";
+            if (timerLabel) timerLabel.textContent = "SURVIVAL TIME PAST SHUTDOWN";
+            timerVal.className = "font-mono text-lg sm:text-xl font-extrabold text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.2)]";
+        }
+
+        lucide.createIcons();
+    }
+
     async function pingAll() {
         const container = document.getElementById('serverList');
+        if (!container) return;
         container.innerHTML = `<div class="text-center py-6 text-zinc-500">Checking if RecNet is still alive...</div>`;
 
+        let results = [];
+        let onlineCount = 0;
         for (let s of servers) {
             const result = await pingServer(s);
+            if (result.status === 'ONLINE') {
+                onlineCount++;
+            }
+            results.push({ s, result });
+        }
+
+        container.innerHTML = '';
+        for (let res of results) {
             const div = document.createElement('div');
-            div.className = "glass-card rounded-2xl px-6 py-4 flex justify-between items-center mb-3";
+            div.className = "glass-card rounded-2xl px-6 py-4 flex justify-between items-center mb-3 border border-zinc-800";
             div.innerHTML = `
                 <div>
-                    <div class="font-medium text-white">${s.name}</div>
-                    <div class="text-xs text-zinc-500">${s.location}</div>
+                    <div class="font-medium text-white">${res.s.name}</div>
+                    <div class="text-xs text-zinc-500">${res.s.location}</div>
                 </div>
-                <div class="font-mono ${result.status === 'ONLINE' ? 'text-emerald-400' : 'text-red-400'}">${result.message}</div>
+                <div class="font-mono ${res.result.status === 'ONLINE' ? 'text-emerald-400' : 'text-red-400'}">${res.result.message}</div>
             `;
             container.appendChild(div);
         }
+
+        // Set the survival status based on online count and preview state
+        if (isEolPreview) {
+            survivalStatus = "dead";
+        } else {
+            survivalStatus = (onlineCount === 0) ? "dead" : "alive";
+        }
+        updateSurvivalTimer();
     }
 
     let lastSeconds = -1;
@@ -891,7 +1229,7 @@
         if (diff <= 0 && now >= EOL_DATE) {
             countdownEl.innerHTML = `<span class="text-red-600 font-bold">TRACKER OFFLINE</span>`;
 
-            const sectionsToHide = ['headerSection', 'countdownSection', 'stagesSection', 'whySection', 'rageSection', 'faqSection', 'feedbackSection', 'serverList', 'pingLog'];
+            const sectionsToHide = ['headerSection', 'countdownSection', 'stagesSection', 'whySection', 'rageSection', 'faqSection', 'feedbackSection', 'serverList', 'pingLog', 'witnessSection', 'farewellVideoSection'];
             sectionsToHide.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = 'none';
@@ -1257,6 +1595,23 @@
         }
     });
 
+    function openRevivalModal() {
+        const el = document.getElementById('revivalModal');
+        if (el) el.classList.remove('hidden');
+        lucide.createIcons();
+    }
+
+    function closeRevivalModal() {
+        const el = document.getElementById('revivalModal');
+        if (el) el.classList.add('hidden');
+    }
+
+    document.getElementById('revivalModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeRevivalModal();
+        }
+    });
+
     renderLegends();
     initTimezoneSelector();
     updateStages();
@@ -1301,6 +1656,7 @@
         updateStages();
         checkAutomaticAudio();
         checkBreakingNews();
+        updateSurvivalTimer();
     }, 1000);
 
     setTimeout(() => { pingAll(); }, 800);
@@ -1312,6 +1668,7 @@
         const headerBtn = document.getElementById('eolPreviewBtn');
 
         if (isEolPreview) {
+            survivalStatus = "dead";
             if (banner) banner.classList.remove('hidden');
             if (headerBtn) {
                 headerBtn.innerHTML = `<i data-lucide="eye-off" class="w-3.5 h-3.5"></i> Exit Preview`;
@@ -1332,6 +1689,8 @@
                 }
             });
         } else {
+            survivalStatus = "unknown";
+            pingAll();
             if (banner) banner.classList.add('hidden');
             if (headerBtn) {
                 headerBtn.innerHTML = `<i data-lucide="eye" class="w-3.5 h-3.5"></i> Preview EOL Mode`;
@@ -1343,7 +1702,7 @@
             if (nav) nav.classList.remove('hidden');
 
             // Restore sections hidden by EOL
-            const sectionsToRestore = ['headerSection', 'countdownSection', 'stagesSection', 'whySection', 'rageSection', 'faqSection', 'feedbackSection', 'serverList', 'pingLog'];
+            const sectionsToRestore = ['headerSection', 'countdownSection', 'stagesSection', 'whySection', 'rageSection', 'faqSection', 'feedbackSection', 'serverList', 'pingLog', 'workspaceSection', 'witnessSection', 'farewellVideoSection'];
             sectionsToRestore.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.display = '';
@@ -1368,6 +1727,7 @@
 
         lucide.createIcons();
         updateCountdown();
+        updateSurvivalTimer();
     }
 
     function downloadSource() {
@@ -1395,6 +1755,8 @@
     window.playAudio = playAudio;
     window.openLegendModal = openLegendModal;
     window.closeLegendModal = closeLegendModal;
+    window.openRevivalModal = openRevivalModal;
+    window.closeRevivalModal = closeRevivalModal;
     window.downloadSource = downloadSource;
     window.toggleEolPreview = toggleEolPreview;
 </script>
