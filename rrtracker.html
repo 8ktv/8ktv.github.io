@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -311,8 +312,8 @@
 
         <div id="headerSection" class="text-center mb-12">
             <h1 class="text-5xl font-bold tracking-tighter mb-2 text-orange-400">School’s Out... Forever</h1>
-            <p class="text-zinc-400 text-xl">Rec Room shuts down June 1st, 2026. Yeah, it's real this time.</p>
-            <div class="mt-4 text-xs text-zinc-500">Made with pain by Plasma • Finalized • EOL 06/15/26</div>
+            <p class="text-zinc-400 text-xl">Rec Room has officially shut down. (June 1st, 2026)</p>
+            <div class="mt-4 text-xs text-zinc-500">Made with pain by Plasma • Finalized • EOL 12/25/26</div>
         </div>
 
         <div id="countdownSection" class="glass-card rounded-3xl p-8 mb-10">
@@ -349,6 +350,35 @@
                 <button onclick="shareCountdown()" class="bg-zinc-800 hover:bg-zinc-700 p-3 rounded-full transition-all hover:scale-110 active:scale-95 text-orange-400 border border-zinc-700/50">
                     <i data-lucide="share-2" class="w-5 h-5"></i>
                 </button>
+            </div>
+        </div>
+
+        <!-- Real-time Shutdown Witness / Memorial Section -->
+        <div id="witnessSection" class="glass-card rounded-3xl p-8 mb-10 relative overflow-hidden border border-red-500/20 shadow-[0_0_50px_rgba(239,68,68,0.05)]">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+            <div class="flex items-start gap-4">
+                <div class="bg-red-500/10 text-red-500 p-3 rounded-2xl shrink-0">
+                    <i data-lucide="skull" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold tracking-tight text-red-400 mb-1">THE END HAS ARRIVED</h2>
+                    <span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full font-mono font-medium tracking-wide uppercase">June 1st, 2026 @ 12:00 PM PDT / 7:00 PM UTC</span>
+                    <p class="text-zinc-300 text-sm leading-relaxed mt-3">
+                        And just like that, the servers went cold. The 3D dorm room, the rec center hallways, and all our memories turned into a blank connection error screen. Rec Room is officially offline.
+                    </p>
+                    <div class="mt-6 border-t border-zinc-800/80 pt-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="https://yt3.googleusercontent.com/kCqnic1u3kzumts_aLvX5y9w6M_pswkTVSCEmH-8BpjC-1C7QCMLHBKXfPe9aEyq9o5Vfk1f6jc=s160-c-k-c0x00ffffff-no-rj" alt="Runeskate" class="w-8 h-8 rounded-full border border-zinc-700/50 hover:scale-105 transition-transform" referrerpolicy="no-referrer">
+                            <div>
+                                <div class="text-xs font-semibold text-white">Witness Account: Runeskate (Linux Savior)</div>
+                                <div class="text-[10px] text-zinc-500">June 1, 2026 — 12:01 PM PDT</div>
+                            </div>
+                        </div>
+                        <blockquote class="border-l-2 border-red-500/30 pl-4 py-1 italic text-zinc-400 text-xs sm:text-sm leading-relaxed bg-red-500/5 rounded-r-xl pr-3">
+                            "I witnessed the final seconds of the shutdown first-hand... and then faded out to black. It's really over."
+                        </blockquote>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -686,7 +716,7 @@
         { name: "The Big Layoff", date: new Date('2025-08-25'), description: "Half the team got cut. We all pretended it was fine.", videoId: "HJl-i58SuW4", theme: "default" },
         { name: "Quiet Panic", date: new Date('2026-04-01'), description: "Store starts closing. Everyone realizes it's real.", videoId: "HJl-i58SuW4", theme: "default" },
         { name: "The Great Backup", date: new Date('2026-05-01'), description: "Creators scrambling to download their rooms before they vanish.", videoId: "yqv9kK5oXpo", theme: "backup" },
-        { name: "The End / Farewell", date: SHUTDOWN_DATE, description: "Servers go dark. RecNet dies. Official Farewell video releases: Farewell, Rec Room.", videoId: "VWBgDwo59Po", theme: "end" }
+        { name: "The End / Farewell", date: SHUTDOWN_DATE, description: "Servers go dark. RecNet dies. Live witness Runeskate reports first-hand fading out to black as the plug was pulled.", videoId: "VWBgDwo59Po", theme: "end" }
     ];
 
     lucide.createIcons();
@@ -1010,8 +1040,8 @@
             id: "runeskate",
             name: "Runeskate (The Linux Savior)",
             image: "https://yt3.googleusercontent.com/kCqnic1u3kzumts_aLvX5y9w6M_pswkTVSCEmH-8BpjC-1C7QCMLHBKXfPe9aEyq9o5Vfk1f6jc=s160-c-k-c0x00ffffff-no-rj",
-            desc: "Massive shoutout to Runeskate, the trans lady who actually figured out how to run Rec Room on Linux and made a full tutorial for it. She even followed it up with a tutorial on getting Radium working on Linux. Such an absolute win for the community. Legends never die.",
-            quote: "I wish i could of made this video earilier, but.. you know me i.. i barely play this game so.. i forgot, its been ages man i-- i dont really give a danm about this game but im sad that this game is going.. and i really feel bad cuz i really use to hate this game very much because of its 'community', but i realized how many friends i had on there. and it was a wild journey man, it was fun.",
+            desc: "Massive shoutout to Runeskate, the trans lady who actually figured out how to run Rec Room on Linux and made a full tutorial for it. She was there live when the plug was officially pulled on June 1st, 2026, reporting back that she witnessed the shutdown first-hand, then her fading out to black as the servers died.",
+            quote: "I witnessed the final seconds of the shutdown... and then faded out to black. It's really over.",
             images: [
                 { src: "https://pub-f3e7d2e809054331a35d7860afc78ce9.r2.dev/cards/60661626c2c24ddc971c6707472baaa7.jpg", alt: "Runeskate Report Card", caption: "\"time to get a job in vrchat\"" },
                 { src: "https://raw.githubusercontent.com/8ktv/8ktv.github.io/main/images/RRarchive/2f6wbeoe8pkdoub08wevwvjkz.jpg", alt: "Runeskate Second Report Card" },
