@@ -1728,13 +1728,6 @@
 
     // Discord Webhook Dispatch Payload Sender
     async function logReportToHistory() {
-        const webhookUrlInput = CONFIG.webhookUrl.trim();
-
-        if (!webhookUrlInput || !webhookUrlInput.startsWith("https://discord.com/api/webhooks/")) {
-            showNotification("error", "Provide a valid Discord Webhook URL route to deliver logs.");
-            return;
-        }
-
         const dispatchBtn = document.getElementById("btn-dispatch");
         const dispatchIdleIcon = document.getElementById("dispatch-icon-idle");
         const dispatchSpinner = document.getElementById("dispatch-spinner");
@@ -1743,129 +1736,30 @@
         if (dispatchBtn) dispatchBtn.setAttribute("disabled", "true");
         if (dispatchIdleIcon) dispatchIdleIcon.classList.add("hidden");
         if (dispatchSpinner) dispatchSpinner.classList.remove("hidden");
-        if (dispatchText) dispatchText.textContent = "Relaying Deliverables to Webhook...";
+        if (dispatchText) dispatchText.textContent = "Logging Report...";
         dismissAlert();
 
-        // Convert hex code values
-        let borderDecimal = 16729175;
-        try {
-            borderDecimal = parseInt(CONFIG.embedColor.replace("#", ""), 16);
-        } catch (colorErr) {
-            console.error(colorErr);
-        }
-
-        const payloadFields = [
-            {
-                name: "Reporter",
-                value: `${ACTIVE_REPORT.reporterName || "N/A"}`,
-                inline: true
-            },
-            {
-                name: "Reported",
-                value: `${ACTIVE_REPORT.reportedName || "N/A"}`,
-                inline: true
-            },
-            {
-                name: "Category",
-                value: ACTIVE_REPORT.category || "General Violation",
-                inline: true
-            },
-            {
-                name: "Details",
-                value: ACTIVE_REPORT.details || "(none)",
-                inline: false
-            }
-        ];
-
-        // Conditional Evidence attachment fields insertion
-        if (ACTIVE_REPORT.evidenceUrl) {
-            payloadFields.push({
-                name: "Evidence Asset / Web Link",
-                value: ACTIVE_REPORT.evidenceUrl,
-                inline: false
-            });
-        } else if (ACTIVE_REPORT.evidenceFileBase64) {
-            payloadFields.push({
-                name: "Evidence Attachment File",
-                value: `Attached: ${ACTIVE_REPORT.evidenceFileName}`,
-                inline: false
-            });
-        }
-
-        const payloadImage = (ACTIVE_REPORT.evidenceUrl && /\.(jpg|jpeg|png|gif|webp|svg)/i.test(ACTIVE_REPORT.evidenceUrl))
-            ? { url: ACTIVE_REPORT.evidenceUrl }
-            : (ACTIVE_REPORT.evidenceFileType?.startsWith("image/")
-                ? { url: `attachment://${ACTIVE_REPORT.evidenceFileName}` }
-                : undefined);
-
-        const payload = {
-            username: CONFIG.botName,
-            avatar_url: CONFIG.botAvatarUrl,
-            embeds: [
-                {
-                    author: {
-                        name: CONFIG.botName
-                    },
-                    title: "New Player Report",
-                    color: borderDecimal,
-                    fields: payloadFields,
-                    image: payloadImage,
-                    footer: {
-                        text: ACTIVE_REPORT.timestamp || `Today at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-                    }
-                }
-            ]
+        // Build index log card item
+        const newHistoryItem = {
+            id: Math.random().toString(36).substring(2, 9),
+            timestamp: new Date().toLocaleString(),
+            payload: {}, // No payload needed anymore
+            reporter: ACTIVE_REPORT.reporterName,
+            reported: ACTIVE_REPORT.reportedName,
+            category: ACTIVE_REPORT.category,
+            details: ACTIVE_REPORT.details
         };
 
-        try {
-            const resp = await fetch("/api/send-webhook", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    webhookUrl: webhookUrlInput,
-                    payload: payload,
-                    fileBase64: ACTIVE_REPORT.evidenceFileBase64 || null,
-                    fileMime: ACTIVE_REPORT.evidenceFileType || null,
-                    fileName: ACTIVE_REPORT.evidenceFileName || null
-                })
-            });
+        CONFIG.history.unshift(newHistoryItem);
+        localStorage.setItem("discohook_history", JSON.stringify(CONFIG.history));
 
-            if (!resp.ok) {
-                const bodyText = await resp.text();
-                console.error("Server API Error Response:", bodyText);
-                try {
-                    const errPayload = JSON.parse(bodyText);
-                    throw new Error(errPayload.error || "The Discord API server rejected this formatted block.");
-                } catch (e) {
-                    throw new Error("Discord API server rejected this (non-JSON response).");
-                }
-            }
+        renderHistoryList();
+        showNotification("success", "Successfully logged report to local Dispatcher History!");
 
-            // Build index log card item
-            const newHistoryItem = {
-                id: Math.random().toString(36).substring(2, 9),
-                timestamp: new Date().toLocaleString(),
-                payload: payload,
-                reporter: ACTIVE_REPORT.reporterName,
-                reported: ACTIVE_REPORT.reportedName,
-                category: ACTIVE_REPORT.category,
-                details: ACTIVE_REPORT.details
-            };
-
-            CONFIG.history.unshift(newHistoryItem);
-            localStorage.setItem("discohook_history", JSON.stringify(CONFIG.history));
-
-            renderHistoryList();
-            showNotification("success", "Successfully delivered report embed to Discord Webhook and logged to history!");
-        } catch (dispatchErr) {
-            console.error(dispatchErr);
-            showNotification("error", dispatchErr.message || "Failed dispatching payload to Discord API.");
-        } finally {
-            if (dispatchBtn) dispatchBtn.removeAttribute("disabled");
-            if (dispatchIdleIcon) dispatchIdleIcon.classList.remove("hidden");
-            if (dispatchSpinner) dispatchSpinner.classList.add("hidden");
-            if (dispatchText) dispatchText.textContent = "Log Report to History";
-        }
+        if (dispatchBtn) dispatchBtn.removeAttribute("disabled");
+        if (dispatchIdleIcon) dispatchIdleIcon.classList.remove("hidden");
+        if (dispatchSpinner) dispatchSpinner.classList.add("hidden");
+        if (dispatchText) dispatchText.textContent = "Log Report to History";
     }
 
     // History logs rendering layout builders

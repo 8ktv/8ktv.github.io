@@ -96,57 +96,6 @@ app.post("/api/parse-report", async (req, res) => {
     }
 });
 
-// Proxy to send webhook payload directly to Discord to bypass CORS issues
-app.post("/api/send-webhook", async (req, res) => {
-    try {
-        const { webhookUrl, payload, fileBase64, fileMime, fileName } = req.body;
-        if (!webhookUrl) {
-            return res.status(400).json({ error: "Missing Discord Webhook URL" });
-        }
-        if (!payload) {
-            return res.status(400).json({ error: "Missing Webhook Payload" });
-        }
-
-        let discordResponse;
-
-        if (fileBase64 && fileMime && fileName) {
-            // Construct native multipart payload
-            const formData = new globalThis.FormData();
-            formData.append("payload_json", JSON.stringify(payload));
-
-            const buffer = Buffer.from(fileBase64, "base64");
-            const blob = new globalThis.Blob([buffer], { type: fileMime });
-            formData.append("files[0]", blob, fileName);
-
-            discordResponse = await fetch(webhookUrl, {
-                method: "POST",
-                body: formData,
-            });
-        } else {
-            discordResponse = await fetch(webhookUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
-        }
-
-        if (!discordResponse.ok) {
-            const errorText = await discordResponse.text();
-            console.error("Discord Webhook Error Response:", errorText);
-            return res.status(discordResponse.status).json({
-                error: `Discord Webhook error: ${errorText || discordResponse.statusText}`,
-            });
-        }
-
-        return res.json({ success: true });
-    } catch (err: any) {
-        console.error("Webhook Delivery Failure:", err);
-        return res.status(500).json({ error: err.message || "Could not forward payload to Discord." });
-    }
-});
-
 // Configure Vite middleware or static serving
 async function configureEndpoints() {
     if (process.env.NODE_ENV !== "production") {
