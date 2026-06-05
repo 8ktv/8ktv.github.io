@@ -1,0 +1,2026 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SheetStream Embed Engine - Discohook Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
+                        mono: ["JetBrains Mono", "SFMono-Regular", "monospace"],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulse-glow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 0.1, transform: 'scale(1)' },
+                            '50%': { opacity: 0.15, transform: 'scale(1.05)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Custom thin scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-[#f0f2f5] text-[#1a1a1b] selection:bg-indigo-500/20 selection:text-indigo-600 font-sans relative overflow-x-hidden">
+
+<!-- Decorative Ambient Glows -->
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#4f46e5]/5 animate-pulse-glow pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-violet-550/5 animate-pulse-glow pointer-events-none"></div>
+
+<!-- Sticky Header -->
+<header class="border-b border-gray-200/80 bg-white/85 backdrop-blur-md sticky top-0 z-50 transition-all shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="bg-[#4f46e5] p-2.5 rounded-xl shadow-lg shadow-indigo-600/20">
+                <i data-lucide="shield-alert" class="h-6 w-6 text-white"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
+                    SheetStream Embed Engine
+                    <span class="bg-indigo-100 text-indigo-700 text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                Discohook Mode (Pure HTML)
+              </span>
+                </h1>
+                <p class="text-xs text-gray-500 font-semibold">Moderation Report Parser & Webhook Dispatched Embedder</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button
+                    onclick="loadSampleData()"
+                    class="px-3.5 py-1.5 text-xs text-gray-655 text-gray-600 hover:text-indigo-600 border-gray-200 hover:border-indigo-300 font-bold bg-white border rounded-xl hover:bg-indigo-50/25 transition-all cursor-pointer shadow-xs whitespace-nowrap"
+            >
+                Load Sample Report
+            </button>
+            <div class="text-xs text-indigo-700 bg-indigo-50 border border-indigo-150 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
+                <span class="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                Webhook Connected
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- App Container -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+
+    <!-- System Notification Banner -->
+    <div id="alert-banner" class="hidden mb-6 p-4 rounded-xl border flex items-start gap-3 transition-all duration-300 shadow-sm">
+        <div id="alert-icon-success" class="hidden text-emerald-600 mt-0.5">
+            <i data-lucide="check-circle" class="h-5 w-5"></i>
+        </div>
+        <div id="alert-icon-error" class="hidden text-red-600 mt-0.5">
+            <i data-lucide="alert-circle" class="h-5 w-5"></i>
+        </div>
+        <div class="text-sm font-semibold flex-1" id="alert-message"></div>
+        <button onclick="dismissAlert()" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+            <i data-lucide="x" class="h-4 w-4"></i>
+        </button>
+    </div>
+
+    <!-- Main Workspace Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+        <!-- LEFT COLUMN: Creator Panels (Config, Parser, Fields) -->
+        <div class="lg:col-span-6 space-y-6">
+
+            <!-- Webhook Settings Panel -->
+            <div class="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 shadow-sm relative">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-[#4f46e5] rounded-t-2xl"></div>
+
+                <div class="flex items-center justify-between border-b border-gray-150 pb-3">
+                    <h3 class="text-sm font-extrabold text-gray-900 flex items-center gap-2">
+                        <i data-lucide="settings-2" class="text-[#4f46e5] h-4.5 w-4.5"></i>
+                        <span>Webhook & Bot Config</span>
+                    </h3>
+                </div>
+
+                <!-- Webhook URL Input -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <label class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                            Discord Webhook URL
+                        </label>
+                        <button
+                                type="button"
+                                onclick="toggleWebhookVisibility()"
+                                class="text-xs text-[#4f46e5] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                                id="webhook-toggle-btn"
+                        >
+                            <i data-lucide="eye" class="h-3 w-3" id="webhook-toggle-icon"></i>
+                            <span id="webhook-toggle-text">Reveal URL</span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <input
+                                type="password"
+                                id="input-webhook-url"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 tracking-wide focus:outline-none focus:border-[#4f46e5] focus:ring-1 focus:ring-indigo-500/10 transition-all font-mono text-xs"
+                                placeholder="https://discord.com/api/webhooks/..."
+                                oninput="updateWebhookUrl(this.value)"
+                        />
+                    </div>
+                    <p class="text-[10px] text-gray-400 italic">Dispatched embeds are delivered to this target channel path.</p>
+                </div>
+
+                <!-- Bot Persona Metadata grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <div class="space-y-1">
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                            Sender Username (Bot)
+                        </label>
+                        <input
+                                type="text"
+                                id="input-bot-name"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#4f46e5] focus:ring-1 focus:ring-indigo-500/10 transition-all"
+                                placeholder="e.g. meow.net"
+                                oninput="updateBotName(this.value)"
+                        />
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                            Left Border Tint Color
+                        </label>
+                        <div class="flex gap-2 items-center">
+                            <input
+                                    type="color"
+                                    id="input-embed-color-picker"
+                                    class="w-10 h-9 p-0.5 bg-white border border-gray-200 rounded-lg cursor-pointer"
+                                    oninput="updateEmbedColor(this.value)"
+                            />
+                            <input
+                                    type="text"
+                                    id="input-embed-color-text"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#4f46e5] font-mono text-center uppercase"
+                                    oninput="updateEmbedColor(this.value)"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-[10px] uppercase font-bold tracking-wider text-gray-400">
+                        Bot Profile Avatar Image URL
+                    </label>
+                    <input
+                            type="text"
+                            id="input-bot-avatar"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#4f46e5]"
+                            placeholder="Paste direct .png/.jpg/.svg link"
+                            oninput="updateBotAvatar(this.value)"
+                    />
+                </div>
+            </div>
+
+            <!-- 🎮 In-Game Fast-Command Console (Hands-Free Mode) -->
+            <div class="bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 p-6 space-y-4 shadow-xl relative overflow-hidden">
+                <!-- Glow background style -->
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-xl pointer-events-none"></div>
+
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400">
+                            <i data-lucide="gamepad-2" class="h-4.5 w-4.5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-white tracking-wide">In-Game Speed Console</h3>
+                            <p class="text-[10px] text-slate-400">Tactical screenshot-free reporting terminal</p>
+                        </div>
+                    </div>
+                    <span class="text-[9px] bg-red-500/10 border border-red-500/20 text-red-400 px-2 py-0.5 rounded font-extrabold uppercase tracking-widest animate-pulse">
+                In-Game Mode Available
+              </span>
+                </div>
+
+                <!-- Sticky Moderator Profile Setup -->
+                <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800/80 space-y-2">
+                    <div class="flex items-center justify-between">
+                <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <i data-lucide="user-cog" class="h-3 w-3 text-indigo-400"></i>
+                  My Moderator Profile Credentials
+                </span>
+                        <span class="text-[9px] text-slate-500 italic">Saved locally for session reuse</span>
+                    </div>
+
+                    <div class="grid grid-cols-1">
+                        <div>
+                            <label class="block text-[8px] uppercase font-bold tracking-wider text-slate-500 mb-0.5">My Mod Tag</label>
+                            <input
+                                    type="text"
+                                    id="sticky-mod-name"
+                                    class="w-full bg-slate-900 border border-slate-800 text-white rounded px-2 py-1 text-[11px] focus:outline-none focus:border-indigo-500 font-mono"
+                                    value="@ModPurr"
+                                    oninput="saveStickyModProfile()"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CLI Command Input Console Row -->
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] uppercase font-extrabold text-slate-400 tracking-wider">
+                        Slash Shortcut Command Line
+                    </label>
+
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-2.5 text-slate-500 font-bold text-xs select-none">/</span>
+                        <input
+                                type="text"
+                                id="console-command-input"
+                                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-500/20 rounded-xl pl-6 pr-12 py-2 text-xs text-white placeholder-slate-600 focus:outline-none font-mono tracking-wide"
+                                placeholder="ban @violator underage sound like 10 yrs old"
+                                oninput="onConsoleInputChange(this.value)"
+                                onkeydown="handleConsoleInputKey(event)"
+                        />
+                        <button
+                                onclick="triggerInstantConsoleCommand()"
+                                class="absolute right-1.5 top-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all"
+                                title="Parse and trigger direct webhook send"
+                        >
+                            Fire
+                        </button>
+                    </div>
+                    <p class="text-[9px] text-slate-500 leading-relaxed font-mono">
+                        Syntax: <span class="text-indigo-400">/ban @[username] [category-keyword] [reason text]</span>. Press <kbd class="bg-slate-800 px-1 py-0.2 rounded text-slate-300">Enter</kbd> to dispatch immediately!
+                    </p>
+                </div>
+
+                <!-- Predefined Rapid Presets Grid -->
+                <div class="space-y-3.5 pt-1">
+                    <div class="flex-grow border-t border-slate-800/80 my-2"></div>
+
+                    <div>
+                <span class="block text-[10px] uppercase font-extrabold text-[#10b981] tracking-wider mb-1.5 flex items-center gap-1">
+                  <span class="h-1.5 w-1.5 rounded-full bg-[#10b981] animate-ping"></span>
+                  Step 1: Enter Violator Handle (Type first)
+                </span>
+                        <input
+                                type="text"
+                                id="game-target-username"
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#10b981] font-mono shadow-inner"
+                                value="@"
+                                placeholder="e.g. @abusive_player"
+                                oninput="updatePresetTargetLabel(this.value)"
+                        />
+                    </div>
+
+                    <!-- Step 2: Customize Reason & Evidence (Video/Picture) Attachment -->
+                    <div class="space-y-3.5 bg-slate-950/40 p-4 rounded-xl border border-slate-800/60">
+                <span class="block text-[10px] uppercase font-extrabold text-indigo-400 tracking-wider flex items-center gap-1">
+                  <i data-lucide="file-plus-2" class="h-3.5 w-3.5 text-indigo-400"></i>
+                  Step 2: Customize Reason & Specific Evidence (Optional)
+                </span>
+
+                        <!-- Custom Reason details -->
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between">
+                                <label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400">
+                                    Reason / Violation Details
+                                </label>
+                                <span class="text-[8px] text-slate-500 italic">Overrides preset defaults if typed</span>
+                            </div>
+                            <textarea
+                                    id="evidence-details-input"
+                                    rows="2"
+                                    class="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder-slate-700 focus:outline-none focus:border-[#4f46e5]/80 font-sans leading-relaxed"
+                                    placeholder="Provide specific reason details (e.g. 'toxic voice chat and slurs')"
+                                    oninput="onCustomReasonChange(this.value)"
+                            ></textarea>
+                        </div>
+
+                        <!-- Custom Media URL or Local upload -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400">
+                                    Evidence Media (Video / Picture or Web URL)
+                                </label>
+                                <span class="text-[8px] text-indigo-400 font-semibold uppercase tracking-wider">Multipair file support</span>
+                            </div>
+
+                            <!-- Paste URL Input -->
+                            <div class="relative flex items-center">
+                                <input
+                                        type="text"
+                                        id="evidence-media-url-input"
+                                        class="w-full bg-slate-950 border border-slate-850 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/10 rounded-xl pl-3 pr-20 py-2.5 text-xs text-slate-300 placeholder-slate-700 focus:outline-none font-mono"
+                                        placeholder="Paste e.g. YouTube, streamable or Imgur link..."
+                                        oninput="onEvidenceUrlChange(this.value)"
+                                />
+                                <div class="absolute right-1.5 top-1.5">
+                                    <button
+                                            type="button"
+                                            onclick="triggerEvidenceFileInput()"
+                                            class="bg-indigo-600/80 hover:bg-indigo-600 text-white text-[9.5px] font-extrabold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+                                            title="Upload a screenshot or video file directly"
+                                    >
+                                        <i data-lucide="paperclip" class="h-3 w-3"></i>
+                                        Local File
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Secret input file -->
+                            <input
+                                    type="file"
+                                    id="evidence-file-input"
+                                    accept="image/*,video/*"
+                                    class="hidden"
+                                    onchange="handleEvidenceFileSelect(event)"
+                            />
+
+                            <!-- Dropzone drag zone block -->
+                            <div
+                                    id="evidence-dropzone"
+                                    class="border border-dashed border-slate-800 hover:border-indigo-900 rounded-xl p-3 text-center text-slate-500 hover:text-slate-400 bg-slate-950/20 transition-all text-xs cursor-pointer flex items-center justify-center gap-2 mt-1"
+                                    onclick="triggerEvidenceFileInput()"
+                                    ondragover="handleEvidenceDragOver(event)"
+                                    ondragleave="handleEvidenceDragLeave(event)"
+                                    ondrop="handleEvidenceDrop(event)"
+                            >
+                                <i data-lucide="upload-cloud" class="h-4 w-4 text-indigo-400" id="evidence-upload-icon"></i>
+                                <span id="evidence-upload-text">Browse & Attach/Drag Local Image or Video file</span>
+                            </div>
+
+                            <!-- Selected item metadata card preview -->
+                            <div id="evidence-media-preview-box" class="hidden mt-2 p-2.5 bg-slate-950 border border-slate-850 rounded-xl flex flex-col gap-2 relative">
+                                <!-- Preview Container -->
+                                <div class="flex items-center justify-center bg-black/40 rounded-lg overflow-hidden max-h-40 relative border border-slate-850 p-1">
+                                    <img id="evidence-image-preview" src="" class="hidden max-h-36 object-contain" />
+                                    <video id="evidence-video-preview" src="" class="hidden max-h-36" controls></video>
+                                </div>
+
+                                <!-- File Info description -->
+                                <div class="flex items-center justify-between text-[10px] bg-slate-900/60 p-2 rounded-lg border border-slate-850/40">
+                                    <span id="evidence-metadata" class="text-slate-300 font-bold truncate font-mono max-w-[70%]"></span>
+                                    <button
+                                            type="button"
+                                            onclick="clearAttachedEvidence()"
+                                            class="text-red-400 hover:text-red-300 font-extrabold hover:underline py-1 px-2.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-[9.5px] bg-red-500/10 hover:bg-red-500/20"
+                                    >
+                                        <i data-lucide="trash-2" class="h-3 w-3 text-red-400"></i>
+                                        Clear File
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Local Rules Engine Preview -->
+                    <div class="space-y-4 bg-slate-950/60 p-4 rounded-xl border border-emerald-950/80">
+                        <div class="flex items-center justify-between mb-1">
+                  <span class="block text-[10px] uppercase font-extrabold text-emerald-400 tracking-wider flex items-center gap-1">
+                    <i data-lucide="binary" class="h-3.5 w-3.5 text-emerald-400"></i>
+                    Step 3: Local Rules Engine Preview
+                  </span>
+                            <span class="text-[9px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-0.5 rounded font-extrabold uppercase select-none">
+                    Running Live
+                  </span>
+                        </div>
+
+                        <p class="text-[10px] text-slate-300 leading-relaxed font-sans">
+                            The local engine parses your typed Details, attached evidence properties, and URLs, classifying the Code of Conduct (CoC) category automatically in real-time.
+                        </p>
+
+                        <!-- Core Local Trigger Button -->
+                        <button
+                                type="button"
+                                id="btn-ai-reasoning"
+                                onclick="triggerAIReasoning()"
+                                class="w-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-555 text-white font-extrabold text-xs py-3 rounded-xl transition-all shadow-md hover:shadow-emerald-500/10 border border-emerald-500/20 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+                                title="Force refresh deterministic keyword/rule reasoning"
+                        >
+                            <i data-lucide="refresh-cw" class="h-4.5 w-4.5" id="ai-reason-icon-idle"></i>
+                            <!-- Spinner -->
+                            <div id="ai-reason-spinner" class="hidden h-4.5 w-4.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <span id="btn-ai-reasoning-text">Refresh Rules Reasoning</span>
+                        </button>
+
+                        <!-- Small Config Controls under the button -->
+                        <div class="flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-900/60 pt-3 flex-wrap gap-2">
+                  <span class="font-semibold flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Interactive Local Rules Pipeline
+                  </span>
+
+                            <button
+                                    onclick="dispatchFastPresetEmbed()"
+                                    class="text-[#10b981] hover:text-[#34d399] font-extrabold uppercase flex items-center gap-1 transition-colors cursor-pointer text-[9px]"
+                                    title="Send current preview details straight to Discord Webhook"
+                            >
+                                <i data-lucide="send" class="h-3 w-3"></i>
+                                Confirm & Send Webhook
+                            </button>
+                        </div>
+
+                        <!-- Sub-section: Quick Manual Presets -->
+                        <div class="space-y-2 pt-2 border-t border-slate-900/40">
+                  <span class="block text-[8.5px] uppercase font-bold tracking-wider text-slate-500">
+                    Or Select a Quick Manual Override Preset
+                  </span>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button
+                                        onclick="triggerTargetPreset('Underage (100)', 'Player admitted to being under age limit in game.')"
+                                        class="bg-slate-950/80 hover:bg-indigo-950/80 hover:border-indigo-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-indigo-300 relative group overflow-hidden"
+                                        title="Send immediate Underage report to webhook"
+                                >
+                                    <i data-lucide="user-minus" class="h-3.5 w-3.5 text-indigo-400"></i>
+                                    <span class="font-extrabold text-[10px]">Underage</span>
+                                </button>
+                                <button
+                                        onclick="triggerTargetPreset('Toxicity (102)', 'Extreme verbal harassment and toxic slurs directed at players.')"
+                                        class="bg-slate-950/80 hover:bg-amber-950/80 hover:border-amber-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-amber-300 relative group overflow-hidden"
+                                        title="Send immediate Toxicity report to webhook"
+                                >
+                                    <i data-lucide="frown" class="h-3.5 w-3.5 text-amber-400"></i>
+                                    <span class="font-extrabold text-[10px]">Toxicity</span>
+                                </button>
+                                <button
+                                        onclick="triggerTargetPreset('Griefing (103)', 'Friendly fire, team killing and intentional lobby disruption.')"
+                                        class="bg-slate-950/80 hover:bg-rose-950/80 hover:border-rose-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-rose-300 relative group overflow-hidden"
+                                        title="Send immediate Griefing report to webhook"
+                                >
+                                    <i data-lucide="swords" class="h-3.5 w-3.5 text-rose-400"></i>
+                                    <span class="font-extrabold text-[10px]">Griefing</span>
+                                </button>
+                                <button
+                                        onclick="triggerTargetPreset('Sexual (101)', 'Explicit sexual gestures, drawing symbols, and offensive voice.')"
+                                        class="bg-slate-950/80 hover:bg-violet-950/80 hover:border-violet-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-violet-300 relative group overflow-hidden"
+                                        title="Send immediate Sexual CoC report to webhook"
+                                >
+                                    <i data-lucide="alert-triangle" class="h-3.5 w-3.5 text-violet-400"></i>
+                                    <span class="font-extrabold text-[10px]">Sexual CoC</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Manual Backup / Config Override Dispatch -->
+                <div id="manual-dispatch-row" class="flex gap-2 items-center justify-between text-[11px] text-slate-400 bg-slate-950/40 p-2.5 rounded-xl border border-slate-800/60">
+              <span class="flex items-center gap-1 text-[10px]">
+                <i data-lucide="help-circle" class="h-3.5 w-3.5 text-indigo-400"></i>
+                Tip: Enter username first, then tap any macro to deliver instantly.
+              </span>
+                    <button
+                            onclick="dispatchFastPresetEmbed()"
+                            class="text-[#10b981] hover:text-[#34d399] font-extrabold uppercase tracking-wide flex items-center gap-1 transition-colors cursor-pointer text-[10px]"
+                            title="Manually trigger preset send with current selections"
+                    >
+                        <i data-lucide="arrow-right-circle" class="h-3.5 w-3.5"></i>
+                        Force Deliver
+                    </button>
+                </div>
+
+                <div id="live-parsed-console-status" class="text-[9px] text-slate-500 italic font-mono bg-slate-950/40 p-2 rounded border border-slate-850 hidden">
+                    System Console Status: Listening for terminal command sequences...
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Discord Viewport Simulation -->
+        <div class="lg:col-span-6 space-y-6 lg:sticky lg:top-24">
+
+            <!-- Discord Dark Simulated Application -->
+            <div class="bg-[#313338] text-[#dbdee1] rounded-2xl shadow-xl overflow-hidden font-sans border border-gray-800">
+
+                <!-- Window Bar info -->
+                <div class="bg-[#2b2d31] px-4 py-3 border-b border-[#1f2023] flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[#80848e] font-extrabold text-lg">#</span>
+                        <span class="text-white font-bold text-sm">moderation-logs</span>
+                        <span class="h-4 w-[1px] bg-[#3f4147] mx-1"></span>
+                        <p class="text-[11px] text-[#949ba4] font-medium hidden sm:inline">Active Live Preview of Bot Embed</p>
+                    </div>
+                    <div class="bg-[#1e1f22] text-[#949ba4] text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md tracking-wider">
+                        Discohook Preview
+                    </div>
+                </div>
+
+                <!-- Inner feed -->
+                <div class="p-4 sm:p-6 space-y-6">
+
+                    <!-- Setup Information card -->
+                    <div class="bg-[#2b2d31]/40 border-l-4 border-indigo-500 rounded-r-xl p-3 text-xs leading-relaxed max-w-full">
+                        <p class="text-white font-semibold mb-1">👋 Welcome to SheetStream Discohook Portal!</p>
+                        <p class="text-[#b5bac1]">
+                            This side-panel displays a pixel-perfect, live rendering of your report inside Discord. Any adjustments you make in the left-hand form fields instantly update this preview below.
+                        </p>
+                    </div>
+
+                    <!-- Message container -->
+                    <div class="flex items-start gap-4 text-sm">
+
+                        <!-- Bot Profile Image -->
+                        <div class="w-10 h-10 rounded-full overflow-hidden bg-[#1e1f22] shadow flex-shrink-0 border border-gray-800">
+                            <img
+                                    id="preview-bot-avatar"
+                                    src="https://api.dicebear.com/7.x/bottts/svg?seed=meow-moderator"
+                                    alt="Bot Profile Icon"
+                                    class="w-full h-full object-cover"
+                                    referrerpolicy="no-referrer"
+                            />
+                        </div>
+
+                        <!-- Main column -->
+                        <div class="space-y-1.5 flex-1 min-w-0">
+
+                            <!-- Metadata bar -->
+                            <div class="flex flex-wrap items-baseline gap-1.5">
+                                <span id="preview-bot-name" class="text-white font-semibold text-sm hover:underline cursor-pointer">meow.net</span>
+                                <!-- BOT APP BADGE -->
+                                <span class="bg-[#5865F2] text-white text-[9px] font-extrabold px-1 rounded uppercase tracking-wider flex items-center justify-center h-4.5 scale-90 origin-left">
+                      App
+                    </span>
+                                <span id="preview-msg-timestamp" class="text-[10px] text-[#949ba4] font-semibold">Today at 4:33 AM</span>
+                            </div>
+
+                            <!-- EMBED CHANNELS CONTAINER -->
+                            <div class="flex max-w-[520px]">
+
+                                <!-- Left borders color indicator -->
+                                <div
+                                        id="preview-embed-border"
+                                        class="w-[4px] rounded-l flex-shrink-0 transition-colors duration-200"
+                                        style="background-color: #ff4757;"
+                                ></div>
+
+                                <!-- Embed context block -->
+                                <div class="bg-[#2b2d31] p-4 rounded-r flex-1 min-w-0 space-y-3 border border-[#2b2d31] shadow-md">
+
+                                    <!-- Author -->
+                                    <div id="preview-embed-author" class="text-xs font-bold text-white hover:underline cursor-pointer">
+                                        meow.net
+                                    </div>
+
+                                    <!-- Main title -->
+                                    <div class="text-base font-extrabold text-white">
+                                        New Player Report
+                                    </div>
+
+                                    <!-- Multi Columns layout -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-y-4 gap-x-2 text-xs">
+
+                                        <!-- Col 1 -->
+                                        <div class="min-w-0">
+                          <span class="block text-[#949ba4] font-bold text-[11px] uppercase tracking-wider mb-1">
+                            Reporter
+                          </span>
+                                            <span id="preview-reporter-full" class="text-[#dbdee1] font-semibold block break-all">
+                            @ogkarpuz (#298522977)
+                          </span>
+                                        </div>
+
+                                        <!-- Col 2 -->
+                                        <div class="min-w-0">
+                          <span class="block text-[#949ba4] font-bold text-[11px] uppercase tracking-wider mb-1">
+                            Reported
+                          </span>
+                                            <span id="preview-reported-full" class="text-[#dbdee1] font-semibold block break-all">
+                            @jacksonfah67 (#647326160)
+                          </span>
+                                        </div>
+
+                                        <!-- Col 3 -->
+                                        <div class="min-w-0">
+                          <span class="block text-[#949ba4] font-bold text-[11px] uppercase tracking-wider mb-1">
+                            Category
+                          </span>
+                                            <span id="preview-category-full" class="text-[#dbdee1] font-medium block">
+                            CoC: Underage (100)
+                          </span>
+                                        </div>
+
+                                        <!-- Evidence / Details -->
+                                        <div class="col-span-1 sm:col-span-3 min-w-0 border-t border-[#35363c]/50 pt-2.5">
+                          <span class="block text-[#949ba4] font-bold text-[11px] uppercase tracking-wider mb-1">
+                            Details
+                          </span>
+                                            <span id="preview-details-full" class="text-[#dbdee1] block italic whitespace-pre-wrap leading-relaxed text-[13px]">
+                            (none)
+                          </span>
+                                        </div>
+
+                                        <!-- Live Evidence Visual Attachment in Simulated Message -->
+                                        <div id="preview-evidence-link-section" class="col-span-1 sm:col-span-3 min-w-0 border-t border-[#35363c]/30 pt-2.5 hidden">
+                          <span class="block text-[#949ba4] font-bold text-[11px] uppercase tracking-wider mb-0.5">
+                            Evidence Attachment
+                          </span>
+                                            <span id="preview-evidence-link" class="text-indigo-400 font-semibold block break-all font-mono text-[10px]">
+                            None
+                          </span>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Simulated Embed Image -->
+                                    <div id="preview-embed-image-container" class="hidden mt-3.5 max-w-full rounded-lg overflow-hidden border border-[#35363c]/50 bg-black/20">
+                                        <img id="preview-embed-image" src="" class="max-h-[180px] w-full object-contain" referrerpolicy="no-referrer" />
+                                    </div>
+
+                                    <!-- Footer section -->
+                                    <div class="text-[10px] text-[#949ba4] font-semibold flex items-center gap-1 border-t border-[#35363c]/40 pt-2.5">
+                                        <span id="preview-embed-footer">Today at 4:33 AM</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Simulated Embed Video Player (Attached below embed block like native Discord) -->
+                            <div id="preview-embed-video-container" class="hidden mt-2 max-w-[420px] rounded-xl overflow-hidden border border-[#1e1f22] bg-[#2b2d31] p-2.5 shadow-md flex flex-col gap-1.5 transition-all">
+                                <div class="flex items-center gap-2 text-[10px] text-slate-300 font-bold font-mono pb-1.5 border-b border-white/5">
+                                    <i data-lucide="video" class="h-3.5 w-3.5 text-indigo-400"></i>
+                                    <span id="preview-embed-video-name" class="truncate flex-1">evidence.mp4</span>
+                                    <span class="text-[8px] bg-indigo-500/10 text-indigo-400 px-1 py-0.2 rounded uppercase">Video play preview</span>
+                                </div>
+                                <video id="preview-embed-video" src="" class="w-full rounded-lg bg-black/90 max-h-[220px]" controls></video>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dispatched Output History list log -->
+            <div class="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 shadow-sm">
+                <div class="flex items-center justify-between border-b border-gray-150 pb-3 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="file-text" class="text-[#4f46e5] h-4.5 w-4.5"></i>
+                        <h3 class="text-sm font-extrabold text-gray-900">Dispatcher Log Output History</h3>
+                    </div>
+                    <div id="history-header-actions" class="hidden flex items-center gap-2 flex-wrap">
+                        <button
+                                onclick="copyAllRecRoomFormat()"
+                                class="text-xs text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl px-3 py-1.5 transition-all cursor-pointer font-bold flex items-center gap-1 shadow-xs"
+                                title="Copy all history records grouped as a combined Ban Record summary formatted for RecRoom"
+                        >
+                            <i data-lucide="clipboard" class="h-3 w-3"></i>
+                            Copy All (RecRoom Board Format)
+                        </button>
+                        <button
+                                onclick="clearDispatchHistory()"
+                                class="text-xs text-gray-400 hover:text-red-500 hover:underline transition-all cursor-pointer font-bold pl-1"
+                        >
+                            Clear history
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Empty list fallback -->
+                <div id="history-empty" class="text-center py-6 text-gray-400 text-xs italic">
+                    No reports have been dispatched yet in this browser session. Select a report screenshot, scan layout variables, and dispatch to compile log lists here.
+                </div>
+
+                <!-- Active List content -->
+                <div id="history-list" class="hidden max-h-[300px] overflow-y-auto space-y-2.5 divide-y divide-gray-100 pr-2">
+                    <!-- Rendered via JS -->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- App Bottom Footer -->
+<footer class="mt-8 border-t border-gray-200/80 bg-white/80 py-6 text-center text-xs text-gray-400">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <p class="font-semibold">SheetStream Discohook Moderation Ecosystem • Version 1.4.0 (HTML/CSS Engine)</p>
+        <div class="flex gap-4 items-center">
+          <span class="flex items-center gap-1.5 text-emerald-600 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-150">
+            <span class="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+            Secure Relay Server: ONLINE
+          </span>
+        </div>
+    </div>
+</footer>
+
+<!-- Lucide Icon Instantiation script -->
+<script>
+    // Global configuration variables initialized with defaults or retrieved from local storage
+    const CONFIG = {
+        webhookUrl: localStorage.getItem("discohook_webhook_url") || "https://discord.com/api/webhooks/1512397006457536582/YeNut71fI--Jw64aDBK0A-6JxNjqcezpCC7UQucigGejhWvbwrRIkDzmrpgJS5meuqX9",
+        botName: localStorage.getItem("discohook_bot_name") || "meow.net",
+        botAvatarUrl: localStorage.getItem("discohook_bot_avatar") || "https://api.dicebear.com/7.x/bottts/svg?seed=meow-moderator",
+        embedColor: localStorage.getItem("discohook_embed_color") || "#ff4757",
+        history: JSON.parse(localStorage.getItem("discohook_history") || "[]"),
+        autoScan: localStorage.getItem("discohook_auto_scan") !== "false", // default true
+        autoCopy: localStorage.getItem("discohook_auto_copy") !== "false", // default true
+        autoDispatch: localStorage.getItem("discohook_auto_dispatch") === "true" // default false
+    };
+
+    // Current source state variables
+    let currentFileBase64 = null;
+    let currentFileMimeType = null;
+    let isWebhookSecretVisible = false;
+
+    // Active Parsed Fields state
+    const ACTIVE_REPORT = {
+        reporterName: "@ogkarpuz",
+        reportedName: "@jacksonfah67",
+        category: "CoC: Sexual (101)",
+        details: "(none)",
+        timestamp: "Today at 4:33 AM",
+        evidenceUrl: null,
+        evidenceFileBase64: null,
+        evidenceFileType: null,
+        evidenceFileName: null
+    };
+
+    // Customize Reason & Evidence event callbacks
+    function onCustomReasonChange(value) {
+        ACTIVE_REPORT.details = value.trim() || "(none)";
+        runAutomaticLocalRules(true); // pass true to indicate manual typing is active so we preserve current typed text
+    }
+
+    function onEvidenceUrlChange(value) {
+        // Clear local file state when setting remote URL to avoid double preview
+        ACTIVE_REPORT.evidenceFileBase64 = null;
+        ACTIVE_REPORT.evidenceFileType = null;
+        ACTIVE_REPORT.evidenceFileName = null;
+        ACTIVE_REPORT.evidenceUrl = value.trim() || null;
+
+        // Hide file previews and update
+        const previewBox = document.getElementById("evidence-media-preview-box");
+        if (previewBox) previewBox.classList.add("hidden");
+        const imgPreview = document.getElementById("evidence-image-preview");
+        if (imgPreview) imgPreview.src = "";
+        const vidPreview = document.getElementById("evidence-video-preview");
+        if (vidPreview) vidPreview.src = "";
+        const fileInput = document.getElementById("evidence-file-input");
+        if (fileInput) fileInput.value = "";
+        const uploadText = document.getElementById("evidence-upload-text");
+        if (uploadText) uploadText.textContent = "Browse & Attach/Drag Local Image or Video file";
+
+        runAutomaticLocalRules();
+    }
+
+    function triggerEvidenceFileInput() {
+        const fileInput = document.getElementById("evidence-file-input");
+        if (fileInput) fileInput.click();
+    }
+
+    function handleEvidenceFileSelect(event) {
+        const file = event.target.files?.[0];
+        if (file) {
+            processEvidenceFile(file);
+        }
+    }
+
+    function handleEvidenceDragOver(e) {
+        e.preventDefault();
+        const dropzone = document.getElementById("evidence-dropzone");
+        if (dropzone) dropzone.classList.add("border-indigo-550", "bg-indigo-950/40");
+    }
+
+    function handleEvidenceDragLeave(e) {
+        e.preventDefault();
+        const dropzone = document.getElementById("evidence-dropzone");
+        if (dropzone) dropzone.classList.remove("border-indigo-550", "bg-indigo-950/40");
+    }
+
+    function handleEvidenceDrop(e) {
+        e.preventDefault();
+        const dropzone = document.getElementById("evidence-dropzone");
+        if (dropzone) dropzone.classList.remove("border-indigo-550", "bg-indigo-950/40");
+        const file = e.dataTransfer?.files?.[0];
+        if (file) {
+            processEvidenceFile(file);
+        }
+    }
+
+    function processEvidenceFile(file) {
+        // Check size: e.g. 25MB limit
+        if (file.size > 25 * 1024 * 1024) {
+            showNotification("error", "The attached evidence file exceeds the maximum 25MB limits.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const rawResult = e.target?.result;
+            const base64Segment = rawResult.split(",")[1];
+
+            ACTIVE_REPORT.evidenceFileBase64 = base64Segment;
+            ACTIVE_REPORT.evidenceFileType = file.type;
+            ACTIVE_REPORT.evidenceFileName = file.name;
+            ACTIVE_REPORT.evidenceUrl = null; // Clear URL string when file is active
+
+            // Clear text URL input to reflect active file state
+            const mediaUrlInput = document.getElementById("evidence-media-url-input");
+            if (mediaUrlInput) mediaUrlInput.value = "";
+
+            // Render form previews
+            const previewBox = document.getElementById("evidence-media-preview-box");
+            const imgPreview = document.getElementById("evidence-image-preview");
+            const vidPreview = document.getElementById("evidence-video-preview");
+
+            if (previewBox) previewBox.classList.remove("hidden");
+            if (file.type.startsWith("image/")) {
+                if (imgPreview) {
+                    imgPreview.src = rawResult;
+                    imgPreview.classList.remove("hidden");
+                }
+                if (vidPreview) {
+                    vidPreview.classList.add("hidden");
+                    vidPreview.src = "";
+                }
+            } else if (file.type.startsWith("video/")) {
+                if (vidPreview) {
+                    vidPreview.src = rawResult;
+                    vidPreview.classList.remove("hidden");
+                }
+                if (imgPreview) {
+                    imgPreview.classList.add("hidden");
+                    imgPreview.src = "";
+                }
+            }
+
+            const friendlySize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+            const metadataText = document.getElementById("evidence-metadata");
+            if (metadataText) metadataText.textContent = `${file.name} (${friendlySize})`;
+            const uploadText = document.getElementById("evidence-upload-text");
+            if (uploadText) uploadText.textContent = "Selected: " + file.name;
+
+            runAutomaticLocalRules();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function clearAttachedEvidence() {
+        ACTIVE_REPORT.evidenceFileBase64 = null;
+        ACTIVE_REPORT.evidenceFileType = null;
+        ACTIVE_REPORT.evidenceFileName = null;
+        ACTIVE_REPORT.evidenceUrl = null;
+
+        const fileInput = document.getElementById("evidence-file-input");
+        if (fileInput) fileInput.value = "";
+        const mediaUrlInput = document.getElementById("evidence-media-url-input");
+        if (mediaUrlInput) mediaUrlInput.value = "";
+        const previewBox = document.getElementById("evidence-media-preview-box");
+        if (previewBox) previewBox.classList.add("hidden");
+        const imgPreview = document.getElementById("evidence-image-preview");
+        if (imgPreview) imgPreview.src = "";
+        const vidPreview = document.getElementById("evidence-video-preview");
+        if (vidPreview) vidPreview.src = "";
+        const uploadText = document.getElementById("evidence-upload-text");
+        if (uploadText) uploadText.textContent = "Browse & Attach/Drag Local Image or Video file";
+
+        runAutomaticLocalRules();
+    }
+
+    // Page startup hook initialization
+    window.addEventListener('DOMContentLoaded', () => {
+        // Initialize fields configurations from storage
+        document.getElementById("input-webhook-url").value = CONFIG.webhookUrl;
+        document.getElementById("input-bot-name").value = CONFIG.botName;
+        document.getElementById("input-bot-avatar").value = CONFIG.botAvatarUrl;
+        document.getElementById("input-embed-color-picker").value = CONFIG.embedColor;
+        document.getElementById("input-embed-color-text").value = CONFIG.embedColor;
+
+        // Initialize sticky in-game moderator profiles
+        document.getElementById("sticky-mod-name").value = localStorage.getItem("discohook_sticky_mod_name") || "@ModPurr";
+
+        // Initialize active parsed fields from variables
+        loadReportToForm(ACTIVE_REPORT);
+
+        // Push initial default violator state of "@"
+        const initTargetVal = document.getElementById("game-target-username").value;
+        updatePresetTargetLabel(initTargetVal);
+
+        // Refresh preview box elements based on initial values
+        updateDiscordPreviewStyles();
+
+        // Build dispatched records histories
+        renderHistoryList();
+
+        // Instantiates SVG icons across custom nodes
+        lucide.createIcons();
+    });
+
+    // Persistent Sticky Moderator profiles
+    function saveStickyModProfile() {
+        const name = document.getElementById("sticky-mod-name").value;
+        localStorage.setItem("discohook_sticky_mod_name", name);
+    }
+
+    // Live keyboard command line listeners
+    let activePresetCategory = "Underage (100)";
+    let activePresetDetails = "Player admitted to being under age limit in game.";
+
+    function updatePresetTargetLabel(val) {
+        // Live updates current reported target field based on preset overlay inputs
+        const targetClean = val.startsWith("@") ? val : "@" + val;
+        ACTIVE_REPORT.reportedName = val ? targetClean : "@violator_handle";
+        runAutomaticLocalRules();
+    }
+
+    // ⚙️ ✨ LIVE DETERMINISTIC AUTOMATIC RULES ENGINE PIPELINE ✨
+    function runAutomaticLocalRules(isPlayingWithTyping = false) {
+        const violatorInput = document.getElementById("game-target-username")?.value?.trim() || "";
+        const targetClean = violatorInput ? (violatorInput.startsWith("@") ? violatorInput : "@" + violatorInput) : "@violator_handle";
+
+        const rawReasonBox = document.getElementById("evidence-details-input")?.value?.trim() || "";
+        const evidenceUrlInput = ACTIVE_REPORT.evidenceUrl || document.getElementById("evidence-media-url-input")?.value?.trim() || "";
+        const attachedFileName = ACTIVE_REPORT.evidenceFileName || "";
+
+        let classifiedCategory = "General Rule Violation (105)";
+        let reasonExplanation = "";
+
+        const fullAnalysisText = (rawReasonBox + " " + evidenceUrlInput + " " + attachedFileName).toLowerCase();
+
+        // Rule Classification Logic (Deterministic Keywords match)
+        if (
+            fullAnalysisText.includes("underage") ||
+            fullAnalysisText.includes("12 and under") ||
+            fullAnalysisText.includes("junior account") ||
+            fullAnalysisText.includes("years old") ||
+            fullAnalysisText.includes("yr old") ||
+            fullAnalysisText.includes("age limit") ||
+            fullAnalysisText.includes("<13") ||
+            fullAnalysisText.includes("kid") ||
+            fullAnalysisText.includes("child") ||
+            /\b([0-9]|1[0-2])\b/.test(fullAnalysisText)
+        ) {
+            classifiedCategory = "Underage (100)";
+            reasonExplanation = rawReasonBox || "Players 12 and under must use a junior account.";
+        }
+        else if (
+            fullAnalysisText.includes("sexually explicit") ||
+            fullAnalysisText.includes("nsfw") ||
+            fullAnalysisText.includes("sexual") ||
+            fullAnalysisText.includes("porn") ||
+            fullAnalysisText.includes("explicit") ||
+            fullAnalysisText.includes("naked")
+        ) {
+            classifiedCategory = "Sexual (101)";
+            reasonExplanation = rawReasonBox || "No sexually explicit stuff in public areas.";
+        }
+        else if (
+            fullAnalysisText.includes("sexist") ||
+            fullAnalysisText.includes("racist") ||
+            fullAnalysisText.includes("discriminatory") ||
+            fullAnalysisText.includes("harass") ||
+            fullAnalysisText.includes("slur") ||
+            fullAnalysisText.includes("hate") ||
+            fullAnalysisText.includes("abuse") ||
+            fullAnalysisText.includes("abusive") ||
+            fullAnalysisText.includes("foul language")
+        ) {
+            classifiedCategory = "Harassment & Hate (102)";
+            reasonExplanation = rawReasonBox || "No sexist, racist, discriminatory, or harassing language, symbols, or behavior.";
+        }
+        else if (
+            fullAnalysisText.includes("disruptive trolling") ||
+            fullAnalysisText.includes("grief") ||
+            fullAnalysisText.includes("teamkill") ||
+            fullAnalysisText.includes("friendly fire") ||
+            fullAnalysisText.includes("sabotage") ||
+            fullAnalysisText.includes("troll") ||
+            fullAnalysisText.includes("disrupt") ||
+            fullAnalysisText.includes("blocking")
+        ) {
+            classifiedCategory = "Disruptive Trolling (103)";
+            reasonExplanation = rawReasonBox || "No harassing other players or disruptive trolling.";
+        }
+        else {
+            classifiedCategory = "General Rule Violation (105)";
+            reasonExplanation = rawReasonBox || "Be excellent to each other! General infraction of code of conduct guidelines.";
+        }
+
+        // Apply local classification outcomes to active global variables
+        activePresetCategory = classifiedCategory;
+        if (isPlayingWithTyping) {
+            reasonExplanation = rawReasonBox;
+        }
+        activePresetDetails = reasonExplanation;
+
+        ACTIVE_REPORT.reportedName = targetClean;
+        ACTIVE_REPORT.category = "CoC: " + classifiedCategory;
+        ACTIVE_REPORT.details = reasonExplanation || "(none)";
+
+        // Sync fields to the Live JSON Staging Queue
+        const fieldReportedName = document.getElementById("field-reported-name");
+        if (fieldReportedName) fieldReportedName.value = targetClean;
+
+        const fieldCategory = document.getElementById("field-category");
+        if (fieldCategory) fieldCategory.value = "CoC: " + classifiedCategory;
+
+        const fieldDetails = document.getElementById("field-details");
+        if (fieldDetails) fieldDetails.value = reasonExplanation || "(none)";
+
+        updateDiscordPreviewStyles();
+    }
+
+    // Explicit trigger button for Interactive Local Rules Pipeline
+    async function triggerAIReasoning() {
+        const violatorInput = document.getElementById("game-target-username").value.trim();
+        if (!violatorInput || violatorInput === "@") {
+            showNotification("error", "Provide the violator's username or target handle in Step 1 to execute automatic reasoning.");
+            document.getElementById("game-target-username").focus();
+            return;
+        }
+
+        const targetClean = violatorInput.startsWith("@") ? violatorInput : "@" + violatorInput;
+
+        // UI Selectors
+        const aiBtn = document.getElementById("btn-ai-reasoning");
+        const aiIconId = document.getElementById("ai-reason-icon-idle");
+        const aiSpinner = document.getElementById("ai-reason-spinner");
+        const aiBtnText = document.getElementById("btn-ai-reasoning-text");
+
+        // Set Loading State
+        if (aiBtn) aiBtn.setAttribute("disabled", "true");
+        if (aiIconId) aiIconId.classList.add("hidden");
+        if (aiSpinner) aiSpinner.classList.remove("hidden");
+        if (aiBtnText) aiBtnText.textContent = "⚙️ Executing Local Rules Engine...";
+
+        // Real satisfying thinking simulation delay (200ms)
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        try {
+            runAutomaticLocalRules();
+
+            let successMessage = `🎯 Local automatic decision refreshed! Classified as: CoC: ${activePresetCategory}`;
+
+            // Clipboard sync
+            if (CONFIG.autoCopy) {
+                const line = `${targetClean} - Reason for Ban: CoC: ${activePresetCategory} - Evidence: ${activePresetDetails}`;
+                const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD (AUTOMATED RULES)\n━━━━━━━━━━━━━━━━━━ \n\n`;
+                await navigator.clipboard.writeText(header + line);
+                successMessage += " Auto-copied ban record!";
+            }
+
+            showNotification("success", successMessage);
+
+        } catch (e) {
+            console.error("Local Reasoning Error:", e);
+            showNotification("error", "Exception in deterministic rule execution pipeline: " + e.message);
+        } finally {
+            // Restore button UI state
+            if (aiBtn) aiBtn.removeAttribute("disabled");
+            if (aiIconId) aiIconId.classList.remove("hidden");
+            if (aiSpinner) aiSpinner.classList.add("hidden");
+            if (aiBtnText) aiBtnText.textContent = "Run Local Automatic Reasoning";
+        }
+    }
+
+    async function triggerTargetPreset(category, defaultDetails) {
+        // Just fill the reasoning box and let the pipeline decide
+        const customInput = document.getElementById("evidence-details-input");
+        if (customInput) {
+            customInput.value = defaultDetails;
+        }
+
+        // Trigger the pipeline automatically
+        runAutomaticLocalRules(false);
+
+        const violatorInput = document.getElementById("game-target-username").value.trim();
+        if (!violatorInput || violatorInput === "@") {
+            showNotification("success", `Preloaded preset hint for "${category}"! Enter a player username above to finish reasoning.`);
+            document.getElementById("game-target-username").focus();
+        } else {
+            // Still auto-dispatch if it was a preset, as that seems to be expected behavior
+            await dispatchFastPresetEmbed();
+        }
+    }
+
+    // Fast layout generator for preset buttons
+    async function dispatchFastPresetEmbed() {
+        const violatorInput = document.getElementById("game-target-username").value.trim();
+        if (!violatorInput || violatorInput === "@") {
+            showNotification("error", "Provide the violator's username or target handle to use preset macro dispatch.");
+            return;
+        }
+
+        const targetClean = violatorInput.startsWith("@") ? violatorInput : "@" + violatorInput;
+
+        const customReasonText = document.getElementById("evidence-details-input")?.value?.trim();
+        const detailsToUse = customReasonText || activePresetDetails;
+
+        // Hydrate state
+        const finalReport = {
+            reporterName: document.getElementById("sticky-mod-name").value || "@ModPurr",
+            reportedName: targetClean,
+            category: activePresetCategory.startsWith("CoC: ") ? activePresetCategory : "CoC: " + activePresetCategory,
+            timestamp: "Today at " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            details: detailsToUse,
+            evidenceUrl: ACTIVE_REPORT.evidenceUrl,
+            evidenceFileBase64: ACTIVE_REPORT.evidenceFileBase64,
+            evidenceFileType: ACTIVE_REPORT.evidenceFileType,
+            evidenceFileName: ACTIVE_REPORT.evidenceFileName
+        };
+
+        loadReportToForm(finalReport);
+
+        let sMessage = `Successfully processed Tactical In-Game Preset dispatch for ${targetClean}!`;
+
+        // Auto-Copy Ban Record
+        if (CONFIG.autoCopy) {
+            const line = `${finalReport.reportedName} - Reason for Ban: ${finalReport.category} - Evidence: ${finalReport.details}`;
+            const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
+            await navigator.clipboard.writeText(header + line);
+            sMessage += " Banned line copied automatically!";
+        }
+
+        showNotification("success", sMessage);
+
+        // Auto-Send to Webhook
+        await logReportToHistory();
+
+        // Clear target username field to allow next report
+        document.getElementById("game-target-username").value = "@";
+        updatePresetTargetLabel("@");
+
+        // Clear custom reason inputs & attachments for clean next report state
+        const customInput = document.getElementById("evidence-details-input");
+        if (customInput) customInput.value = "";
+        clearAttachedEvidence();
+    }
+
+    function onConsoleInputChange(val) {
+        const statusBox = document.getElementById("live-parsed-console-status");
+        if (val.trim()) {
+            statusBox.classList.remove("hidden");
+
+            // Micro-parse live preview info
+            const cleanTxt = val.trim();
+            let msg = "CLI Parser: ";
+            if (cleanTxt.startsWith("ban") || cleanTxt.startsWith("/") || cleanTxt.startsWith("report")) {
+                msg += "Ready to parse structural ban sequence.";
+            } else {
+                msg += "Listening for username token tags and evidence.";
+            }
+            statusBox.textContent = msg;
+        } else {
+            statusBox.classList.add("hidden");
+        }
+    }
+
+    function handleConsoleInputKey(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            triggerInstantConsoleCommand();
+        }
+    }
+
+    async function triggerInstantConsoleCommand() {
+        const inputField = document.getElementById("console-command-input");
+        const rawCmdText = inputField.value.trim();
+        if (!rawCmdText) {
+            showNotification("error", "Type a ban instruction first. Example: /ban @kid underage sounding like 11 yrs old");
+            return;
+        }
+
+        // Process CLI text parsing
+        let txt = rawCmdText;
+        if (txt.startsWith("/")) {
+            txt = txt.substring(1);
+        }
+
+        // Tokenized extractor
+        const parts = txt.split(/\s+/);
+        let commandWord = parts[0].toLowerCase();
+        let targetName = "";
+        let commandRemainder = [];
+
+        // Find username starting with @
+        let foundTargetIdx = parts.findIndex(p => p.startsWith("@"));
+        if (foundTargetIdx !== -1) {
+            targetName = parts[foundTargetIdx];
+            // Collect everything after command word except target
+            for (let i = 1; i < parts.length; i++) {
+                if (i !== foundTargetIdx) {
+                    commandRemainder.push(parts[i]);
+                }
+            }
+        } else {
+            // If no @ is provided, treat second word as target name
+            if (parts.length > 1) {
+                targetName = "@" + parts[1].replace("@", "");
+                commandRemainder = parts.slice(2);
+            } else {
+                targetName = "@unknown";
+                commandRemainder = [];
+            }
+        }
+
+        const remainingText = commandRemainder.join(" ");
+
+        // Determine Category details
+        let resolvedCategory = "CoC: General Rule Violation (105)";
+        if (txt.toLowerCase().includes("underage") || txt.toLowerCase().includes("kid") || txt.toLowerCase().includes("young") || commandWord === "underage") {
+            resolvedCategory = "CoC: Underage (100)";
+        } else if (txt.toLowerCase().includes("toxic") || txt.toLowerCase().includes("curse") || txt.toLowerCase().includes("harass") || commandWord === "toxic") {
+            resolvedCategory = "CoC: Toxicity (102)";
+        } else if (txt.toLowerCase().includes("sex") || txt.toLowerCase().includes("nsfw") || commandWord === "sexual") {
+            resolvedCategory = "CoC: Sexual (101)";
+        } else if (txt.toLowerCase().includes("grief") || txt.toLowerCase().includes("troll") || txt.toLowerCase().includes("team") || commandWord === "grief") {
+            resolvedCategory = "CoC: Griefing (103)";
+        }
+
+        const evidenceDetails = remainingText || "In-game prompt terminal submission.";
+
+        // Build composite struct
+        const finalObj = {
+            reporterName: document.getElementById("sticky-mod-name").value || "@ModPurr",
+            reportedName: targetName,
+            category: resolvedCategory,
+            timestamp: "Today at " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            details: evidenceDetails
+        };
+
+        loadReportToForm(finalObj);
+
+        let successFeedback = `Console processed command! extraction completed for ${targetName}.`;
+
+        // Direct Clipboard push
+        if (CONFIG.autoCopy) {
+            const line = `${finalObj.reportedName} - Reason for Ban: ${finalObj.category} - Evidence: ${finalObj.details}`;
+            const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
+            await navigator.clipboard.writeText(header + line);
+            successFeedback += " Clipboard record prepared!";
+        }
+
+        showNotification("success", successFeedback);
+
+        // Immediate Send Webhook Relay
+        await logReportToHistory();
+
+        // Wipe CLI line for next entry
+        inputField.value = "";
+        document.getElementById("live-parsed-console-status").classList.add("hidden");
+    }
+
+    // Toggle automation checkboxes
+    function toggleAutomation(key, checked) {
+        CONFIG[key] = checked;
+        // Map camelCase to snake_case for localStorage config keys
+        const lsKey = "discohook_" + key.replace(/[A-Z]/g, letter => "_" + letter.toLowerCase());
+        localStorage.setItem(lsKey, checked);
+
+        // Visual confirmation feedback
+        showNotification("success", `Automation parameter updated: ${key} is now ${checked ? 'ENABLED' : 'DISABLED'}`);
+    }
+
+    // Show/Hide password toggle function
+    function toggleWebhookVisibility() {
+        const input = document.getElementById("input-webhook-url");
+        const toggleIcon = document.getElementById("webhook-toggle-icon");
+        const toggleText = document.getElementById("webhook-toggle-text");
+
+        isWebhookSecretVisible = !isWebhookSecretVisible;
+        if (isWebhookSecretVisible) {
+            input.type = "text";
+            toggleIcon.setAttribute("data-lucide", "eye-off");
+            toggleText.textContent = "Mask URL";
+        } else {
+            input.type = "password";
+            toggleIcon.setAttribute("data-lucide", "eye");
+            toggleText.textContent = "Reveal URL";
+        }
+        lucide.createIcons();
+    }
+
+    // Input change callback listeners
+    function updateWebhookUrl(value) {
+        CONFIG.webhookUrl = value;
+        localStorage.setItem("discohook_webhook_url", value);
+    }
+
+    function updateBotName(value) {
+        CONFIG.botName = value || "meow.net";
+        localStorage.setItem("discohook_bot_name", CONFIG.botName);
+        updateDiscordPreviewStyles();
+    }
+
+    function updateBotAvatar(value) {
+        CONFIG.botAvatarUrl = value || "https://api.dicebear.com/7.x/bottts/svg?seed=meow-moderator";
+        localStorage.setItem("discohook_bot_avatar", CONFIG.botAvatarUrl);
+        updateDiscordPreviewStyles();
+    }
+
+    function updateEmbedColor(value) {
+        if (!value.startsWith("#")) {
+            value = "#" + value;
+        }
+        // Validate hex regex
+        if (/^#[0-9A-F]{6}$/i.test(value)) {
+            CONFIG.embedColor = value;
+            document.getElementById("input-embed-color-picker").value = value;
+            document.getElementById("input-embed-color-text").value = value;
+            localStorage.setItem("discohook_embed_color", value);
+            updateDiscordPreviewStyles();
+        }
+    }
+
+    // Manage active forms mapping
+    function loadReportToForm(report) {
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val;
+        };
+        setVal("field-reporter-name", report.reporterName);
+        setVal("field-reporter-id", report.reporterId);
+        setVal("field-reporter-height", report.heightReporter);
+        setVal("field-reported-name", report.reportedName);
+        setVal("field-reported-id", report.reportedId);
+        setVal("field-reported-height", report.heightReported);
+        setVal("field-category", report.category);
+        setVal("field-timestamp", report.timestamp);
+        setVal("field-details", report.details);
+        setVal("evidence-details-input", report.details);
+
+        // Synchronize internally
+        Object.assign(ACTIVE_REPORT, report);
+        updateDiscordPreviewStyles();
+    }
+
+    // Update Preview fields synchronously with manual inputs
+    function onFormChange() {
+        const getVal = (id, fallback) => {
+            const el = document.getElementById(id);
+            return el ? el.value : fallback;
+        };
+        ACTIVE_REPORT.reporterName = getVal("field-reporter-name", ACTIVE_REPORT.reporterName);
+        ACTIVE_REPORT.reporterId = getVal("field-reporter-id", ACTIVE_REPORT.reporterId);
+        ACTIVE_REPORT.heightReporter = getVal("field-reporter-height", ACTIVE_REPORT.heightReporter);
+        ACTIVE_REPORT.reportedName = getVal("field-reported-name", ACTIVE_REPORT.reportedName);
+        ACTIVE_REPORT.reportedId = getVal("field-reported-id", ACTIVE_REPORT.reportedId);
+        ACTIVE_REPORT.heightReported = getVal("field-reported-height", ACTIVE_REPORT.heightReported);
+        ACTIVE_REPORT.category = getVal("field-category", ACTIVE_REPORT.category);
+        ACTIVE_REPORT.timestamp = getVal("field-timestamp", ACTIVE_REPORT.timestamp);
+        ACTIVE_REPORT.details = getVal("field-details", ACTIVE_REPORT.details);
+
+        updateDiscordPreviewStyles();
+    }
+
+    function updateDiscordPreviewStyles() {
+        // Text mappings
+        const doc_bot_name = document.getElementById("preview-bot-name");
+        if (doc_bot_name) doc_bot_name.textContent = CONFIG.botName;
+
+        const doc_bot_avatar = document.getElementById("preview-bot-avatar");
+        if (doc_bot_avatar) doc_bot_avatar.src = CONFIG.botAvatarUrl;
+
+        const doc_embed_author = document.getElementById("preview-embed-author");
+        if (doc_embed_author) doc_embed_author.textContent = CONFIG.botName;
+
+        const timestampText = ACTIVE_REPORT.timestamp || "Today at 4:33 AM";
+        const cleanTimestamp = timestampText.replace("Today at ", "");
+
+        const doc_msg_timestamp = document.getElementById("preview-msg-timestamp");
+        if (doc_msg_timestamp) doc_msg_timestamp.textContent = "Today at " + cleanTimestamp;
+
+        const doc_embed_footer = document.getElementById("preview-embed-footer");
+        if (doc_embed_footer) doc_embed_footer.textContent = timestampText;
+
+        // Strip color
+        const doc_embed_border = document.getElementById("preview-embed-border");
+        if (doc_embed_border) doc_embed_border.style.backgroundColor = CONFIG.embedColor;
+
+        // Full metadata column mappings
+        const rName = ACTIVE_REPORT.reporterName || "N/A";
+        const doc_reporter_full = document.getElementById("preview-reporter-full");
+        if (doc_reporter_full) {
+            doc_reporter_full.textContent = rName;
+        }
+
+        const dName = ACTIVE_REPORT.reportedName || "N/A";
+        const doc_reported_full = document.getElementById("preview-reported-full");
+        if (doc_reported_full) {
+            doc_reported_full.textContent = dName;
+        }
+
+        const doc_category_full = document.getElementById("preview-category-full");
+        if (doc_category_full) doc_category_full.textContent = ACTIVE_REPORT.category || "General Violation";
+
+        const doc_details_full = document.getElementById("preview-details-full");
+        if (doc_details_full) doc_details_full.textContent = ACTIVE_REPORT.details || "(none)";
+
+        const roomVal = ACTIVE_REPORT.roomId || "N/A";
+        const doc_room_full = document.getElementById("preview-room-full");
+        if (doc_room_full) {
+            doc_room_full.textContent = roomVal;
+        }
+
+        // Live Evidence Visual Updates in Discord Sim
+        const previewImageContainer = document.getElementById("preview-embed-image-container");
+        const previewImage = document.getElementById("preview-embed-image");
+        const previewVideoContainer = document.getElementById("preview-embed-video-container");
+        const previewVideoName = document.getElementById("preview-embed-video-name");
+        const previewVideo = document.getElementById("preview-embed-video");
+        const previewLinkSection = document.getElementById("preview-evidence-link-section");
+        const previewLinkLabel = document.getElementById("preview-evidence-link");
+
+        if (previewImageContainer) previewImageContainer.classList.add("hidden");
+        if (previewVideoContainer) previewVideoContainer.classList.add("hidden");
+        if (previewLinkSection) previewLinkSection.classList.add("hidden");
+
+        if (ACTIVE_REPORT.evidenceFileBase64) {
+            const dataUrl = `data:${ACTIVE_REPORT.evidenceFileType};base64,${ACTIVE_REPORT.evidenceFileBase64}`;
+            if (ACTIVE_REPORT.evidenceFileType.startsWith("image/")) {
+                if (previewImage && previewImageContainer) {
+                    previewImage.src = dataUrl;
+                    previewImageContainer.classList.remove("hidden");
+                }
+            } else if (ACTIVE_REPORT.evidenceFileType.startsWith("video/")) {
+                if (previewVideo && previewVideoContainer && previewVideoName) {
+                    previewVideo.src = dataUrl;
+                    previewVideoName.textContent = ACTIVE_REPORT.evidenceFileName || "evidence.mp4";
+                    previewVideoContainer.classList.remove("hidden");
+                }
+            }
+            if (previewLinkSection && previewLinkLabel) {
+                previewLinkLabel.textContent = `Attached local file: ${ACTIVE_REPORT.evidenceFileName}`;
+                previewLinkSection.classList.remove("hidden");
+            }
+        } else if (ACTIVE_REPORT.evidenceUrl) {
+            const url = ACTIVE_REPORT.evidenceUrl;
+            if (previewLinkSection && previewLinkLabel) {
+                previewLinkLabel.textContent = url;
+                previewLinkSection.classList.remove("hidden");
+            }
+
+            // Simple pattern matching for urls
+            const isUrlImage = /\.(jpg|jpeg|png|gif|webp|svg)/i.test(url) || url.includes("images") || url.includes("image") || url.includes("dicebear");
+            const isUrlVideo = /\.(mp4|webm|mov|ogg)/i.test(url) || url.includes("youtube.com") || url.includes("youtu.be") || url.includes("streamable.com");
+
+            if (isUrlImage && previewImage && previewImageContainer) {
+                previewImage.src = url;
+                previewImageContainer.classList.remove("hidden");
+            } else if (isUrlVideo && previewVideo && previewVideoContainer && previewVideoName) {
+                previewVideo.src = url;
+                previewVideoName.textContent = "External video player source";
+                previewVideoContainer.classList.remove("hidden");
+            }
+        }
+    }
+
+    // Dropzone and file helpers configuration
+    function triggerFileInput() {
+        document.getElementById("file-input-raw").click();
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        document.getElementById("file-dropzone").classList.add("border-[#4f46e5]", "bg-indigo-50/50");
+    }
+
+    function handleDragLeave(e) {
+        e.preventDefault();
+        document.getElementById("file-dropzone").classList.remove("border-[#4f46e5]", "bg-indigo-50/50");
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        document.getElementById("file-dropzone").classList.remove("border-[#4f46e5]", "bg-indigo-50/50");
+        const file = e.dataTransfer?.files?.[0];
+        if (file && file.type.startsWith("image/")) {
+            processRawImageFile(file);
+        } else {
+            showUploadError("Drop target was not an acceptable image format.");
+        }
+    }
+
+    function handleImageSelect(event) {
+        const file = event.target.files?.[0];
+        if (file) {
+            processRawImageFile(file);
+        }
+    }
+
+    function handleGlobalClipPaste(e) {
+        const activeElem = document.activeElement;
+        const isTypingInInput = activeElem && (activeElem.tagName === "INPUT" || activeElem.tagName === "TEXTAREA");
+
+        const items = e.clipboardData?.items;
+        if (items) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf("image") !== -1) {
+                    const file = items[i].getAsFile();
+                    if (file) {
+                        processRawImageFile(file);
+                        e.preventDefault();
+                        return;
+                    }
+                }
+            }
+        }
+
+        // If not actively typing elsewhere, process pasted text context immediately
+        if (!isTypingInInput) {
+            const text = e.clipboardData?.getData("text");
+            if (text && text.trim().length > 10) {
+                document.getElementById("input-raw-text").value = text;
+                onParsedTextChange();
+                e.preventDefault();
+            }
+        }
+    }
+
+    function processRawImageFile(file) {
+        // Cap at 10MB
+        if (file.size > 10 * 1024 * 1024) {
+            showUploadError("Selected screen snapshot exceeds the maximum 10MB size parameter.");
+            return;
+        }
+
+        hideUploadError();
+        currentFileMimeType = file.type;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const rawResult = e.target?.result;
+
+            // Switch dropzone states
+            document.getElementById("dropzone-empty-state").classList.add("hidden");
+            document.getElementById("dropzone-filled-state").classList.remove("hidden");
+            document.getElementById("image-preview").src = rawResult;
+            document.getElementById("btn-clear-source").classList.remove("hidden");
+
+            // Extract base64 segment
+            currentFileBase64 = rawResult.split(",")[1];
+            evaluateScanButtonState();
+
+            // AUTOMATED WORKFLOW SCAN TRIGGER
+            if (CONFIG.autoScan) {
+                triggerAIScan();
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    let textChangeDebounceTimeout = null;
+    function onParsedTextChange() {
+        evaluateScanButtonState();
+        if (CONFIG.autoScan) {
+            clearTimeout(textChangeDebounceTimeout);
+            textChangeDebounceTimeout = setTimeout(() => {
+                const txtValue = document.getElementById("input-raw-text").value.trim();
+                if (txtValue) {
+                    triggerAIScan();
+                }
+            }, 650);
+        }
+    }
+
+    function evaluateScanButtonState() {
+        const txtValue = document.getElementById("input-raw-text").value.trim();
+        const scanBtn = document.getElementById("btn-scan");
+
+        if (currentFileBase64 || txtValue.length > 0) {
+            scanBtn.removeAttribute("disabled");
+        } else {
+            scanBtn.setAttribute("disabled", "true");
+        }
+    }
+
+    function clearSourceInputs() {
+        currentFileBase64 = null;
+        currentFileMimeType = null;
+        document.getElementById("input-raw-text").value = "";
+        document.getElementById("file-input-raw").value = "";
+
+        document.getElementById("dropzone-filled-state").classList.add("hidden");
+        document.getElementById("dropzone-empty-state").classList.remove("hidden");
+        document.getElementById("image-preview").src = "";
+        document.getElementById("btn-clear-source").classList.add("hidden");
+
+        evaluateScanButtonState();
+        hideUploadError();
+    }
+
+    function showUploadError(text) {
+        const alertBox = document.getElementById("upload-error-alert");
+        const alertMsg = document.getElementById("upload-error-text");
+        alertBox.classList.remove("hidden");
+        alertMsg.textContent = text;
+    }
+
+    function hideUploadError() {
+        document.getElementById("upload-error-alert").classList.add("hidden");
+    }
+
+    // Gemini Parsing API integration with built-in post-scan automations
+    async function triggerAIScan() {
+        const rawTextData = document.getElementById("input-raw-text").value;
+        const scanBtn = document.getElementById("btn-scan");
+        const scanIdleIcon = document.getElementById("scan-icon-idle");
+        const scanSpinner = document.getElementById("scan-spinner");
+        const scanBtnText = document.getElementById("btn-scan-text");
+
+        // UI Loading transitions
+        if (scanBtn) scanBtn.setAttribute("disabled", "true");
+        if (scanIdleIcon) scanIdleIcon.classList.add("hidden");
+        if (scanSpinner) scanSpinner.classList.remove("hidden");
+        if (scanBtnText) scanBtnText.textContent = "Gemini Processing Image Layout...";
+        dismissAlert();
+
+        try {
+            const resp = await fetch("/api/parse-report", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    text: rawTextData,
+                    image: currentFileBase64,
+                    mimeType: currentFileMimeType
+                })
+            });
+
+            if (!resp.ok) {
+                const errBody = await resp.json();
+                throw new Error(errBody.error || "A parsing disruption occurred inside our relay layer.");
+            }
+
+            const parsedReport = await resp.json();
+
+            // Re-fill form variables
+            const finalReport = {
+                reporterName: parsedReport.reporterName || "",
+                reporterId: parsedReport.reporterId || "",
+                heightReporter: parsedReport.heightReporter || "",
+                reportedName: parsedReport.reportedName || "",
+                reportedId: parsedReport.reportedId || "",
+                heightReported: parsedReport.heightReported || "",
+                category: parsedReport.category || "CoC: (General Violation)",
+                timestamp: parsedReport.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                roomId: parsedReport.roomId || "",
+                roomType: parsedReport.roomType || "",
+                details: parsedReport.details || "(none)"
+            };
+
+            loadReportToForm(finalReport);
+
+            let successMessage = "AI Assistant successfully scanned your screenshot layout and extracted structural attributes!";
+
+            // Automation step 1: Auto-Copy Ban Record Format
+            if (CONFIG.autoCopy) {
+                const line = `${finalReport.reportedName || "@unknown"} - Reason for Ban: ${finalReport.category || "General Violation"} - Evidence: ${finalReport.details || "(none)"}`;
+                const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
+
+                await navigator.clipboard.writeText(header + line);
+                successMessage += " Copied new RecRoom ban record to your clipboard automatically!";
+            }
+
+            showNotification("success", successMessage);
+
+            // Automation step 2: Auto-send embed to Discord Webhook
+            if (CONFIG.autoDispatch) {
+                setTimeout(() => {
+                    logReportToHistory();
+                }, 300);
+            }
+
+        } catch (e) {
+            console.error(e);
+            showNotification("error", e.message || "Could not query Gemini parser server. Verify API key credentials.");
+        } finally {
+            if (scanBtn) scanBtn.removeAttribute("disabled");
+            if (scanIdleIcon) scanIdleIcon.classList.remove("hidden");
+            if (scanSpinner) scanSpinner.classList.add("hidden");
+            if (scanBtnText) scanBtnText.textContent = "Force Manual Scan with Gemini";
+            evaluateScanButtonState();
+        }
+    }
+
+    // Discord Webhook Dispatch Payload Sender
+    async function logReportToHistory() {
+        const dispatchBtn = document.getElementById("btn-dispatch");
+        const dispatchIdleIcon = document.getElementById("dispatch-icon-idle");
+        const dispatchSpinner = document.getElementById("dispatch-spinner");
+        const dispatchText = document.getElementById("btn-dispatch-text");
+
+        if (dispatchBtn) dispatchBtn.setAttribute("disabled", "true");
+        if (dispatchIdleIcon) dispatchIdleIcon.classList.add("hidden");
+        if (dispatchSpinner) dispatchSpinner.classList.remove("hidden");
+        if (dispatchText) dispatchText.textContent = "Relaying Deliverables to Webhook...";
+        dismissAlert();
+
+        // Convert hex code values
+        let borderDecimal = 16729175;
+        try {
+            borderDecimal = parseInt(CONFIG.embedColor.replace("#", ""), 16);
+        } catch (colorErr) {
+            console.error(colorErr);
+        }
+
+        const payloadFields = [
+            {
+                name: "Reporter",
+                value: `${ACTIVE_REPORT.reporterName || "N/A"}`,
+                inline: true
+            },
+            {
+                name: "Reported",
+                value: `${ACTIVE_REPORT.reportedName || "N/A"}`,
+                inline: true
+            },
+            {
+                name: "Category",
+                value: ACTIVE_REPORT.category || "General Violation",
+                inline: true
+            },
+            {
+                name: "Details",
+                value: ACTIVE_REPORT.details || "(none)",
+                inline: false
+            }
+        ];
+
+        // Conditional Evidence attachment fields insertion
+        if (ACTIVE_REPORT.evidenceUrl) {
+            payloadFields.push({
+                name: "Evidence Asset / Web Link",
+                value: ACTIVE_REPORT.evidenceUrl,
+                inline: false
+            });
+        } else if (ACTIVE_REPORT.evidenceFileBase64) {
+            payloadFields.push({
+                name: "Evidence Attachment File",
+                value: `Attached: ${ACTIVE_REPORT.evidenceFileName}`,
+                inline: false
+            });
+        }
+
+        const payloadImage = (ACTIVE_REPORT.evidenceUrl && /\.(jpg|jpeg|png|gif|webp|svg)/i.test(ACTIVE_REPORT.evidenceUrl))
+            ? { url: ACTIVE_REPORT.evidenceUrl }
+            : (ACTIVE_REPORT.evidenceFileType?.startsWith("image/")
+                ? { url: `attachment://${ACTIVE_REPORT.evidenceFileName}` }
+                : undefined);
+
+        const payload = {
+            username: CONFIG.botName,
+            avatar_url: CONFIG.botAvatarUrl,
+            embeds: [
+                {
+                    author: {
+                        name: CONFIG.botName
+                    },
+                    title: "New Player Report",
+                    color: borderDecimal,
+                    fields: payloadFields,
+                    image: payloadImage,
+                    footer: {
+                        text: ACTIVE_REPORT.timestamp || `Today at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                    }
+                }
+            ]
+        };
+
+        // Build index log card item
+        const newHistoryItem = {
+            id: Math.random().toString(36).substring(2, 9),
+            timestamp: new Date().toLocaleString(),
+            reporter: ACTIVE_REPORT.reporterName,
+            reported: ACTIVE_REPORT.reportedName,
+            category: ACTIVE_REPORT.category,
+            details: ACTIVE_REPORT.details
+        };
+
+        CONFIG.history.unshift(newHistoryItem);
+        localStorage.setItem("discohook_history", JSON.stringify(CONFIG.history));
+
+        renderHistoryList();
+        showNotification("success", "Successfully logged report to local Dispatcher History!");
+
+        if (dispatchBtn) dispatchBtn.removeAttribute("disabled");
+        if (dispatchIdleIcon) dispatchIdleIcon.classList.remove("hidden");
+        if (dispatchSpinner) dispatchSpinner.classList.add("hidden");
+        if (dispatchText) dispatchText.textContent = "Log Report to History";
+    }
+
+    // History logs rendering layout builders
+    function renderHistoryList() {
+        const historyEmpty = document.getElementById("history-empty");
+        const historyList = document.getElementById("history-list");
+        const actionsHeader = document.getElementById("history-header-actions");
+
+        if (CONFIG.history.length === 0) {
+            historyEmpty.classList.remove("hidden");
+            historyList.classList.add("hidden");
+            actionsHeader.classList.add("hidden");
+            historyList.innerHTML = "";
+            return;
+        }
+
+        historyEmpty.classList.add("hidden");
+        historyList.classList.remove("hidden");
+        actionsHeader.classList.remove("hidden");
+
+        historyList.innerHTML = CONFIG.history.map(item => {
+            const detailsExcerpt = item.details || "(No evidence description)";
+            return `
+            <div class="pt-2.5 first:pt-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
+              <div class="space-y-0.5 min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="font-bold text-gray-800">${escapeHtml(item.reporter || "Unknown")}</span>
+                  <i data-lucide="chevron-right" class="h-3 w-3 text-gray-400"></i>
+                  <span class="font-extrabold text-[#4f46e5]">${escapeHtml(item.reported || "Unknown")}</span>
+                  <span class="text-[9px] bg-indigo-50 border border-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded font-bold max-w-xs truncate" title="${escapeHtml(item.category)}">
+                    ${escapeHtml(item.category)}
+                  </span>
+                </div>
+                <p class="text-[10px] text-gray-400 font-medium">Dispatched: ${item.timestamp}</p>
+              </div>
+
+              <!-- Button groupings -->
+              <div class="flex items-center gap-1.5 flex-shrink-0">
+                <button
+                  onclick="copySingleBannedRecord('${item.id}')"
+                  class="text-[9px] text-[#4f46e5] font-bold bg-indigo-50 hover:bg-indigo-100 px-2 py-1.5 rounded inline-flex items-center gap-1 border border-indigo-150 cursor-pointer transition-colors"
+                  title="Copy this user record formatted for RecRoom Ban Board"
+                >
+                  <i data-lucide="clipboard" class="h-2.5 w-2.5"></i>
+                  Copy RecRoom
+                </button>
+                <button
+                  onclick="copySingleJsonPayload('${item.id}')"
+                  class="text-[9px] text-gray-500 font-bold bg-gray-50 hover:bg-gray-100 px-2 py-1.5 rounded inline-flex items-center gap-1 border border-gray-200 cursor-pointer transition-colors"
+                  title="Copy formatted Discord Webhook Embed Payload JSON"
+                >
+                  Copy JSON Payload
+                </button>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        lucide.createIcons();
+    }
+
+    // Clean HTML utilities prevent scripts injects
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function clearDispatchHistory() {
+        CONFIG.history = [];
+        localStorage.setItem("discohook_history", "[]");
+        renderHistoryList();
+        showNotification("success", "Dispatched report tracking database successfully wiped clean.");
+    }
+
+    // Standard copy utility handlers
+    function showNotification(type, message) {
+        const banner = document.getElementById("alert-banner");
+        const successIcon = document.getElementById("alert-icon-success");
+        const errorIcon = document.getElementById("alert-icon-error");
+        const messageContainer = document.getElementById("alert-message");
+
+        banner.classList.remove("hidden", "bg-emerald-50", "border-emerald-200", "text-emerald-800", "bg-red-50", "border-red-200", "text-red-800");
+        successIcon.classList.add("hidden");
+        errorIcon.classList.add("hidden");
+
+        messageContainer.textContent = message;
+
+        if (type === "success") {
+            banner.classList.add("bg-emerald-50", "border-emerald-200", "text-emerald-800");
+            successIcon.classList.remove("hidden");
+        } else {
+            banner.classList.add("bg-red-50", "border-red-200", "text-red-800");
+            errorIcon.classList.remove("hidden");
+        }
+
+        banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function dismissAlert() {
+        document.getElementById("alert-banner").classList.add("hidden");
+    }
+
+    // SINGLE BAN RECORD BUILDER
+    function getRecRoomRecordLine(item) {
+        const user = item.reported || "@unknown";
+        const reason = item.category || "General Violation";
+        let evidence = item.details || "";
+
+        // Secondary lookup on custom structures
+        if (!evidence && item.payload?.embeds?.[0]?.fields) {
+            const detailField = item.payload.embeds[0].fields.find(f => f.name === "Details");
+            if (detailField) {
+                evidence = detailField.value;
+            }
+        }
+
+        if (!evidence || evidence === "(none)") {
+            evidence = "(none)";
+        }
+
+        return `${user} - Reason for Ban: ${reason} - Evidence: ${evidence}`;
+    }
+
+    // Copy Single element to clipboard
+    function copySingleBannedRecord(itemId) {
+        const item = CONFIG.history.find(h => h.id === itemId);
+        if (!item) return;
+
+        const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
+        const line = getRecRoomRecordLine(item);
+        const fullOutput = header + line;
+
+        navigator.clipboard.writeText(fullOutput)
+            .then(() => {
+                showNotification("success", `RecRoom formatted ban record for ${item.reported} successfully copied!`);
+            })
+            .catch(e => {
+                console.error(e);
+                showNotification("error", "Inability to access desktop clipboard interfaces.");
+            });
+    }
+
+    // Copy Single JSON embed parameters
+    function copySingleJsonPayload(itemId) {
+        const item = CONFIG.history.find(h => h.id === itemId);
+        if (!item) return;
+
+        const rawJsonString = JSON.stringify(item.payload, null, 2);
+        navigator.clipboard.writeText(rawJsonString)
+            .then(() => {
+                showNotification("success", `Discord Payload JSON configuration for ${item.reported} copied to clipboard!`);
+            })
+            .catch(e => {
+                console.error(e);
+                showNotification("error", "Inability to access desktop clipboard interfaces.");
+            });
+    }
+
+    // MULTI-ENTRY BATCH COPIER (Joined block layout)
+    function copyAllRecRoomFormat() {
+        if (CONFIG.history.length === 0) {
+            showNotification("error", "No dispatched report data logs to export.");
+            return;
+        }
+
+        const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
+        const lines = CONFIG.history.map(item => getRecRoomRecordLine(item)).join("\n");
+        const fullOutputCombined = header + lines;
+
+        navigator.clipboard.writeText(fullOutputCombined)
+            .then(() => {
+                showNotification("success", "All historic entries successfully compiled and copied as a multi-line RecRoom report!");
+            })
+            .catch(e => {
+                console.error(e);
+                showNotification("error", "Inability to access desktop clipboard interfaces.");
+            });
+    }
+
+    // Sample data loading
+    function loadSampleData() {
+        const sampleReport = {
+            reporterName: "@purrfectmeow99",
+            reportedName: "@ogkarpuz",
+            category: "CoC: Underage (100)",
+            timestamp: "Today at 4:51 AM",
+            details: "Player was saying their age was 9 in standard voice chat channel."
+        };
+        loadReportToForm(sampleReport);
+        showNotification("success", "Standard RecRoom sample profile loaded successfully!");
+    }
+
+</script>
+</body>
+</html>
