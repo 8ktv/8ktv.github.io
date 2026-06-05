@@ -1665,8 +1665,14 @@
             });
 
             if (!resp.ok) {
-                const errBody = await resp.json();
-                throw new Error(errBody.error || "A parsing disruption occurred inside our relay layer.");
+                const bodyText = await resp.text();
+                console.error("Parse Report Error Response:", bodyText);
+                try {
+                    const errBody = JSON.parse(bodyText);
+                    throw new Error(errBody.error || "A parsing disruption occurred inside our relay layer.");
+                } catch (e) {
+                    throw new Error("Parsing relay rejected this (non-JSON response).");
+                }
             }
 
             const parsedReport = await resp.json();
@@ -1825,8 +1831,14 @@
             });
 
             if (!resp.ok) {
-                const errPayload = await resp.json();
-                throw new Error(errPayload.error || "The Discord API server rejected this formatted block.");
+                const bodyText = await resp.text();
+                console.error("Server API Error Response:", bodyText);
+                try {
+                    const errPayload = JSON.parse(bodyText);
+                    throw new Error(errPayload.error || "The Discord API server rejected this formatted block.");
+                } catch (e) {
+                    throw new Error("Discord API server rejected this (non-JSON response).");
+                }
             }
 
             // Build index log card item

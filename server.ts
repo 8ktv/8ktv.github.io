@@ -134,6 +134,7 @@ app.post("/api/send-webhook", async (req, res) => {
 
         if (!discordResponse.ok) {
             const errorText = await discordResponse.text();
+            console.error("Discord Webhook Error Response:", errorText);
             return res.status(discordResponse.status).json({
                 error: `Discord Webhook error: ${errorText || discordResponse.statusText}`,
             });
