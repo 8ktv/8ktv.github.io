@@ -111,100 +111,10 @@
     </div>
 
     <!-- Main Workspace Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div class="flex flex-col gap-8 items-center max-w-2xl mx-auto">
 
-        <!-- LEFT COLUMN: Creator Panels (Config, Parser, Fields) -->
-        <div class="lg:col-span-6 space-y-6">
-
-            <!-- Webhook Settings Panel -->
-            <div class="bg-white rounded-2xl border border-gray-200 p-6 space-y-4 shadow-sm relative">
-                <div class="absolute top-0 left-0 right-0 h-1 bg-[#4f46e5] rounded-t-2xl"></div>
-
-                <div class="flex items-center justify-between border-b border-gray-150 pb-3">
-                    <h3 class="text-sm font-extrabold text-gray-900 flex items-center gap-2">
-                        <i data-lucide="settings-2" class="text-[#4f46e5] h-4.5 w-4.5"></i>
-                        <span>Webhook & Bot Config</span>
-                    </h3>
-                </div>
-
-                <!-- Webhook URL Input -->
-                <div class="space-y-1.5">
-                    <div class="flex items-center justify-between">
-                        <label class="text-[10px] uppercase font-bold tracking-wider text-gray-400">
-                            Discord Webhook URL
-                        </label>
-                        <button
-                                type="button"
-                                onclick="toggleWebhookVisibility()"
-                                class="text-xs text-[#4f46e5] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
-                                id="webhook-toggle-btn"
-                        >
-                            <i data-lucide="eye" class="h-3 w-3" id="webhook-toggle-icon"></i>
-                            <span id="webhook-toggle-text">Reveal URL</span>
-                        </button>
-                    </div>
-                    <div class="relative">
-                        <input
-                                type="password"
-                                id="input-webhook-url"
-                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 tracking-wide focus:outline-none focus:border-[#4f46e5] focus:ring-1 focus:ring-indigo-500/10 transition-all font-mono text-xs"
-                                placeholder="https://discord.com/api/webhooks/..."
-                                oninput="updateWebhookUrl(this.value)"
-                        />
-                    </div>
-                    <p class="text-[10px] text-gray-400 italic">Dispatched embeds are delivered to this target channel path.</p>
-                </div>
-
-                <!-- Bot Persona Metadata grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                    <div class="space-y-1">
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-gray-400">
-                            Sender Username (Bot)
-                        </label>
-                        <input
-                                type="text"
-                                id="input-bot-name"
-                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#4f46e5] focus:ring-1 focus:ring-indigo-500/10 transition-all"
-                                placeholder="e.g. meow.net"
-                                oninput="updateBotName(this.value)"
-                        />
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="block text-[10px] uppercase font-bold tracking-wider text-gray-400">
-                            Left Border Tint Color
-                        </label>
-                        <div class="flex gap-2 items-center">
-                            <input
-                                    type="color"
-                                    id="input-embed-color-picker"
-                                    class="w-10 h-9 p-0.5 bg-white border border-gray-200 rounded-lg cursor-pointer"
-                                    oninput="updateEmbedColor(this.value)"
-                            />
-                            <input
-                                    type="text"
-                                    id="input-embed-color-text"
-                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#4f46e5] font-mono text-center uppercase"
-                                    oninput="updateEmbedColor(this.value)"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-1">
-                    <label class="block text-[10px] uppercase font-bold tracking-wider text-gray-400">
-                        Bot Profile Avatar Image URL
-                    </label>
-                    <input
-                            type="text"
-                            id="input-bot-avatar"
-                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#4f46e5]"
-                            placeholder="Paste direct .png/.jpg/.svg link"
-                            oninput="updateBotAvatar(this.value)"
-                    />
-                </div>
-            </div>
-
+        <!-- Console Panel -->
+        <div class="w-full">
             <!-- 🎮 In-Game Fast-Command Console (Hands-Free Mode) -->
             <div class="bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 p-6 space-y-4 shadow-xl relative overflow-hidden">
                 <!-- Glow background style -->
@@ -734,21 +644,13 @@
 <!-- Lucide Icon Instantiation script -->
 <script>
     // Global configuration variables initialized with defaults or retrieved from local storage
+    // Config Initialization (UI removed)
     const CONFIG = {
-        webhookUrl: localStorage.getItem("discohook_webhook_url") || "https://discord.com/api/webhooks/1512397006457536582/YeNut71fI--Jw64aDBK0A-6JxNjqcezpCC7UQucigGejhWvbwrRIkDzmrpgJS5meuqX9",
-        botName: localStorage.getItem("discohook_bot_name") || "meow.net",
-        botAvatarUrl: localStorage.getItem("discohook_bot_avatar") || "https://api.dicebear.com/7.x/bottts/svg?seed=meow-moderator",
-        embedColor: localStorage.getItem("discohook_embed_color") || "#ff4757",
         history: JSON.parse(localStorage.getItem("discohook_history") || "[]"),
         autoScan: localStorage.getItem("discohook_auto_scan") !== "false", // default true
         autoCopy: localStorage.getItem("discohook_auto_copy") !== "false", // default true
         autoDispatch: localStorage.getItem("discohook_auto_dispatch") === "true" // default false
     };
-
-    // Current source state variables
-    let currentFileBase64 = null;
-    let currentFileMimeType = null;
-    let isWebhookSecretVisible = false;
 
     // Active Parsed Fields state
     const ACTIVE_REPORT = {
@@ -907,13 +809,6 @@
 
     // Page startup hook initialization
     window.addEventListener('DOMContentLoaded', () => {
-        // Initialize fields configurations from storage
-        document.getElementById("input-webhook-url").value = CONFIG.webhookUrl;
-        document.getElementById("input-bot-name").value = CONFIG.botName;
-        document.getElementById("input-bot-avatar").value = CONFIG.botAvatarUrl;
-        document.getElementById("input-embed-color-picker").value = CONFIG.embedColor;
-        document.getElementById("input-embed-color-text").value = CONFIG.embedColor;
-
         // Initialize sticky in-game moderator profiles
         document.getElementById("sticky-mod-name").value = localStorage.getItem("discohook_sticky_mod_name") || "@ModPurr";
 
@@ -1300,55 +1195,7 @@
     }
 
     // Show/Hide password toggle function
-    function toggleWebhookVisibility() {
-        const input = document.getElementById("input-webhook-url");
-        const toggleIcon = document.getElementById("webhook-toggle-icon");
-        const toggleText = document.getElementById("webhook-toggle-text");
 
-        isWebhookSecretVisible = !isWebhookSecretVisible;
-        if (isWebhookSecretVisible) {
-            input.type = "text";
-            toggleIcon.setAttribute("data-lucide", "eye-off");
-            toggleText.textContent = "Mask URL";
-        } else {
-            input.type = "password";
-            toggleIcon.setAttribute("data-lucide", "eye");
-            toggleText.textContent = "Reveal URL";
-        }
-        lucide.createIcons();
-    }
-
-    // Input change callback listeners
-    function updateWebhookUrl(value) {
-        CONFIG.webhookUrl = value;
-        localStorage.setItem("discohook_webhook_url", value);
-    }
-
-    function updateBotName(value) {
-        CONFIG.botName = value || "meow.net";
-        localStorage.setItem("discohook_bot_name", CONFIG.botName);
-        updateDiscordPreviewStyles();
-    }
-
-    function updateBotAvatar(value) {
-        CONFIG.botAvatarUrl = value || "https://api.dicebear.com/7.x/bottts/svg?seed=meow-moderator";
-        localStorage.setItem("discohook_bot_avatar", CONFIG.botAvatarUrl);
-        updateDiscordPreviewStyles();
-    }
-
-    function updateEmbedColor(value) {
-        if (!value.startsWith("#")) {
-            value = "#" + value;
-        }
-        // Validate hex regex
-        if (/^#[0-9A-F]{6}$/i.test(value)) {
-            CONFIG.embedColor = value;
-            document.getElementById("input-embed-color-picker").value = value;
-            document.getElementById("input-embed-color-text").value = value;
-            localStorage.setItem("discohook_embed_color", value);
-            updateDiscordPreviewStyles();
-        }
-    }
 
     // Manage active forms mapping
     function loadReportToForm(report) {
@@ -1394,13 +1241,10 @@
     function updateDiscordPreviewStyles() {
         // Text mappings
         const doc_bot_name = document.getElementById("preview-bot-name");
-        if (doc_bot_name) doc_bot_name.textContent = CONFIG.botName;
 
         const doc_bot_avatar = document.getElementById("preview-bot-avatar");
-        if (doc_bot_avatar) doc_bot_avatar.src = CONFIG.botAvatarUrl;
 
         const doc_embed_author = document.getElementById("preview-embed-author");
-        if (doc_embed_author) doc_embed_author.textContent = CONFIG.botName;
 
         const timestampText = ACTIVE_REPORT.timestamp || "Today at 4:33 AM";
         const cleanTimestamp = timestampText.replace("Today at ", "");
@@ -1410,10 +1254,6 @@
 
         const doc_embed_footer = document.getElementById("preview-embed-footer");
         if (doc_embed_footer) doc_embed_footer.textContent = timestampText;
-
-        // Strip color
-        const doc_embed_border = document.getElementById("preview-embed-border");
-        if (doc_embed_border) doc_embed_border.style.backgroundColor = CONFIG.embedColor;
 
         // Full metadata column mappings
         const rName = ACTIVE_REPORT.reporterName || "N/A";
