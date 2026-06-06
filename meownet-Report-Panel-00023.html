@@ -308,7 +308,7 @@
                                     <span id="age-result" class="text-xs text-slate-400 font-mono"></span>
                                     <button
                                             type="button"
-                                            onclick="triggerTargetPreset('Underage (100)', 'junior account')"
+                                            onclick="triggerTargetPreset('Underage', 'junior account')"
                                             class="text-[9px] bg-emerald-950 text-emerald-300 px-2 py-1 rounded hover:bg-emerald-900 border border-emerald-800"
                                     >
                                         Mark Junior
@@ -459,7 +459,7 @@
                             Category
                           </span>
                                             <span id="preview-category-full" class="text-[#dbdee1] font-medium block">
-                            CoC: Underage (100)
+                            CoC: Underage
                           </span>
                                         </div>
 
@@ -585,7 +585,7 @@
     const ACTIVE_REPORT = {
         reporterName: "@ogkarpuz",
         reportedName: "@jacksonfah67",
-        category: "CoC: Sexual (101)",
+        category: "CoC: Sexual",
         details: "(none)",
         timestamp: "Today at 4:33 AM",
         evidenceUrl: null,
@@ -757,7 +757,7 @@
     });
 
     // Live keyboard command line listeners
-    let activePresetCategory = "Underage (100)";
+    let activePresetCategory = "Underage";
     let activePresetDetails = "Player admitted to being under age limit in game.";
 
     function updatePresetTargetLabel(val) {
@@ -786,7 +786,7 @@
         const evidenceUrlInput = ACTIVE_REPORT.evidenceUrl || document.getElementById("evidence-media-url-input")?.value?.trim() || "";
         const attachedFileName = ACTIVE_REPORT.evidenceFileName || "";
 
-        let classifiedCategory = "General Rule Violation (105)";
+        let classifiedCategory = "General Rule Violation";
         let reasonExplanation = "";
 
         const fullAnalysisText = (rawReasonBox + " " + evidenceUrlInput + " " + attachedFileName).toLowerCase();
@@ -804,7 +804,7 @@
             fullAnalysisText.includes("child") ||
             /\b([0-9]|1[0-2])\b/.test(fullAnalysisText)
         ) {
-            classifiedCategory = "Underage (100)";
+            classifiedCategory = "Underage";
             reasonExplanation = rawReasonBox || "Players 12 and under must use a junior account.";
         }
         else if (
@@ -815,7 +815,7 @@
             fullAnalysisText.includes("explicit") ||
             fullAnalysisText.includes("naked")
         ) {
-            classifiedCategory = "Sexual (101)";
+            classifiedCategory = "Sexual";
             reasonExplanation = rawReasonBox || "No sexually explicit stuff in public areas.";
         }
         else if (
@@ -829,7 +829,7 @@
             fullAnalysisText.includes("abusive") ||
             fullAnalysisText.includes("foul language")
         ) {
-            classifiedCategory = "Harassment & Hate (102)";
+            classifiedCategory = "Harassment & Hate";
             reasonExplanation = rawReasonBox || "No sexist, racist, discriminatory, or harassing language, symbols, or behavior.";
         }
         else if (
@@ -842,16 +842,16 @@
             fullAnalysisText.includes("disrupt") ||
             fullAnalysisText.includes("blocking")
         ) {
-            classifiedCategory = "Disruptive Trolling (103)";
+            classifiedCategory = "Disruptive Trolling";
             reasonExplanation = rawReasonBox || "No harassing other players or disruptive trolling.";
         }
         else {
-            classifiedCategory = "General Rule Violation (105)";
+            classifiedCategory = "General Rule Violation";
             reasonExplanation = rawReasonBox || "Be excellent to each other! General infraction of code of conduct guidelines.";
         }
 
         const birthyearBox = document.getElementById("underage-birthyear-box");
-        if (classifiedCategory === "Underage (100)") {
+        if (classifiedCategory === "Underage") {
             birthyearBox.classList.remove("hidden");
         } else {
             birthyearBox.classList.add("hidden");
@@ -947,7 +947,8 @@
             return;
         }
 
-        if (activePresetCategory === "Underage (100)") {
+        let calculatedAge = null;
+        if (activePresetCategory === "Underage") {
             const birthyearInput = document.getElementById("birthyear-input");
             const customInput = document.getElementById("evidence-details-input");
             const hasBirthyear = birthyearInput && birthyearInput.value.trim().length > 0;
@@ -961,9 +962,9 @@
 
             if (hasBirthyear && !hasFailedCheck) {
                 const currentYear = new Date().getFullYear();
-                const age = currentYear - parseInt(birthyearInput.value.trim());
-                if (age >= 13) {
-                    showNotification("success", `User is ${age} years old and therefore not underage. Report skipped.`);
+                calculatedAge = currentYear - parseInt(birthyearInput.value.trim());
+                if (calculatedAge >= 13) {
+                    showNotification("success", `User is ${calculatedAge} years old and therefore not underage. Report skipped.`);
                     // Optional: clear the birthyear 
                     if (birthyearInput) { birthyearInput.value = ""; onBirthyearChange(""); }
                     return;
@@ -988,6 +989,7 @@
             reporterName: "@ModPurr",
             reportedName: targetClean,
             category: activePresetCategory.startsWith("CoC: ") ? activePresetCategory : "CoC: " + activePresetCategory,
+            age: calculatedAge,
             timestamp: "Today at " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             details: detailsToUse,
             evidenceUrl: ACTIVE_REPORT.evidenceUrl,
@@ -1002,7 +1004,11 @@
 
         // Auto-Copy Ban Record
         if (CONFIG.autoCopy) {
-            const formattedRecord = `👤 **User**: ${finalReport.reportedName} - 📜 **Category**: ${finalReport.category} - 📝 **Details**: ${finalReport.details}`;
+            let reasonText = finalReport.category;
+            if (reasonText === "CoC: Underage" && finalReport.age) {
+                reasonText = `CoC: Underage (${finalReport.age})`;
+            }
+            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${finalReport.details}`;
             await navigator.clipboard.writeText(formattedRecord);
             sMessage += " Banned line copied automatically!";
         }
@@ -1092,15 +1098,15 @@
         const remainingText = commandRemainder.join(" ");
 
         // Determine Category details
-        let resolvedCategory = "CoC: General Rule Violation (105)";
+        let resolvedCategory = "CoC: General Rule Violation";
         if (txt.toLowerCase().includes("underage") || txt.toLowerCase().includes("kid") || txt.toLowerCase().includes("young") || commandWord === "underage") {
-            resolvedCategory = "CoC: Underage (100)";
+            resolvedCategory = "CoC: Underage";
         } else if (txt.toLowerCase().includes("toxic") || txt.toLowerCase().includes("curse") || txt.toLowerCase().includes("harass") || commandWord === "toxic") {
-            resolvedCategory = "CoC: Toxicity (102)";
+            resolvedCategory = "CoC: Harassment & Hate";
         } else if (txt.toLowerCase().includes("sex") || txt.toLowerCase().includes("nsfw") || commandWord === "sexual") {
-            resolvedCategory = "CoC: Sexual (101)";
+            resolvedCategory = "CoC: Sexual";
         } else if (txt.toLowerCase().includes("grief") || txt.toLowerCase().includes("troll") || txt.toLowerCase().includes("team") || commandWord === "grief") {
-            resolvedCategory = "CoC: Griefing (103)";
+            resolvedCategory = "CoC: Disruptive Trolling";
         }
 
         const evidenceDetails = remainingText || "In-game prompt terminal submission.";
@@ -1120,7 +1126,11 @@
 
         // Direct Clipboard push
         if (CONFIG.autoCopy) {
-            const formattedRecord = `👤 **User**: ${finalObj.reportedName} - 📜 **Category**: ${finalObj.category} - 📝 **Details**: ${finalObj.details}`;
+            let reasonText = finalObj.category;
+            if (reasonText === "CoC: Underage" && finalObj.age) {
+                reasonText = `CoC: Underage (${finalObj.age})`;
+            }
+            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalObj.reportedName} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${finalObj.details}`;
             await navigator.clipboard.writeText(formattedRecord);
             successFeedback += " Clipboard record prepared!";
         }
@@ -1478,6 +1488,7 @@
                 reportedId: parsedReport.reportedId || "",
                 heightReported: parsedReport.heightReported || "",
                 category: parsedReport.category || "CoC: (General Violation)",
+                age: parsedReport.age || null,
                 timestamp: parsedReport.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 roomId: parsedReport.roomId || "",
                 roomType: parsedReport.roomType || "",
@@ -1490,7 +1501,11 @@
 
             // Automation step 1: Auto-Copy Ban Record Format
             if (CONFIG.autoCopy) {
-                const formattedRecord = `👤 **User**: ${finalReport.reportedName || "@unknown"} - 📜 **Category**: ${finalReport.category || "General Violation"} - 📝 **Details**: ${finalReport.details || "(none)"}`;
+                let reasonText = finalReport.category || "General Violation";
+                if (reasonText === "CoC: Underage" && ACTIVE_REPORT.age) {
+                    reasonText = `CoC: Underage (${ACTIVE_REPORT.age})`;
+                }
+                const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName || "@unknown"} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${finalReport.details || "(none)"}`;
 
                 await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Copied new RecRoom ban record to your clipboard automatically!";
@@ -1538,7 +1553,8 @@
             reporter: ACTIVE_REPORT.reporterName,
             reported: ACTIVE_REPORT.reportedName,
             category: ACTIVE_REPORT.category,
-            details: ACTIVE_REPORT.details
+            details: ACTIVE_REPORT.details,
+            age: ACTIVE_REPORT.age
         };
 
         CONFIG.history.unshift(newHistoryItem);
@@ -1573,6 +1589,10 @@
 
         historyList.innerHTML = CONFIG.history.map(item => {
             const detailsExcerpt = item.details || "(No evidence description)";
+            let cat = item.category;
+            if (cat === "CoC: Underage" && item.age) {
+                cat = `CoC: Underage (${item.age})`;
+            }
             return `
             <div class="pt-2.5 first:pt-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
               <div class="space-y-0.5 min-w-0 flex-1">
@@ -1580,8 +1600,8 @@
                   <span class="font-bold text-slate-350">${escapeHtml(item.reporter || "Unknown")}</span>
                   <i data-lucide="chevron-right" class="h-3 w-3 text-slate-600"></i>
                   <span class="font-extrabold text-[#818cf8]">${escapeHtml(item.reported || "Unknown")}</span>
-                  <span class="text-[9px] bg-indigo-950/40 border border-indigo-900/30 text-indigo-300 px-1.5 py-0.2 rounded font-bold max-w-xs truncate" title="${escapeHtml(item.category)}">
-                    ${escapeHtml(item.category)}
+                  <span class="text-[9px] bg-indigo-950/40 border border-indigo-900/30 text-indigo-300 px-1.5 py-0.2 rounded font-bold max-w-xs truncate" title="${escapeHtml(cat)}">
+                    ${escapeHtml(cat)}
                   </span>
                 </div>
                 <p class="text-[10px] text-slate-500 font-medium font-mono">Dispatched: ${item.timestamp}</p>
@@ -1661,7 +1681,10 @@
     // SINGLE BAN RECORD BUILDER
     function getRecRoomRecordLine(item) {
         const user = item.reported || "@unknown";
-        const reason = item.category || "General Violation";
+        let reason = item.category || "General Violation";
+        if (reason === "CoC: Underage" && item.age) {
+            reason = `CoC: Underage (${item.age})`;
+        }
         let evidence = item.details || "";
 
         // Secondary lookup on custom structures
@@ -1676,7 +1699,7 @@
             evidence = "(none)";
         }
 
-        return `👤 **User**: ${user} - 📜 **Category**: ${reason} - 📝 **Details**: ${evidence}`;
+        return `:bust_in_silhouette: **User**: ${user} - :scroll: **Category**: ${reason} - :pencil: **Details**: ${evidence}`;
     }
 
     // Copy Single element to clipboard
@@ -1739,7 +1762,7 @@
         const sampleReport = {
             reporterName: "@purrfectmeow99",
             reportedName: "@ogkarpuz",
-            category: "CoC: Underage (100)",
+            category: "CoC: Underage",
             timestamp: "Today at 4:51 AM",
             details: "Player was saying their age was 9 in standard voice chat channel."
         };
