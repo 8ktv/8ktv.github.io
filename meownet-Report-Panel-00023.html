@@ -75,10 +75,6 @@
             >
                 Load Sample
             </button>
-            <div class="text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-900/50 px-3 py-1 rounded-full font-medium flex items-center gap-1.5">
-                <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-                Connected
-            </div>
         </div>
     </div>
 </header>
@@ -117,6 +113,48 @@
                         <p class="text-[11px] text-slate-500 font-medium">Dynamic dispatch controller</p>
                     </div>
                 </div>
+                <!-- Sub-section: Quick Manual Presets -->
+                <div class="space-y-2 pt-2 pb-4 border-b border-slate-900/60 mb-2">
+              <span class="block text-[8.5px] uppercase font-bold tracking-wider text-slate-500">
+                Quick Manual Override Presets (Select to load reason)
+              </span>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button
+                                onclick="triggerTargetPreset('Underage (CoC)', 'Player is underage or using an improper account.')"
+                                class="bg-slate-950/80 hover:bg-indigo-950/80 hover:border-indigo-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-indigo-300 relative group overflow-hidden"
+                                title="Send immediate Underage report to webhook"
+                        >
+                            <i data-lucide="user-minus" class="h-3.5 w-3.5 text-indigo-400"></i>
+                            <span class="font-extrabold text-[10px]">Underage</span>
+                        </button>
+                        <button
+                                onclick="triggerTargetPreset('Harassment/Discrimination (CoC)', 'Sexist, racist, discriminatory or harassing language/behavior.')"
+                                class="bg-slate-950/80 hover:bg-amber-950/80 hover:border-amber-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-amber-300 relative group overflow-hidden"
+                                title="Send immediate Harassment/Discrimination report to webhook"
+                        >
+                            <i data-lucide="frown" class="h-3.5 w-3.5 text-amber-400"></i>
+                            <span class="font-extrabold text-[10px]">Abuse/Harassment</span>
+                        </button>
+                        <button
+                                onclick="triggerTargetPreset('Disruptive/Cheating (CoC)', 'Disruptive trolling, cheating, or abusing in-game moderation tools.')"
+                                class="bg-slate-950/80 hover:bg-rose-950/80 hover:border-rose-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-rose-300 relative group overflow-hidden"
+                                title="Send immediate Disruptive/Cheating report to webhook"
+                        >
+                            <i data-lucide="swords" class="h-3.5 w-3.5 text-rose-400"></i>
+                            <span class="font-extrabold text-[10px]">Disruptive</span>
+                        </button>
+                        <button
+                                onclick="triggerTargetPreset('Sexual/Inappropriate (CoC)', 'Explicit sexual content, gestures, or inflammatory topics.')"
+                                class="bg-slate-950/80 hover:bg-violet-950/80 hover:border-violet-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-violet-300 relative group overflow-hidden"
+                                title="Send immediate Sexual/Inappropriate report to webhook"
+                        >
+                            <i data-lucide="alert-triangle" class="h-3.5 w-3.5 text-violet-400"></i>
+                            <span class="font-extrabold text-[10px]">Inappropriate</span>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="space-y-1.5 pt-2">
                     <div>
                 <span class="block text-[10px] uppercase font-extrabold text-[#10b981] tracking-wider mb-1.5 flex items-center gap-1">
@@ -241,28 +279,11 @@
                     <i data-lucide="binary" class="h-3.5 w-3.5 text-emerald-400"></i>
                     Step 3: Local Rules Engine Preview
                   </span>
-                            <span class="text-[9px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-0.5 rounded font-extrabold uppercase select-none">
-                    Running Live
-                  </span>
                         </div>
 
-                        <p class="text-[10px] text-slate-300 leading-relaxed font-sans">
+                        <p class="text-[10px] text-slate-300 leading-relaxed font-sans pb-2">
                             The local engine parses your typed Details, attached evidence properties, and URLs, classifying the Code of Conduct (CoC) category automatically in real-time.
                         </p>
-
-                        <!-- Core Local Trigger Button -->
-                        <button
-                                type="button"
-                                id="btn-ai-reasoning"
-                                onclick="triggerAIReasoning()"
-                                class="w-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-555 text-white font-extrabold text-xs py-3 rounded-2xl transition-all shadow-md hover:shadow-emerald-500/10 border border-emerald-500/20 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
-                                title="Force refresh deterministic keyword/rule reasoning"
-                        >
-                            <i data-lucide="refresh-cw" class="h-4.5 w-4.5" id="ai-reason-icon-idle"></i>
-                            <!-- Spinner -->
-                            <div id="ai-reason-spinner" class="hidden h-4.5 w-4.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            <span id="btn-ai-reasoning-text">Refresh Rules Reasoning</span>
-                        </button>
 
                         <!-- Small Config Controls under the button -->
                         <div class="flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-900/60 pt-3 flex-wrap gap-2">
@@ -294,58 +315,20 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="pt-2">
                             <button
                                     onclick="dispatchFastPresetEmbed()"
-                                    class="text-[#10b981] hover:text-[#34d399] font-extrabold uppercase flex items-center gap-1 transition-colors cursor-pointer text-[9px]"
+                                    class="w-full bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/50 text-white shadow-lg shadow-emerald-900/20 font-extrabold uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer text-xs py-3 px-4 rounded-xl"
                                     title="Send current preview details straight to Discord Webhook"
                             >
-                                <i data-lucide="send" class="h-3 w-3"></i>
-                                Confirm & Send Webhook
+                                <i data-lucide="send" class="h-4.5 w-4.5"></i>
+                                Log
                             </button>
                         </div>
 
-                        <!-- Sub-section: Quick Manual Presets -->
-                        <div class="space-y-2 pt-2 border-t border-slate-900/40">
-                  <span class="block text-[8.5px] uppercase font-bold tracking-wider text-slate-500">
-                    Or Select a Quick Manual Override Preset
-                  </span>
 
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                <button
-                                        onclick="triggerTargetPreset('Underage (CoC)', 'Player is underage or using an improper account.')"
-                                        class="bg-slate-950/80 hover:bg-indigo-950/80 hover:border-indigo-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-indigo-300 relative group overflow-hidden"
-                                        title="Send immediate Underage report to webhook"
-                                >
-                                    <i data-lucide="user-minus" class="h-3.5 w-3.5 text-indigo-400"></i>
-                                    <span class="font-extrabold text-[10px]">Underage</span>
-                                </button>
-                                <button
-                                        onclick="triggerTargetPreset('Harassment/Discrimination (CoC)', 'Sexist, racist, discriminatory or harassing language/behavior.')"
-                                        class="bg-slate-950/80 hover:bg-amber-950/80 hover:border-amber-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-amber-300 relative group overflow-hidden"
-                                        title="Send immediate Harassment/Discrimination report to webhook"
-                                >
-                                    <i data-lucide="frown" class="h-3.5 w-3.5 text-amber-400"></i>
-                                    <span class="font-extrabold text-[10px]">Abuse/Harassment</span>
-                                </button>
-                                <button
-                                        onclick="triggerTargetPreset('Disruptive/Cheating (CoC)', 'Disruptive trolling, cheating, or abusing in-game moderation tools.')"
-                                        class="bg-slate-950/80 hover:bg-rose-950/80 hover:border-rose-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-rose-300 relative group overflow-hidden"
-                                        title="Send immediate Disruptive/Cheating report to webhook"
-                                >
-                                    <i data-lucide="swords" class="h-3.5 w-3.5 text-rose-400"></i>
-                                    <span class="font-extrabold text-[10px]">Disruptive</span>
-                                </button>
-                                <button
-                                        onclick="triggerTargetPreset('Sexual/Inappropriate (CoC)', 'Explicit sexual content, gestures, or inflammatory topics.')"
-                                        class="bg-slate-950/80 hover:bg-violet-950/80 hover:border-violet-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-violet-300 relative group overflow-hidden"
-                                        title="Send immediate Sexual/Inappropriate report to webhook"
-                                >
-                                    <i data-lucide="alert-triangle" class="h-3.5 w-3.5 text-violet-400"></i>
-                                    <span class="font-extrabold text-[10px]">Inappropriate</span>
-                                </button>
-                            </div>
-                        </div>
 
                     </div>
                 </div>
@@ -933,58 +916,6 @@
                 customInput.value = "";
                 runAutomaticLocalRules(true);
             }
-        }
-    }
-
-    // Explicit trigger button for Interactive Local Rules Pipeline
-    async function triggerAIReasoning() {
-        const violatorInput = document.getElementById("game-target-username").value.trim();
-        if (!violatorInput || violatorInput === "@") {
-            showNotification("error", "Provide the violator's username or target handle in Step 1 to execute automatic reasoning.");
-            document.getElementById("game-target-username").focus();
-            return;
-        }
-
-        const targetClean = violatorInput.startsWith("@") ? violatorInput : "@" + violatorInput;
-
-        // UI Selectors
-        const aiBtn = document.getElementById("btn-ai-reasoning");
-        const aiIconId = document.getElementById("ai-reason-icon-idle");
-        const aiSpinner = document.getElementById("ai-reason-spinner");
-        const aiBtnText = document.getElementById("btn-ai-reasoning-text");
-
-        // Set Loading State
-        if (aiBtn) aiBtn.setAttribute("disabled", "true");
-        if (aiIconId) aiIconId.classList.add("hidden");
-        if (aiSpinner) aiSpinner.classList.remove("hidden");
-        if (aiBtnText) aiBtnText.textContent = "⚙️ Executing Local Rules Engine...";
-
-        // Real satisfying thinking simulation delay (200ms)
-        await new Promise(resolve => setTimeout(resolve, 200));
-
-        try {
-            runAutomaticLocalRules();
-
-            let successMessage = `🎯 Local automatic decision refreshed! Classified as: CoC: ${activePresetCategory}`;
-
-            // Clipboard sync
-            if (CONFIG.autoCopy) {
-                const formattedRecord = `👤 **User**: ${targetClean} - 📜 **Category**: CoC: ${activePresetCategory} - 📝 **Details**: ${activePresetDetails}`;
-                await navigator.clipboard.writeText(formattedRecord);
-                successMessage += " Auto-copied ban record!";
-            }
-
-            showNotification("success", successMessage);
-
-        } catch (e) {
-            console.error("Local Reasoning Error:", e);
-            showNotification("error", "Exception in deterministic rule execution pipeline: " + e.message);
-        } finally {
-            // Restore button UI state
-            if (aiBtn) aiBtn.removeAttribute("disabled");
-            if (aiIconId) aiIconId.classList.remove("hidden");
-            if (aiSpinner) aiSpinner.classList.add("hidden");
-            if (aiBtnText) aiBtnText.textContent = "Run Local Automatic Reasoning";
         }
     }
 
