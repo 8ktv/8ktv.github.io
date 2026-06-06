@@ -910,7 +910,7 @@
 
             // Clipboard sync
             if (CONFIG.autoCopy) {
-                const formattedRecord = `${targetClean} - Reason for Ban: CoC: ${activePresetCategory} - Evidence: ${activePresetDetails}`;
+                const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${targetClean}\n:scroll: **Category**: CoC: ${activePresetCategory}\n:pencil: **Details**: ${activePresetDetails}\n:calendar_spiral: **Timestamp**: ${new Date().toLocaleString()}`;
                 await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Auto-copied ban record!";
             }
@@ -981,7 +981,7 @@
 
         // Auto-Copy Ban Record
         if (CONFIG.autoCopy) {
-            const formattedRecord = `${finalReport.reportedName} - Reason for Ban: ${finalReport.category} - Evidence: ${finalReport.details}`;
+            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName}\n:scroll: **Category**: ${finalReport.category}\n:pencil: **Details**: ${finalReport.details}\n:calendar_spiral: **Timestamp**: ${finalReport.timestamp}\n`;
             await navigator.clipboard.writeText(formattedRecord);
             sMessage += " Banned line copied automatically!";
         }
@@ -1099,7 +1099,7 @@
 
         // Direct Clipboard push
         if (CONFIG.autoCopy) {
-            const formattedRecord = `${finalObj.reportedName} - Reason for Ban: ${finalObj.category} - Evidence: ${finalObj.details}`;
+            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalObj.reportedName}\n:scroll: **Category**: ${finalObj.category}\n:pencil: **Details**: ${finalObj.details}\n:calendar_spiral: **Timestamp**: ${new Date().toLocaleString()}\n`;
             await navigator.clipboard.writeText(formattedRecord);
             successFeedback += " Clipboard record prepared!";
         }
@@ -1469,7 +1469,7 @@
 
             // Automation step 1: Auto-Copy Ban Record Format
             if (CONFIG.autoCopy) {
-                const formattedRecord = `${finalReport.reportedName || "@unknown"} - Reason for Ban: ${finalReport.category || "General Violation"} - Evidence: ${finalReport.details || "(none)"}`;
+                const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName || "@unknown"}\n:scroll: **Category**: ${finalReport.category || "General Violation"}\n:pencil: **Details**: ${finalReport.details || "(none)"}\n:calendar_spiral: **Timestamp**: ${new Date().toLocaleString()}`;
 
                 await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Copied new RecRoom ban record to your clipboard automatically!";
@@ -1655,7 +1655,9 @@
             evidence = "(none)";
         }
 
-        return `${user} - Reason for Ban: ${reason} - Evidence: ${evidence}`;
+        const timestamp = item.timestamp || new Date().toLocaleString();
+
+        return `:bust_in_silhouette: **User**: ${user}\n:scroll: **Category**: ${reason}\n:pencil: **Details**: ${evidence}\n:calendar_spiral: **Timestamp**: ${timestamp}`;
     }
 
     // Copy Single element to clipboard
@@ -1663,7 +1665,9 @@
         const item = CONFIG.history.find(h => h.id === itemId);
         if (!item) return;
 
-        const fullOutput = getRecRoomRecordLine(item);
+        const header = ":no_entry_sign: **BANNED USER RECORD**\n";
+        const body = getRecRoomRecordLine(item);
+        const fullOutput = header + body;
 
         navigator.clipboard.writeText(fullOutput)
             .then(() => {
@@ -1698,7 +1702,9 @@
             return;
         }
 
-        const fullOutputCombined = CONFIG.history.map(item => getRecRoomRecordLine(item)).join("\n");
+        const header = ":no_entry_sign: **BANNED USER RECORD**\n";
+        const bodyLines = CONFIG.history.map(item => getRecRoomRecordLine(item)).join("\n\n");
+        const fullOutputCombined = header + bodyLines;
 
         navigator.clipboard.writeText(fullOutputCombined)
             .then(() => {
