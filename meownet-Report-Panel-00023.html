@@ -116,11 +116,11 @@
         <!-- Console Panel -->
         <div class="w-full">
             <!-- 🎮 In-Game Fast-Command Console (Hands-Free Mode) -->
-            <div class="bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 p-6 space-y-4 shadow-xl relative overflow-hidden">
+            <div class="bg-slate-800 text-slate-100 rounded-3xl border border-slate-700 p-6 space-y-4 shadow-xl relative overflow-hidden">
                 <!-- Glow background style -->
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-xl pointer-events-none"></div>
 
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center justify-between border-b border-slate-700 pb-3">
                     <div class="flex items-center gap-2">
                         <div class="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400">
                             <i data-lucide="gamepad-2" class="h-4.5 w-4.5"></i>
@@ -135,63 +135,9 @@
               </span>
                 </div>
 
-                <!-- Sticky Moderator Profile Setup -->
-                <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800/80 space-y-2">
-                    <div class="flex items-center justify-between">
-                <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                  <i data-lucide="user-cog" class="h-3 w-3 text-indigo-400"></i>
-                  My Moderator Profile Credentials
-                </span>
-                        <span class="text-[9px] text-slate-500 italic">Saved locally for session reuse</span>
-                    </div>
 
-                    <div class="grid grid-cols-1">
-                        <div>
-                            <label class="block text-[8px] uppercase font-bold tracking-wider text-slate-500 mb-0.5">My Mod Tag</label>
-                            <input
-                                    type="text"
-                                    id="sticky-mod-name"
-                                    class="w-full bg-slate-900 border border-slate-800 text-white rounded px-2 py-1 text-[11px] focus:outline-none focus:border-indigo-500 font-mono"
-                                    value="@ModPurr"
-                                    oninput="saveStickyModProfile()"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CLI Command Input Console Row -->
-                <div class="space-y-1.5">
-                    <label class="block text-[10px] uppercase font-extrabold text-slate-400 tracking-wider">
-                        Slash Shortcut Command Line
-                    </label>
-
-                    <div class="relative">
-                        <span class="absolute left-3.5 top-2.5 text-slate-500 font-bold text-xs select-none">/</span>
-                        <input
-                                type="text"
-                                id="console-command-input"
-                                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-500/20 rounded-xl pl-6 pr-12 py-2 text-xs text-white placeholder-slate-600 focus:outline-none font-mono tracking-wide"
-                                placeholder="ban @violator underage sound like 10 yrs old"
-                                oninput="onConsoleInputChange(this.value)"
-                                onkeydown="handleConsoleInputKey(event)"
-                        />
-                        <button
-                                onclick="triggerInstantConsoleCommand()"
-                                class="absolute right-1.5 top-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all"
-                                title="Parse and trigger direct webhook send"
-                        >
-                            Fire
-                        </button>
-                    </div>
-                    <p class="text-[9px] text-slate-500 leading-relaxed font-mono">
-                        Syntax: <span class="text-indigo-400">/ban @[username] [category-keyword] [reason text]</span>. Press <kbd class="bg-slate-800 px-1 py-0.2 rounded text-slate-300">Enter</kbd> to dispatch immediately!
-                    </p>
-                </div>
-
-                <!-- Predefined Rapid Presets Grid -->
-                <div class="space-y-3.5 pt-1">
-                    <div class="flex-grow border-t border-slate-800/80 my-2"></div>
-
+                <!-- Step 1: Enter Violator Handle (Type first) -->
+                <div class="space-y-1.5 pt-2">
                     <div>
                 <span class="block text-[10px] uppercase font-extrabold text-[#10b981] tracking-wider mb-1.5 flex items-center gap-1">
                   <span class="h-1.5 w-1.5 rounded-full bg-[#10b981] animate-ping"></span>
@@ -200,7 +146,7 @@
                         <input
                                 type="text"
                                 id="game-target-username"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#10b981] font-mono shadow-inner"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#10b981] font-mono shadow-inner"
                                 value="@"
                                 placeholder="e.g. @abusive_player"
                                 oninput="updatePresetTargetLabel(this.value)"
@@ -208,7 +154,7 @@
                     </div>
 
                     <!-- Step 2: Customize Reason & Evidence (Video/Picture) Attachment -->
-                    <div class="space-y-3.5 bg-slate-950/40 p-4 rounded-xl border border-slate-800/60">
+                    <div class="space-y-3.5 bg-slate-950/40 p-4 rounded-2xl border border-slate-700/60">
                 <span class="block text-[10px] uppercase font-extrabold text-indigo-400 tracking-wider flex items-center gap-1">
                   <i data-lucide="file-plus-2" class="h-3.5 w-3.5 text-indigo-400"></i>
                   Step 2: Customize Reason & Specific Evidence (Optional)
@@ -225,7 +171,7 @@
                             <textarea
                                     id="evidence-details-input"
                                     rows="2"
-                                    class="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder-slate-700 focus:outline-none focus:border-[#4f46e5]/80 font-sans leading-relaxed"
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3 py-2 text-xs text-slate-200 placeholder-slate-700 focus:outline-none focus:border-[#4f46e5]/80 font-sans leading-relaxed"
                                     placeholder="Provide specific reason details (e.g. 'toxic voice chat and slurs')"
                                     oninput="onCustomReasonChange(this.value)"
                             ></textarea>
@@ -245,7 +191,7 @@
                                 <input
                                         type="text"
                                         id="evidence-media-url-input"
-                                        class="w-full bg-slate-950 border border-slate-850 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/10 rounded-xl pl-3 pr-20 py-2.5 text-xs text-slate-300 placeholder-slate-700 focus:outline-none font-mono"
+                                        class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/10 rounded-2xl pl-3 pr-20 py-2.5 text-xs text-slate-300 placeholder-slate-700 focus:outline-none font-mono"
                                         placeholder="Paste e.g. YouTube, streamable or Imgur link..."
                                         oninput="onEvidenceUrlChange(this.value)"
                                 />
@@ -253,7 +199,7 @@
                                     <button
                                             type="button"
                                             onclick="triggerEvidenceFileInput()"
-                                            class="bg-indigo-600/80 hover:bg-indigo-600 text-white text-[9.5px] font-extrabold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+                                            class="bg-indigo-600/80 hover:bg-indigo-600 text-white text-[9.5px] font-extrabold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 cursor-pointer"
                                             title="Upload a screenshot or video file directly"
                                     >
                                         <i data-lucide="paperclip" class="h-3 w-3"></i>
@@ -274,7 +220,7 @@
                             <!-- Dropzone drag zone block -->
                             <div
                                     id="evidence-dropzone"
-                                    class="border border-dashed border-slate-800 hover:border-indigo-900 rounded-xl p-3 text-center text-slate-500 hover:text-slate-400 bg-slate-950/20 transition-all text-xs cursor-pointer flex items-center justify-center gap-2 mt-1"
+                                    class="border border-dashed border-slate-700 hover:border-indigo-700 rounded-2xl p-3 text-center text-slate-500 hover:text-slate-400 bg-slate-950/20 transition-all text-xs cursor-pointer flex items-center justify-center gap-2 mt-1"
                                     onclick="triggerEvidenceFileInput()"
                                     ondragover="handleEvidenceDragOver(event)"
                                     ondragleave="handleEvidenceDragLeave(event)"
@@ -285,20 +231,20 @@
                             </div>
 
                             <!-- Selected item metadata card preview -->
-                            <div id="evidence-media-preview-box" class="hidden mt-2 p-2.5 bg-slate-950 border border-slate-850 rounded-xl flex flex-col gap-2 relative">
+                            <div id="evidence-media-preview-box" class="hidden mt-2 p-2.5 bg-slate-950 border border-slate-800 rounded-2xl flex flex-col gap-2 relative">
                                 <!-- Preview Container -->
-                                <div class="flex items-center justify-center bg-black/40 rounded-lg overflow-hidden max-h-40 relative border border-slate-850 p-1">
+                                <div class="flex items-center justify-center bg-black/40 rounded-xl overflow-hidden max-h-40 relative border border-slate-800 p-1">
                                     <img id="evidence-image-preview" src="" class="hidden max-h-36 object-contain" />
                                     <video id="evidence-video-preview" src="" class="hidden max-h-36" controls></video>
                                 </div>
 
                                 <!-- File Info description -->
-                                <div class="flex items-center justify-between text-[10px] bg-slate-900/60 p-2 rounded-lg border border-slate-850/40">
+                                <div class="flex items-center justify-between text-[10px] bg-slate-900/60 p-2 rounded-xl border border-slate-800/40">
                                     <span id="evidence-metadata" class="text-slate-300 font-bold truncate font-mono max-w-[70%]"></span>
                                     <button
                                             type="button"
                                             onclick="clearAttachedEvidence()"
-                                            class="text-red-400 hover:text-red-300 font-extrabold hover:underline py-1 px-2.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-[9.5px] bg-red-500/10 hover:bg-red-500/20"
+                                            class="text-red-400 hover:text-red-300 font-extrabold hover:underline py-1 px-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 text-[9.5px] bg-red-500/10 hover:bg-red-500/20"
                                     >
                                         <i data-lucide="trash-2" class="h-3 w-3 text-red-400"></i>
                                         Clear File
@@ -309,7 +255,7 @@
                     </div>
 
                     <!-- Step 3: Local Rules Engine Preview -->
-                    <div class="space-y-4 bg-slate-950/60 p-4 rounded-xl border border-emerald-950/80">
+                    <div class="space-y-4 bg-slate-950/60 p-4 rounded-2xl border border-emerald-900/80">
                         <div class="flex items-center justify-between mb-1">
                   <span class="block text-[10px] uppercase font-extrabold text-emerald-400 tracking-wider flex items-center gap-1">
                     <i data-lucide="binary" class="h-3.5 w-3.5 text-emerald-400"></i>
@@ -329,7 +275,7 @@
                                 type="button"
                                 id="btn-ai-reasoning"
                                 onclick="triggerAIReasoning()"
-                                class="w-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-555 text-white font-extrabold text-xs py-3 rounded-xl transition-all shadow-md hover:shadow-emerald-500/10 border border-emerald-500/20 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+                                class="w-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:to-teal-555 text-white font-extrabold text-xs py-3 rounded-2xl transition-all shadow-md hover:shadow-emerald-500/10 border border-emerald-500/20 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
                                 title="Force refresh deterministic keyword/rule reasoning"
                         >
                             <i data-lucide="refresh-cw" class="h-4.5 w-4.5" id="ai-reason-icon-idle"></i>
@@ -363,36 +309,36 @@
 
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                 <button
-                                        onclick="triggerTargetPreset('Underage (100)', 'Player admitted to being under age limit in game.')"
-                                        class="bg-slate-950/80 hover:bg-indigo-950/80 hover:border-indigo-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-indigo-300 relative group overflow-hidden"
+                                        onclick="triggerTargetPreset('Underage (CoC)', 'Player is underage or using an improper account.')"
+                                        class="bg-slate-950/80 hover:bg-indigo-950/80 hover:border-indigo-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-indigo-300 relative group overflow-hidden"
                                         title="Send immediate Underage report to webhook"
                                 >
                                     <i data-lucide="user-minus" class="h-3.5 w-3.5 text-indigo-400"></i>
                                     <span class="font-extrabold text-[10px]">Underage</span>
                                 </button>
                                 <button
-                                        onclick="triggerTargetPreset('Toxicity (102)', 'Extreme verbal harassment and toxic slurs directed at players.')"
-                                        class="bg-slate-950/80 hover:bg-amber-950/80 hover:border-amber-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-amber-300 relative group overflow-hidden"
-                                        title="Send immediate Toxicity report to webhook"
+                                        onclick="triggerTargetPreset('Harassment/Discrimination (CoC)', 'Sexist, racist, discriminatory or harassing language/behavior.')"
+                                        class="bg-slate-950/80 hover:bg-amber-950/80 hover:border-amber-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-amber-300 relative group overflow-hidden"
+                                        title="Send immediate Harassment/Discrimination report to webhook"
                                 >
                                     <i data-lucide="frown" class="h-3.5 w-3.5 text-amber-400"></i>
-                                    <span class="font-extrabold text-[10px]">Toxicity</span>
+                                    <span class="font-extrabold text-[10px]">Abuse/Harassment</span>
                                 </button>
                                 <button
-                                        onclick="triggerTargetPreset('Griefing (103)', 'Friendly fire, team killing and intentional lobby disruption.')"
-                                        class="bg-slate-950/80 hover:bg-rose-950/80 hover:border-rose-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-rose-300 relative group overflow-hidden"
-                                        title="Send immediate Griefing report to webhook"
+                                        onclick="triggerTargetPreset('Disruptive/Cheating (CoC)', 'Disruptive trolling, cheating, or abusing in-game moderation tools.')"
+                                        class="bg-slate-950/80 hover:bg-rose-950/80 hover:border-rose-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-rose-300 relative group overflow-hidden"
+                                        title="Send immediate Disruptive/Cheating report to webhook"
                                 >
                                     <i data-lucide="swords" class="h-3.5 w-3.5 text-rose-400"></i>
-                                    <span class="font-extrabold text-[10px]">Griefing</span>
+                                    <span class="font-extrabold text-[10px]">Disruptive</span>
                                 </button>
                                 <button
-                                        onclick="triggerTargetPreset('Sexual (101)', 'Explicit sexual gestures, drawing symbols, and offensive voice.')"
-                                        class="bg-slate-950/80 hover:bg-violet-950/80 hover:border-violet-900 transition-all border border-slate-800/80 rounded-xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-violet-300 relative group overflow-hidden"
-                                        title="Send immediate Sexual CoC report to webhook"
+                                        onclick="triggerTargetPreset('Sexual/Inappropriate (CoC)', 'Explicit sexual content, gestures, or inflammatory topics.')"
+                                        class="bg-slate-950/80 hover:bg-violet-950/80 hover:border-violet-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-violet-300 relative group overflow-hidden"
+                                        title="Send immediate Sexual/Inappropriate report to webhook"
                                 >
                                     <i data-lucide="alert-triangle" class="h-3.5 w-3.5 text-violet-400"></i>
-                                    <span class="font-extrabold text-[10px]">Sexual CoC</span>
+                                    <span class="font-extrabold text-[10px]">Inappropriate</span>
                                 </button>
                             </div>
                         </div>
@@ -400,7 +346,7 @@
                 </div>
 
                 <!-- Manual Backup / Config Override Dispatch -->
-                <div id="manual-dispatch-row" class="flex gap-2 items-center justify-between text-[11px] text-slate-400 bg-slate-950/40 p-2.5 rounded-xl border border-slate-800/60">
+                <div id="manual-dispatch-row" class="flex gap-2 items-center justify-between text-[11px] text-slate-400 bg-slate-950/40 p-2.5 rounded-2xl border border-slate-700/60">
               <span class="flex items-center gap-1 text-[10px]">
                 <i data-lucide="help-circle" class="h-3.5 w-3.5 text-indigo-400"></i>
                 Tip: Enter username first, then tap any macro to deliver instantly.
@@ -413,10 +359,6 @@
                         <i data-lucide="arrow-right-circle" class="h-3.5 w-3.5"></i>
                         Force Deliver
                     </button>
-                </div>
-
-                <div id="live-parsed-console-status" class="text-[9px] text-slate-500 italic font-mono bg-slate-950/40 p-2 rounded border border-slate-850 hidden">
-                    System Console Status: Listening for terminal command sequences...
                 </div>
             </div>
         </div>
@@ -587,16 +529,16 @@
             </div>
 
             <!-- Dispatched Output History list log -->
-            <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6 space-y-4 shadow-sm">
-                <div class="flex items-center justify-between border-b border-gray-800 pb-3 flex-wrap gap-2">
+            <div class="bg-slate-800 rounded-3xl border border-slate-700 p-6 space-y-4 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-700 pb-3 flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <i data-lucide="file-text" class="text-indigo-400 h-4.5 w-4.5"></i>
-                        <h3 class="text-sm font-extrabold text-gray-100">Dispatcher Log Output History</h3>
+                        <h3 class="text-sm font-extrabold text-white">Dispatcher Log Output History</h3>
                     </div>
                     <div id="history-header-actions" class="hidden flex items-center gap-2 flex-wrap">
                         <button
                                 onclick="copyAllRecRoomFormat()"
-                                class="text-xs text-indigo-300 bg-indigo-900/50 hover:bg-indigo-900 border border-indigo-700 rounded-xl px-3 py-1.5 transition-all cursor-pointer font-bold flex items-center gap-1 shadow-xs"
+                                class="text-xs text-indigo-300 bg-indigo-900/50 hover:bg-indigo-900 border border-indigo-700 rounded-2xl px-3 py-1.5 transition-all cursor-pointer font-bold flex items-center gap-1 shadow-xs"
                                 title="Copy all history records grouped as a combined Ban Record summary formatted for RecRoom"
                         >
                             <i data-lucide="clipboard" class="h-3 w-3"></i>
@@ -612,12 +554,12 @@
                 </div>
 
                 <!-- Empty list fallback -->
-                <div id="history-empty" class="text-center py-6 text-gray-500 text-xs italic">
+                <div id="history-empty" class="text-center py-6 text-gray-400 text-xs italic">
                     No reports have been dispatched yet in this browser session. Select a report screenshot, scan layout variables, and dispatch to compile log lists here.
                 </div>
 
                 <!-- Active List content -->
-                <div id="history-list" class="hidden max-h-[300px] overflow-y-auto space-y-2.5 divide-y divide-gray-800 pr-2">
+                <div id="history-list" class="hidden max-h-[300px] overflow-y-auto space-y-2.5 divide-y divide-slate-700 pr-2">
                     <!-- Rendered via JS -->
                 </div>
             </div>
@@ -809,15 +751,13 @@
 
     // Page startup hook initialization
     window.addEventListener('DOMContentLoaded', () => {
-        // Initialize sticky in-game moderator profiles
-        document.getElementById("sticky-mod-name").value = localStorage.getItem("discohook_sticky_mod_name") || "@ModPurr";
-
         // Initialize active parsed fields from variables
         loadReportToForm(ACTIVE_REPORT);
 
         // Push initial default violator state of "@"
-        const initTargetVal = document.getElementById("game-target-username").value;
+        const initTargetVal = document.getElementById("game-target-username")?.value || "";
         updatePresetTargetLabel(initTargetVal);
+
 
         // Refresh preview box elements based on initial values
         updateDiscordPreviewStyles();
@@ -828,12 +768,6 @@
         // Instantiates SVG icons across custom nodes
         lucide.createIcons();
     });
-
-    // Persistent Sticky Moderator profiles
-    function saveStickyModProfile() {
-        const name = document.getElementById("sticky-mod-name").value;
-        localStorage.setItem("discohook_sticky_mod_name", name);
-    }
 
     // Live keyboard command line listeners
     let activePresetCategory = "Underage (100)";
@@ -976,9 +910,8 @@
 
             // Clipboard sync
             if (CONFIG.autoCopy) {
-                const line = `${targetClean} - Reason for Ban: CoC: ${activePresetCategory} - Evidence: ${activePresetDetails}`;
-                const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD (AUTOMATED RULES)\n━━━━━━━━━━━━━━━━━━ \n\n`;
-                await navigator.clipboard.writeText(header + line);
+                const formattedRecord = `🚫 **BANNED USER RECORD (AUTOMATED RULES)**\n👤 **User**: ${targetClean}\n📜 **Category**: CoC: ${activePresetCategory}\n📝 **Details**: ${activePresetDetails}\n`;
+                await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Auto-copied ban record!";
             }
 
@@ -1031,7 +964,7 @@
 
         // Hydrate state
         const finalReport = {
-            reporterName: document.getElementById("sticky-mod-name").value || "@ModPurr",
+            reporterName: "@ModPurr",
             reportedName: targetClean,
             category: activePresetCategory.startsWith("CoC: ") ? activePresetCategory : "CoC: " + activePresetCategory,
             timestamp: "Today at " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -1048,9 +981,8 @@
 
         // Auto-Copy Ban Record
         if (CONFIG.autoCopy) {
-            const line = `${finalReport.reportedName} - Reason for Ban: ${finalReport.category} - Evidence: ${finalReport.details}`;
-            const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
-            await navigator.clipboard.writeText(header + line);
+            const formattedRecord = `🚫 **BANNED USER RECORD**\n👤 **User**: ${finalReport.reportedName}\n📜 **Category**: ${finalReport.category}\n📝 **Details**: ${finalReport.details}\n🗓️ **Timestamp**: ${finalReport.timestamp}\n`;
+            await navigator.clipboard.writeText(formattedRecord);
             sMessage += " Banned line copied automatically!";
         }
 
@@ -1154,7 +1086,7 @@
 
         // Build composite struct
         const finalObj = {
-            reporterName: document.getElementById("sticky-mod-name").value || "@ModPurr",
+            reporterName: "@ModPurr",
             reportedName: targetName,
             category: resolvedCategory,
             timestamp: "Today at " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -1167,9 +1099,8 @@
 
         // Direct Clipboard push
         if (CONFIG.autoCopy) {
-            const line = `${finalObj.reportedName} - Reason for Ban: ${finalObj.category} - Evidence: ${finalObj.details}`;
-            const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
-            await navigator.clipboard.writeText(header + line);
+            const formattedRecord = `🚫 **BANNED USER RECORD**\n👤 **User**: ${finalObj.reportedName}\n📜 **Category**: ${finalObj.category}\n📝 **Details**: ${finalObj.details}\n`;
+            await navigator.clipboard.writeText(formattedRecord);
             successFeedback += " Clipboard record prepared!";
         }
 
@@ -1538,10 +1469,9 @@
 
             // Automation step 1: Auto-Copy Ban Record Format
             if (CONFIG.autoCopy) {
-                const line = `${finalReport.reportedName || "@unknown"} - Reason for Ban: ${finalReport.category || "General Violation"} - Evidence: ${finalReport.details || "(none)"}`;
-                const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
+                const formattedRecord = `🚫 **BANNED USER RECORD**\n👤 **User**: ${finalReport.reportedName || "@unknown"}\n📜 **Category**: ${finalReport.category || "General Violation"}\n📝 **Details**: ${finalReport.details || "(none)"}\n`;
 
-                await navigator.clipboard.writeText(header + line);
+                await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Copied new RecRoom ban record to your clipboard automatically!";
             }
 
@@ -1725,7 +1655,7 @@
             evidence = "(none)";
         }
 
-        return `${user} - Reason for Ban: ${reason} - Evidence: ${evidence}`;
+        return `🚫 **BANNED USER RECORD**\n👤 **User**: ${user}\n📜 **Category**: ${reason}\n📝 **Details**: ${evidence}\n🗓️ **Timestamp**: ${item.timestamp || new Date().toLocaleString()}\n`;
     }
 
     // Copy Single element to clipboard
@@ -1733,9 +1663,7 @@
         const item = CONFIG.history.find(h => h.id === itemId);
         if (!item) return;
 
-        const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
-        const line = getRecRoomRecordLine(item);
-        const fullOutput = header + line;
+        const fullOutput = getRecRoomRecordLine(item);
 
         navigator.clipboard.writeText(fullOutput)
             .then(() => {
@@ -1770,9 +1698,7 @@
             return;
         }
 
-        const header = `━━━━━━━━━━━━━━━━━━\n BANNED USER RECORD\n━━━━━━━━━━━━━━━━━━ \n\n`;
-        const lines = CONFIG.history.map(item => getRecRoomRecordLine(item)).join("\n");
-        const fullOutputCombined = header + lines;
+        const fullOutputCombined = CONFIG.history.map(item => getRecRoomRecordLine(item)).join("\n");
 
         navigator.clipboard.writeText(fullOutputCombined)
             .then(() => {
