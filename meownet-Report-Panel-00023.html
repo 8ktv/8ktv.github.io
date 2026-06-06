@@ -291,6 +291,23 @@
                     Interactive Local Rules Pipeline
                   </span>
 
+                            <!-- Birthyear calculator for Underage -->
+                            <div id="underage-birthyear-box" class="hidden space-y-1 mt-2 w-full">
+                                <label class="block text-[9px] uppercase font-bold tracking-wider text-emerald-400">
+                                    Verify Birthyear (Underage Check)
+                                </label>
+                                <div class="flex items-center gap-2">
+                                    <input
+                                            type="number"
+                                            id="birthyear-input"
+                                            class="w-24 bg-slate-950 border border-emerald-900 rounded-2xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                                            placeholder="YYYY"
+                                            oninput="onBirthyearChange(this.value)"
+                                    />
+                                    <span id="age-result" class="text-xs text-slate-400 font-mono"></span>
+                                </div>
+                            </div>
+
                             <button
                                     onclick="dispatchFastPresetEmbed()"
                                     class="text-[#10b981] hover:text-[#34d399] font-extrabold uppercase flex items-center gap-1 transition-colors cursor-pointer text-[9px]"
@@ -853,8 +870,16 @@
             reasonExplanation = rawReasonBox || "Be excellent to each other! General infraction of code of conduct guidelines.";
         }
 
+        const birthyearBox = document.getElementById("underage-birthyear-box");
+        if (classifiedCategory === "Underage (100)") {
+            birthyearBox.classList.remove("hidden");
+        } else {
+            birthyearBox.classList.add("hidden");
+        }
+
         // Apply local classification outcomes to active global variables
         activePresetCategory = classifiedCategory;
+
         if (isPlayingWithTyping) {
             reasonExplanation = rawReasonBox;
         }
@@ -875,6 +900,34 @@
         if (fieldDetails) fieldDetails.value = reasonExplanation || "(none)";
 
         updateDiscordPreviewStyles();
+    }
+
+    function onBirthyearChange(birthyear) {
+        const ageResult = document.getElementById("age-result");
+        if (!birthyear) {
+            ageResult.textContent = "";
+            return;
+        }
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - parseInt(birthyear);
+
+        if (age < 0) {
+            ageResult.textContent = "Invalid birthyear";
+            ageResult.classList.add("text-red-500");
+            return;
+        }
+
+        ageResult.classList.remove("text-red-500");
+        ageResult.textContent = `Age: ~${age} years old`;
+
+        if (age < 13) {
+            ageResult.classList.add("text-emerald-500");
+            ageResult.textContent += " (Underage confirmed)";
+        } else {
+            ageResult.classList.remove("text-emerald-500");
+            ageResult.classList.add("text-red-500");
+            ageResult.textContent += " (Not Underage)";
+        }
     }
 
     // Explicit trigger button for Interactive Local Rules Pipeline
@@ -929,7 +982,7 @@
         }
     }
 
-    async function triggerTargetPreset(category, defaultDetails) {
+    window.triggerTargetPreset = async function(category, defaultDetails) {
         // Just fill the reasoning box and let the pipeline decide
         const customInput = document.getElementById("evidence-details-input");
         if (customInput) {
