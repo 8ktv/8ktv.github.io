@@ -869,6 +869,16 @@
         ACTIVE_REPORT.category = "CoC: " + classifiedCategory;
         ACTIVE_REPORT.details = reasonExplanation || "(none)";
 
+        let calculatedAge = null;
+        if (classifiedCategory === "Underage") {
+            const byVal = document.getElementById("birthyear-input")?.value?.trim();
+            if (byVal) {
+                const currentYear = new Date().getFullYear();
+                calculatedAge = currentYear - parseInt(byVal);
+            }
+        }
+        ACTIVE_REPORT.age = calculatedAge;
+
         // Sync fields to the Live JSON Staging Queue
         const fieldReportedName = document.getElementById("field-reported-name");
         if (fieldReportedName) fieldReportedName.value = targetClean;
@@ -906,7 +916,6 @@
             ageResult.textContent += " (Underage confirmed)";
             if (customInput && (!customInput.value.trim() || customInput.value === "Player is underage or using an improper account.")) {
                 customInput.value = "junior account";
-                runAutomaticLocalRules(true);
             }
         } else {
             ageResult.classList.remove("text-emerald-500");
@@ -914,9 +923,9 @@
             ageResult.textContent += " (Not Underage)";
             if (customInput && customInput.value === "junior account") {
                 customInput.value = "";
-                runAutomaticLocalRules(true);
             }
         }
+        runAutomaticLocalRules(true);
     }
 
     window.triggerTargetPreset = async function(category, defaultDetails) {
@@ -954,29 +963,27 @@
             const hasBirthyear = birthyearInput && birthyearInput.value.trim().length > 0;
             const hasFailedCheck = customInput && customInput.value === 'junior account';
 
+            if (hasBirthyear) {
+                const currentYear = new Date().getFullYear();
+                calculatedAge = currentYear - parseInt(birthyearInput.value.trim());
+                if (calculatedAge >= 13 && !hasFailedCheck) {
+                    showNotification("success", `User is ${calculatedAge} years old and therefore not underage. Report skipped.`);
+                    if (birthyearInput) { birthyearInput.value = ""; onBirthyearChange(""); }
+                    return;
+                }
+            }
+
             if (!hasBirthyear && !hasFailedCheck) {
                 showNotification("error", "Underage check required. Please provide a birthyear or click 'Mark Junior' to confirm.");
                 if (birthyearInput) birthyearInput.focus();
                 return; // Stop here, so they can enter the value and dispatch
             }
 
-            if (hasBirthyear && !hasFailedCheck) {
-                const currentYear = new Date().getFullYear();
-                calculatedAge = currentYear - parseInt(birthyearInput.value.trim());
-                if (calculatedAge >= 13) {
-                    showNotification("success", `User is ${calculatedAge} years old and therefore not underage. Report skipped.`);
-                    // Optional: clear the birthyear 
-                    if (birthyearInput) { birthyearInput.value = ""; onBirthyearChange(""); }
-                    return;
-                } else {
-                    activePresetDetails = "junior account";
-                    if (customInput) customInput.value = "junior account";
-                    runAutomaticLocalRules(false);
-                }
-            } else if (hasFailedCheck) {
-                activePresetDetails = "junior account";
-                runAutomaticLocalRules(false);
+            activePresetDetails = "junior account";
+            if (customInput && customInput.value.trim() === "") {
+                customInput.value = "junior account";
             }
+            runAutomaticLocalRules(false);
         }
 
         const targetClean = violatorInput.startsWith("@") ? violatorInput : "@" + violatorInput;
@@ -989,7 +996,7 @@
             reporterName: "@ModPurr",
             reportedName: targetClean,
             category: activePresetCategory.startsWith("CoC: ") ? activePresetCategory : "CoC: " + activePresetCategory,
-            age: calculatedAge,
+            age: calculatedAge || ACTIVE_REPORT.age,
             timestamp: "Today at " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             details: detailsToUse,
             evidenceUrl: ACTIVE_REPORT.evidenceUrl,
