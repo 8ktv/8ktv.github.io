@@ -69,6 +69,12 @@
         </div>
 
         <div class="flex items-center gap-4">
+            <!-- Session Total Stats Badge -->
+            <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs px-3.5 py-1.5 rounded-full font-extrabold transition-all duration-300">
+                <span class="h-1.5 w-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+                <span>Completed: <strong class="text-white font-mono" id="header-reports-count">0</strong></span>
+            </div>
+
             <button
                     onclick="loadSampleData()"
                     class="text-sm text-slate-400 hover:text-white font-medium transition-colors"
@@ -104,250 +110,314 @@
             <div id="console-panel" class="bg-slate-900 border border-slate-800/80 rounded-3xl p-6 space-y-6 shadow-xl relative">
 
                 <!-- Console Header -->
-                <div class="flex items-center gap-3 border-b border-slate-800/60 pb-4 mb-2">
+                <div class="flex items-center gap-3 border-b border-slate-800/60 pb-3 mb-1">
                     <div class="p-2 rounded-xl bg-slate-950 text-indigo-400">
                         <i data-lucide="terminal" class="h-5 w-5"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-white tracking-tight">Command Console</h3>
-                        <p class="text-[11px] text-slate-500 font-medium">Dynamic dispatch controller</p>
+                        <h3 class="text-base font-bold text-white tracking-tight text-left">Guided Dispatch Console</h3>
+                        <p class="text-[11px] text-slate-500 font-medium text-left">Step-by-step report assistant</p>
                     </div>
                 </div>
-                <!-- Sub-section: Quick Manual Presets -->
-                <div class="space-y-2 pt-2 pb-4 border-b border-slate-900/60 mb-2">
-              <span class="block text-[8.5px] uppercase font-bold tracking-wider text-slate-500">
-                Quick Manual Override Presets (Select to load reason)
+
+                <!-- Wizard Progress Bar -->
+                <div id="wizard-progress-bar" class="flex flex-col gap-2 pb-2 border-b border-slate-900/60">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">Wizard Progress</span>
+                        <span id="wizard-navigation-label" class="text-[10px] uppercase font-mono tracking-wider text-indigo-450 font-extrabold text-[#818cf8]">Step 1 of 4</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 w-full mt-1">
+                        <!-- Step 1 Indicator -->
+                        <div id="step-badge-1" class="flex items-center justify-center h-6 w-6 rounded-full text-[10.5px] font-extrabold bg-indigo-600 text-white shadow-md shadow-indigo-950/40 transition-all duration-300">1</div>
+                        <div class="h-1 flex-1 bg-slate-950 rounded-full overflow-hidden">
+                            <div id="step-progress-1" class="h-full bg-indigo-500 w-0 transition-all duration-300"></div>
+                        </div>
+                        <!-- Step 2 Indicator -->
+                        <div id="step-badge-2" class="flex items-center justify-center h-6 w-6 rounded-full text-[10.5px] font-extrabold bg-slate-950 text-slate-500 transition-all duration-300">2</div>
+                        <div class="h-1 flex-1 bg-slate-950 rounded-full overflow-hidden">
+                            <div id="step-progress-2" class="h-full bg-indigo-500 w-0 transition-all duration-300"></div>
+                        </div>
+                        <!-- Step 3 Indicator -->
+                        <div id="step-badge-3" class="flex items-center justify-center h-6 w-6 rounded-full text-[10.5px] font-extrabold bg-slate-950 text-slate-500 transition-all duration-300">3</div>
+                        <div class="h-1 flex-1 bg-slate-950 rounded-full overflow-hidden">
+                            <div id="step-progress-3" class="h-full bg-indigo-500 w-0 transition-all duration-300"></div>
+                        </div>
+                        <!-- Step 4 Indicator -->
+                        <div id="step-badge-4" class="flex items-center justify-center h-6 w-6 rounded-full text-[10.5px] font-extrabold bg-slate-950 text-slate-500 transition-all duration-300">4</div>
+                    </div>
+                </div>
+
+                <!-- STEP 1 CONTAINER: Choose an Override -->
+                <div id="wizard-step-1" class="space-y-4 pt-1">
+              <span class="block text-[10.5px] uppercase font-extrabold text-blue-400 tracking-wider flex items-center gap-1.5">
+                <i data-lucide="sliders" class="h-3.5 w-3.5 text-blue-400"></i>
+                Step 1: Choose an override preset
               </span>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div class="grid grid-cols-2 gap-2.5">
                         <button
-                                onclick="triggerTargetPreset('Underage (CoC)', 'Player is underage or using an improper account.')"
-                                class="bg-slate-950/80 hover:bg-indigo-950/80 hover:border-indigo-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-indigo-300 relative group overflow-hidden"
-                                title="Send immediate Underage report to webhook"
+                                onclick="selectPresetAndAdvance('Underage', 'Player admitted to being under age limit in game.')"
+                                class="bg-slate-950/80 hover:bg-indigo-950/80 hover:border-indigo-900 transition-all border border-slate-800/80 rounded-2xl p-4 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-2 text-indigo-300 relative group overflow-hidden"
+                                title="Choose Underage preset"
                         >
-                            <i data-lucide="user-minus" class="h-3.5 w-3.5 text-indigo-400"></i>
-                            <span class="font-extrabold text-[10px]">Underage</span>
+                            <i data-lucide="user-minus" class="h-5 w-5 text-indigo-400 animate-pulse"></i>
+                            <span class="font-extrabold text-[11px]">Underage</span>
                         </button>
                         <button
-                                onclick="triggerTargetPreset('Harassment/Discrimination (CoC)', 'Sexist, racist, discriminatory or harassing language/behavior.')"
-                                class="bg-slate-950/80 hover:bg-amber-950/80 hover:border-amber-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-amber-300 relative group overflow-hidden"
-                                title="Send immediate Harassment/Discrimination report to webhook"
+                                onclick="selectPresetAndAdvance('Harassment & Hate', 'Sexist, racist, discriminatory or harassing language/behavior.')"
+                                class="bg-slate-950/80 hover:bg-amber-950/80 hover:border-amber-900 transition-all border border-slate-800/80 rounded-2xl p-4 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-2 text-amber-300 relative group overflow-hidden"
+                                title="Choose Abuse/Harassment preset"
                         >
-                            <i data-lucide="frown" class="h-3.5 w-3.5 text-amber-400"></i>
-                            <span class="font-extrabold text-[10px]">Abuse/Harassment</span>
+                            <i data-lucide="frown" class="h-5 w-5 text-amber-400"></i>
+                            <span class="font-extrabold text-[11px]">Abuse / Hate</span>
                         </button>
                         <button
-                                onclick="triggerTargetPreset('Disruptive/Cheating (CoC)', 'Disruptive trolling, cheating, or abusing in-game moderation tools.')"
-                                class="bg-slate-950/80 hover:bg-rose-950/80 hover:border-rose-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-rose-300 relative group overflow-hidden"
-                                title="Send immediate Disruptive/Cheating report to webhook"
+                                onclick="selectPresetAndAdvance('Disruptive Trolling', 'Disruptive trolling, cheating, or abusing in-game moderation tools.')"
+                                class="bg-slate-950/80 hover:bg-rose-950/80 hover:border-rose-900 transition-all border border-slate-800/80 rounded-2xl p-4 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-2 text-rose-300 relative group overflow-hidden"
+                                title="Choose Disruptive preset"
                         >
-                            <i data-lucide="swords" class="h-3.5 w-3.5 text-rose-400"></i>
-                            <span class="font-extrabold text-[10px]">Disruptive</span>
+                            <i data-lucide="swords" class="h-5 w-5 text-rose-400"></i>
+                            <span class="font-extrabold text-[11px]">Disruptive</span>
                         </button>
                         <button
-                                onclick="triggerTargetPreset('Sexual/Inappropriate (CoC)', 'Explicit sexual content, gestures, or inflammatory topics.')"
-                                class="bg-slate-950/80 hover:bg-violet-950/80 hover:border-violet-900 transition-all border border-slate-800/80 rounded-2xl p-2.5 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-1 text-violet-300 relative group overflow-hidden"
-                                title="Send immediate Sexual/Inappropriate report to webhook"
+                                onclick="selectPresetAndAdvance('Sexual', 'Explicit sexual content, gestures, or inflammatory topics.')"
+                                class="bg-slate-950/80 hover:bg-violet-950/80 hover:border-violet-900 transition-all border border-slate-800/80 rounded-2xl p-4 text-[10.5px] text-center font-bold cursor-pointer flex flex-col items-center justify-center gap-2 text-violet-300 relative group overflow-hidden"
+                                title="Choose Inappropriate preset"
                         >
-                            <i data-lucide="alert-triangle" class="h-3.5 w-3.5 text-violet-400"></i>
-                            <span class="font-extrabold text-[10px]">Inappropriate</span>
+                            <i data-lucide="alert-triangle" class="h-5 w-5 text-violet-400"></i>
+                            <span class="font-extrabold text-[11px]">Inappropriate</span>
+                        </button>
+                    </div>
+
+                    <!-- General option -->
+                    <div class="pt-2">
+                        <button
+                                onclick="selectPresetAndAdvance('General Rule Violation', 'Be excellent to each other! General infraction of code of conduct guidelines.')"
+                                class="w-full bg-slate-950 hover:bg-slate-800 border border-slate-800/80 rounded-xl py-3 text-xs text-slate-400 hover:text-white font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
+                        >
+                            <i data-lucide="help-circle" class="h-4 w-4"></i>
+                            Skip Pre-selection (General Violation)
                         </button>
                     </div>
                 </div>
 
-                <div class="space-y-1.5 pt-2">
+                <!-- STEP 2 CONTAINER: Input the Handle -->
+                <div id="wizard-step-2" class="hidden space-y-4">
                     <div>
-                <span class="block text-[10px] uppercase font-extrabold text-[#10b981] tracking-wider mb-1.5 flex items-center gap-1">
-                  <span class="h-1.5 w-1.5 rounded-full bg-[#10b981] animate-ping"></span>
-                  Step 1: Enter Violator Handle (Type first)
+                <span class="block text-[10px] uppercase font-extrabold text-[#10b981] tracking-wider mb-2.5 flex items-center gap-1.5">
+                  <span class="h-2 w-2 rounded-full bg-[#10b981] animate-ping"></span>
+                  Step 2: Input the handle
                 </span>
+                        <p class="text-[11px] text-slate-400 mb-3 font-medium text-left">Record the violator's primary in-game handle or identifier tag:</p>
                         <input
                                 type="text"
                                 id="game-target-username"
-                                class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#10b981] font-mono shadow-inner"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-[#10b981] font-mono shadow-inner tracking-wide"
                                 value="@"
                                 placeholder="e.g. @abusive_player"
-                                oninput="updatePresetTargetLabel(this.value)"
+                                oninput="updatePresetTargetLabel(this.value); evaluateStepValidation();"
                         />
                     </div>
-
-                    <!-- Step 2: Customize Reason & Evidence (Video/Picture) Attachment -->
-                    <div class="space-y-3.5 bg-slate-950/40 p-4 rounded-2xl border border-slate-700/60">
-                <span class="block text-[10px] uppercase font-extrabold text-indigo-400 tracking-wider flex items-center gap-1">
-                  <i data-lucide="file-plus-2" class="h-3.5 w-3.5 text-indigo-400"></i>
-                  Step 2: Customize Reason & Specific Evidence (Optional)
-                </span>
-
-                        <!-- Custom Reason details -->
-                        <div class="space-y-1">
-                            <div class="flex items-center justify-between">
-                                <label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400">
-                                    Reason / Violation Details
-                                </label>
-                                <span class="text-[8px] text-slate-500 italic">Overrides preset defaults if typed</span>
-                            </div>
-                            <textarea
-                                    id="evidence-details-input"
-                                    rows="2"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3 py-2 text-xs text-slate-200 placeholder-slate-700 focus:outline-none focus:border-[#4f46e5]/80 font-sans leading-relaxed"
-                                    placeholder="Provide specific reason details (e.g. 'toxic voice chat and slurs')"
-                                    oninput="onCustomReasonChange(this.value)"
-                            ></textarea>
-                        </div>
-
-                        <!-- Custom Media URL or Local upload -->
-                        <div class="space-y-1.5">
-                            <div class="flex items-center justify-between">
-                                <label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400">
-                                    Evidence Media (Video / Picture or Web URL)
-                                </label>
-                                <span class="text-[8px] text-indigo-400 font-semibold uppercase tracking-wider">Multipair file support</span>
-                            </div>
-
-                            <!-- Paste URL Input -->
-                            <div class="relative flex items-center">
-                                <input
-                                        type="text"
-                                        id="evidence-media-url-input"
-                                        class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/10 rounded-2xl pl-3 pr-20 py-2.5 text-xs text-slate-300 placeholder-slate-700 focus:outline-none font-mono"
-                                        placeholder="Paste e.g. YouTube, streamable or Imgur link..."
-                                        oninput="onEvidenceUrlChange(this.value)"
-                                />
-                                <div class="absolute right-1.5 top-1.5">
-                                    <button
-                                            type="button"
-                                            onclick="triggerEvidenceFileInput()"
-                                            class="bg-indigo-600/80 hover:bg-indigo-600 text-white text-[9.5px] font-extrabold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 cursor-pointer"
-                                            title="Upload a screenshot or video file directly"
-                                    >
-                                        <i data-lucide="paperclip" class="h-3 w-3"></i>
-                                        Local File
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Secret input file -->
-                            <input
-                                    type="file"
-                                    id="evidence-file-input"
-                                    accept="image/*,video/*"
-                                    class="hidden"
-                                    onchange="handleEvidenceFileSelect(event)"
-                            />
-
-                            <!-- Dropzone drag zone block -->
-                            <div
-                                    id="evidence-dropzone"
-                                    class="border border-dashed border-slate-700 hover:border-indigo-700 rounded-2xl p-3 text-center text-slate-500 hover:text-slate-400 bg-slate-950/20 transition-all text-xs cursor-pointer flex items-center justify-center gap-2 mt-1"
-                                    onclick="triggerEvidenceFileInput()"
-                                    ondragover="handleEvidenceDragOver(event)"
-                                    ondragleave="handleEvidenceDragLeave(event)"
-                                    ondrop="handleEvidenceDrop(event)"
-                            >
-                                <i data-lucide="upload-cloud" class="h-4 w-4 text-indigo-400" id="evidence-upload-icon"></i>
-                                <span id="evidence-upload-text">Browse & Attach/Drag Local Image or Video file</span>
-                            </div>
-
-                            <!-- Selected item metadata card preview -->
-                            <div id="evidence-media-preview-box" class="hidden mt-2 p-2.5 bg-slate-950 border border-slate-800 rounded-2xl flex flex-col gap-2 relative">
-                                <!-- Preview Container -->
-                                <div class="flex items-center justify-center bg-black/40 rounded-xl overflow-hidden max-h-40 relative border border-slate-800 p-1">
-                                    <img id="evidence-image-preview" src="" class="hidden max-h-36 object-contain" />
-                                    <video id="evidence-video-preview" src="" class="hidden max-h-36" controls></video>
-                                </div>
-
-                                <!-- File Info description -->
-                                <div class="flex items-center justify-between text-[10px] bg-slate-900/60 p-2 rounded-xl border border-slate-800/40">
-                                    <span id="evidence-metadata" class="text-slate-300 font-bold truncate font-mono max-w-[70%]"></span>
-                                    <button
-                                            type="button"
-                                            onclick="clearAttachedEvidence()"
-                                            class="text-red-400 hover:text-red-300 font-extrabold hover:underline py-1 px-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 text-[9.5px] bg-red-500/10 hover:bg-red-500/20"
-                                    >
-                                        <i data-lucide="trash-2" class="h-3 w-3 text-red-400"></i>
-                                        Clear File
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Local Rules Engine Preview -->
-                    <div class="space-y-4 bg-slate-950/60 p-4 rounded-2xl border border-emerald-900/80">
-                        <div class="flex items-center justify-between mb-1">
-                  <span class="block text-[10px] uppercase font-extrabold text-emerald-400 tracking-wider flex items-center gap-1">
-                    <i data-lucide="binary" class="h-3.5 w-3.5 text-emerald-400"></i>
-                    Step 3: Local Rules Engine Preview
-                  </span>
-                        </div>
-
-                        <p class="text-[10px] text-slate-300 leading-relaxed font-sans pb-2">
-                            The local engine parses your typed Details, attached evidence properties, and URLs, classifying the Code of Conduct (CoC) category automatically in real-time.
-                        </p>
-
-                        <!-- Small Config Controls under the button -->
-                        <div class="flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-900/60 pt-3 flex-wrap gap-2">
-                  <span class="font-semibold flex items-center gap-1">
-                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Interactive Local Rules Pipeline
-                  </span>
-
-                            <!-- Birthyear calculator for Underage -->
-                            <div id="underage-birthyear-box" class="hidden space-y-1 mt-2 w-full">
-                                <label class="block text-[9px] uppercase font-bold tracking-wider text-emerald-400">
-                                    Verify Birthyear (Underage Check)
-                                </label>
-                                <div class="flex items-center gap-2">
-                                    <input
-                                            type="number"
-                                            id="birthyear-input"
-                                            class="w-24 bg-slate-950 border border-emerald-900 rounded-2xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                                            placeholder="YYYY"
-                                            oninput="onBirthyearChange(this.value)"
-                                    />
-                                    <span id="age-result" class="text-xs text-slate-400 font-mono"></span>
-                                    <button
-                                            type="button"
-                                            onclick="triggerTargetPreset('Underage', 'junior account')"
-                                            class="text-[9px] bg-emerald-950 text-emerald-300 px-2 py-1 rounded hover:bg-emerald-900 border border-emerald-800"
-                                    >
-                                        Mark Junior
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="pt-2">
-                            <button
-                                    onclick="dispatchFastPresetEmbed()"
-                                    class="w-full bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/50 text-white shadow-lg shadow-emerald-900/20 font-extrabold uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer text-xs py-3 px-4 rounded-xl"
-                                    title="Send current preview details straight to Discord Webhook"
-                            >
-                                <i data-lucide="send" class="h-4.5 w-4.5"></i>
-                                Log
-                            </button>
-                        </div>
-
-
-
+                    <div class="bg-indigo-950/20 rounded-2xl p-3 border border-indigo-900/30 text-[10.5px] leading-relaxed text-slate-400 flex items-start gap-2.5 text-left">
+                        <i data-lucide="info" class="h-4 w-4 text-indigo-400 mt-0.5 flex-shrink-0"></i>
+                        <span>Type standard tags like <strong class="text-slate-300">@username</strong>. Changing this updates your live Discord Embed simulation immediately.</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- Manual Backup / Config Override Dispatch -->
-            <div id="manual-dispatch-row" class="flex gap-2 items-center justify-between text-[11px] text-slate-400 bg-slate-950/40 p-2.5 rounded-2xl border border-slate-700/60">
-              <span class="flex items-center gap-1 text-[10px]">
-                <i data-lucide="help-circle" class="h-3.5 w-3.5 text-indigo-400"></i>
-                Tip: Enter username first, then tap any macro to deliver instantly.
+                <!-- STEP 3 CONTAINER: Customize Reason (Evidence optional) -->
+                <div id="wizard-step-3" class="hidden space-y-4">
+              <span class="block text-[10px] uppercase font-extrabold text-indigo-400 tracking-wider flex items-center gap-1.5">
+                <i data-lucide="file-plus-2" class="h-3.5 w-3.5 text-indigo-400"></i>
+                Step 3: Customize reason (Evidence optional)
               </span>
-                <button
-                        onclick="dispatchFastPresetEmbed()"
-                        class="text-[#10b981] hover:text-[#34d399] font-extrabold uppercase tracking-wide flex items-center gap-1 transition-colors cursor-pointer text-[10px]"
-                        title="Manually trigger preset send with current selections"
-                >
-                    <i data-lucide="arrow-right-circle" class="h-3.5 w-3.5"></i>
-                    Force Deliver
-                </button>
+
+                    <!-- Custom Reason details -->
+                    <div class="space-y-1 text-left">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400">
+                                Reason / Violation Details
+                            </label>
+                            <span class="text-[8px] text-slate-550 italic">Overrides default preset values</span>
+                        </div>
+                        <textarea
+                                id="evidence-details-input"
+                                rows="3"
+                                class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3 py-2.5 text-xs text-slate-200 placeholder-slate-700 focus:outline-none focus:border-indigo-500 font-sans leading-relaxed shadow-inner"
+                                placeholder="Provide specific details (e.g. 'toxic voice chat and slurs')"
+                                oninput="onCustomReasonChange(this.value)"
+                        ></textarea>
+                    </div>
+
+                    <!-- Custom Media URL or Local upload -->
+                    <div class="space-y-1.5 text-left">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-[9px] uppercase font-bold tracking-wider text-slate-400">
+                                Evidence Media (Video / Picture or Web URL)
+                            </label>
+                            <span class="text-[8px] text-indigo-400 font-semibold uppercase tracking-wider">Multi-media</span>
+                        </div>
+
+                        <!-- Paste URL Input -->
+                        <div class="relative flex items-center">
+                            <input
+                                    type="text"
+                                    id="evidence-media-url-input"
+                                    class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/10 rounded-2xl pl-3 pr-20 py-2.5 text-xs text-slate-300 placeholder-slate-750 focus:outline-none font-mono"
+                                    placeholder="YouTube, streamable, Imgur link..."
+                                    oninput="onEvidenceUrlChange(this.value)"
+                            />
+                            <div class="absolute right-1.5 top-1.5">
+                                <button
+                                        type="button"
+                                        onclick="triggerEvidenceFileInput()"
+                                        class="bg-indigo-600/80 hover:bg-indigo-600 text-white text-[9.5px] font-extrabold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 cursor-pointer"
+                                >
+                                    <i data-lucide="paperclip" class="h-3 w-3"></i>
+                                    Local File
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Secret input file -->
+                        <input
+                                type="file"
+                                id="evidence-file-input"
+                                accept="image/*,video/*"
+                                class="hidden"
+                                onchange="handleEvidenceFileSelect(event)"
+                        />
+
+                        <!-- Dropzone drag zone block -->
+                        <div
+                                id="evidence-dropzone"
+                                class="border border-dashed border-slate-800 hover:border-indigo-700 rounded-2xl p-4 text-center text-slate-500 hover:text-slate-400 bg-slate-950/20 transition-all text-xs cursor-pointer flex items-center justify-center gap-2 mt-1"
+                                onclick="triggerEvidenceFileInput()"
+                                ondragover="handleEvidenceDragOver(event)"
+                                ondragleave="handleEvidenceDragLeave(event)"
+                                ondrop="handleEvidenceDrop(event)"
+                        >
+                            <i data-lucide="upload-cloud" class="h-4 w-4 text-indigo-400" id="evidence-upload-icon"></i>
+                            <span id="evidence-upload-text">Browse / Drag Screenshot file</span>
+                        </div>
+
+                        <!-- Selected item metadata card preview -->
+                        <div id="evidence-media-preview-box" class="hidden mt-2 p-2.5 bg-slate-950 border border-slate-800 rounded-2xl flex flex-col gap-2 relative">
+                            <!-- Preview Container -->
+                            <div class="flex items-center justify-center bg-black/40 rounded-xl overflow-hidden max-h-40 relative border border-slate-800 p-1">
+                                <img id="evidence-image-preview" src="" class="hidden max-h-36 object-contain" />
+                                <video id="evidence-video-preview" src="" class="hidden max-h-36" controls></video>
+                            </div>
+
+                            <!-- File Info description -->
+                            <div class="flex items-center justify-between text-[10px] bg-slate-900/60 p-2 rounded-xl border border-slate-800/40">
+                                <span id="evidence-metadata" class="text-slate-300 font-bold truncate font-mono max-w-[70%]"></span>
+                                <button
+                                        type="button"
+                                        onclick="clearAttachedEvidence()"
+                                        class="text-red-400 hover:text-red-300 font-extrabold hover:underline py-1 px-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 text-[9.5px] bg-red-500/10 hover:bg-red-500/20"
+                                >
+                                    <i data-lucide="trash-2" class="h-3 w-3 text-red-400"></i>
+                                    Clear File
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4 CONTAINER: Rules check & Submission -->
+                <div id="wizard-step-4" class="hidden space-y-4">
+              <span class="block text-[10px] uppercase font-extrabold text-emerald-400 tracking-wider flex items-center gap-1.5">
+                <i data-lucide="cpu" class="h-3.5 w-3.5 text-emerald-400"></i>
+                Step 4: Review audit & Verification
+              </span>
+
+                    <!-- Live review checklist details state -->
+                    <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 space-y-2 text-xs text-left">
+                        <div class="flex justify-between border-b border-slate-900 pb-1.5">
+                            <span class="text-slate-500 font-bold text-[10px] uppercase">Tag:</span>
+                            <span class="text-white font-mono font-bold" id="review-reported-username">@violator</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-900 pb-1.5">
+                            <span class="text-slate-500 font-bold text-[10px] uppercase">Category:</span>
+                            <span class="text-indigo-400 font-bold" id="review-category-text">CoC: General</span>
+                        </div>
+                        <div class="border-b border-slate-900 pb-1.5">
+                            <span class="text-slate-500 font-bold text-[10px] uppercase block mb-1">Details Context:</span>
+                            <p class="text-slate-300 italic text-[11px] leading-relaxed break-all" id="review-details-text">(none)</p>
+                        </div>
+                        <div class="flex justify-between pb-0.5">
+                            <span class="text-slate-500 font-bold text-[10px] uppercase">Evidence Included:</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="review-evidence-count">No file/link</span>
+                        </div>
+                    </div>
+
+                    <!-- Birthyear calculator for Underage checks (moved directly inside review context) -->
+                    <div id="underage-birthyear-box" class="hidden space-y-1.5 bg-emerald-950/20 border border-emerald-900/35 p-3 rounded-2xl text-left">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-[9.5px] uppercase font-extrabold tracking-wider text-emerald-400">
+                                Verify Birthyear (Underage Rule Audit)
+                            </label>
+                            <span class="text-[8px] bg-emerald-950 text-emerald-400 px-1.5 py-0.5 rounded font-mono font-bold uppercase">Critical Policy</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input
+                                    type="number"
+                                    id="birthyear-input"
+                                    class="w-24 bg-slate-950 border border-emerald-900 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs text-white font-mono"
+                                    placeholder="YYYY"
+                                    oninput="onBirthyearChange(this.value)"
+                            />
+                            <span id="age-result" class="text-xs text-slate-300 font-mono font-bold"></span>
+                            <button
+                                    type="button"
+                                    onclick="triggerTargetPreset('Underage', 'junior account')"
+                                    class="text-[9.5px] bg-[#10b981] hover:bg-emerald-600 text-white font-extrabold px-3 py-2 rounded-xl border border-emerald-500/50 cursor-pointer transition-all active:scale-95"
+                            >
+                                Mark Junior
+                            </button>
+                        </div>
+                        <p class="text-[8.5px] text-emerald-400/80 leading-relaxed font-sans mt-1">
+                            * Note: If there was no age input, the user is deemed to have failed the age check and marked as failing.
+                        </p>
+                    </div>
+
+                    <!-- Final submit button inside Step 4 with glow -->
+                    <div class="pt-2">
+                        <button
+                                onclick="submitGuidedReport()"
+                                class="w-full bg-[#10b981] hover:bg-emerald-500 border border-emerald-500/50 text-white shadow-xl shadow-emerald-950/30 font-extrabold uppercase flex items-center justify-center gap-3 transition-all active:scale-[0.98] cursor-pointer text-xs py-4 px-4 rounded-2xl animate-pulse"
+                                title="Deliver this report embed immediately to dispatcher history"
+                        >
+                            <i data-lucide="send" class="h-4.5 w-4.5"></i>
+                            Submit & Log Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Wizard Navigation controls -->
+                <div id="wizard-nav-controls" class="flex items-center justify-between pt-4 border-t border-slate-800/60 mt-4">
+                    <button
+                            id="btn-wizard-prev"
+                            onclick="navigateWizard(-1)"
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 font-bold px-4 py-2 rounded-xl transition-all text-xs flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <i data-lucide="arrow-left" class="h-3.5 w-3.5"></i>
+                        Back
+                    </button>
+
+                    <span id="wizard-navigation-label" class="text-[10px] uppercase font-mono tracking-wider text-slate-500">
+                Step 1 of 4
+              </span>
+
+                    <button
+                            id="btn-wizard-next"
+                            onclick="navigateWizard(1)"
+                            class="bg-[#4f46e5] hover:bg-opacity-90 text-white font-extrabold px-5 py-2 rounded-xl transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-indigo-950/20"
+                    >
+                        Next
+                        <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <!-- RIGHT COLUMN: Discord Viewport Simulation -->
@@ -752,9 +822,263 @@
         // Build dispatched records histories
         renderHistoryList();
 
+        // Setup initial reports count
+        const headerCount = document.getElementById("header-reports-count");
+        if (headerCount) headerCount.textContent = reportsCompletedCount;
+        showStartOverlay();
+
         // Instantiates SVG icons across custom nodes
         lucide.createIcons();
     });
+
+    // ==========================================
+    // ✨ INTERACTIVE STEP-BY-STEP REPORT INFRASTRUCTURE ✨
+    // ==========================================
+    let currentStep = 1;
+    let reportsCompletedCount = parseInt(localStorage.getItem("reports_completed_count") || "0");
+
+    function startGuidedReport() {
+        const overlay = document.getElementById("start-report-overlay");
+        if (overlay) {
+            overlay.classList.add("opacity-0", "pointer-events-none");
+        }
+        // Reset state & fields on start
+        ACTIVE_REPORT.reportedName = "@";
+        ACTIVE_REPORT.evidenceFileBase64 = null;
+        ACTIVE_REPORT.evidenceFileType = null;
+        ACTIVE_REPORT.evidenceFileName = null;
+        ACTIVE_REPORT.evidenceUrl = null;
+
+        const usernameInput = document.getElementById("game-target-username");
+        if (usernameInput) usernameInput.value = "@";
+
+        const detailsInput = document.getElementById("evidence-details-input");
+        if (detailsInput) detailsInput.value = "";
+
+        const mediaInput = document.getElementById("evidence-media-url-input");
+        if (mediaInput) mediaInput.value = "";
+
+        clearAttachedEvidence();
+        updatePresetTargetLabel("@");
+
+        // Start from step 1
+        setWizardStep(1);
+    }
+
+    function showStartOverlay() {
+        const overlay = document.getElementById("start-report-overlay");
+        const headerCount = document.getElementById("header-[#header-reports-count]");
+        const headerCountReal = document.getElementById("header-reports-count");
+        const overlayCount = document.getElementById("overlay-reports-count");
+
+        if (headerCountReal) headerCountReal.textContent = reportsCompletedCount;
+        if (overlayCount) overlayCount.textContent = reportsCompletedCount;
+
+        if (overlay) {
+            overlay.classList.remove("opacity-0", "pointer-events-none");
+        }
+        lucide.createIcons();
+    }
+
+    function setWizardStep(step) {
+        currentStep = step;
+
+        // Hide all steps
+        document.getElementById("wizard-step-1").classList.add("hidden");
+        document.getElementById("wizard-step-2").classList.add("hidden");
+        document.getElementById("wizard-step-3").classList.add("hidden");
+        document.getElementById("wizard-step-4").classList.add("hidden");
+
+        // Show the active one
+        document.getElementById(`wizard-step-${step}`).classList.remove("hidden");
+
+        // Update progress bar navigation text
+        document.getElementById("wizard-navigation-label").textContent = `Step ${step} of 4`;
+
+        // Update indicator styles
+        for (let i = 1; i <= 4; i++) {
+            const badge = document.getElementById(`step-badge-${i}`);
+            const progress = document.getElementById(`step-progress-${i}`);
+
+            if (badge) {
+                if (i === step) {
+                    badge.className = "flex items-center justify-center h-6 w-6 rounded-full text-[10.5px] font-extrabold bg-[#4f46e5] text-white shadow-md shadow-indigo-950/40 transition-all duration-300";
+                } else if (i < step) {
+                    badge.className = "flex items-center justify-center h-6 w-6 rounded-full text-[10.5px] font-extrabold bg-indigo-950/40 border border-indigo-900/50 text-[#818cf8] transition-all duration-300";
+                } else {
+                    badge.className = "flex items-center justify-center h-6 w-6 rounded-full text-[10.5px] font-extrabold bg-slate-950 border border-slate-800 text-slate-500 transition-all duration-300";
+                }
+            }
+
+            if (progress) {
+                if (i < step) {
+                    progress.style.width = "100%";
+                } else {
+                    progress.style.width = "0%";
+                }
+            }
+        }
+
+        // Adjust navigation buttons opacity
+        const prevBtn = document.getElementById("btn-wizard-prev");
+        const nextBtn = document.getElementById("btn-wizard-next");
+
+        if (prevBtn) {
+            if (step === 1) {
+                prevBtn.classList.add("opacity-50", "pointer-events-none");
+            } else {
+                prevBtn.classList.remove("opacity-50", "pointer-events-none");
+            }
+        }
+
+        // Validate steps on view load
+        evaluateStepValidation();
+    }
+
+    function evaluateStepValidation() {
+        const nextBtn = document.getElementById("btn-wizard-next");
+        if (!nextBtn) return;
+
+        if (currentStep === 1) {
+            // Preset step is optional or advances automatically. Next button is active.
+            nextBtn.removeAttribute("disabled");
+            nextBtn.classList.remove("opacity-50", "pointer-events-none");
+            nextBtn.className = "bg-[#4f46e5] hover:bg-opacity-90 text-white font-extrabold px-5 py-2 rounded-xl transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-indigo-950/20";
+            nextBtn.innerHTML = `Skip <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>`;
+        } else if (currentStep === 2) {
+            // Handle requirements validation
+            const username = document.getElementById("game-target-username")?.value?.trim() || "";
+            if (!username || username === "@" || username.length < 3) {
+                nextBtn.setAttribute("disabled", "true");
+                nextBtn.classList.add("opacity-50", "pointer-events-none");
+                nextBtn.textContent = "Enter Handle";
+            } else {
+                nextBtn.removeAttribute("disabled");
+                nextBtn.classList.remove("opacity-50", "pointer-events-none");
+                nextBtn.className = "bg-[#4f46e5] hover:bg-opacity-90 text-white font-extrabold px-5 py-2 rounded-xl transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-indigo-950/20";
+                nextBtn.innerHTML = `Next <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>`;
+            }
+        } else if (currentStep === 3) {
+            nextBtn.removeAttribute("disabled");
+            nextBtn.classList.remove("opacity-50", "pointer-events-none");
+            nextBtn.className = "bg-[#4f46e5] hover:bg-opacity-90 text-white font-extrabold px-5 py-2 rounded-xl transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-indigo-950/20";
+            nextBtn.innerHTML = `Verify Report <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>`;
+        } else if (currentStep === 4) {
+            // Disable Next completely on Step 4 (users must click primary Submit inside layout)
+            nextBtn.classList.add("opacity-50", "pointer-events-none");
+            nextBtn.textContent = "Finish";
+        }
+        lucide.createIcons();
+    }
+
+    function selectPresetAndAdvance(category, defaultDetails) {
+        // Clear custom detail textbox to trigger default override reason
+        const detailsInput = document.getElementById("evidence-details-input");
+        if (detailsInput) detailsInput.value = "";
+
+        // Trigger original preset load engine
+        triggerTargetPreset(category + " (CoC)", defaultDetails);
+
+        // Stagger steps advancement for slick visual layout pacing
+        showNotification("success", `Preloaded Category: ${category}`);
+        setTimeout(() => {
+            setWizardStep(2);
+        }, 350);
+    }
+
+    function navigateWizard(direction) {
+        const targetStep = currentStep + direction;
+        if (targetStep >= 1 && targetStep <= 4) {
+            setWizardStep(targetStep);
+        }
+    }
+
+    async function submitGuidedReport() {
+        const username = document.getElementById("game-target-username")?.value?.trim() || "";
+        if (!username || username === "@" || username.length < 3) {
+            showNotification("error", "Target handler is missing or too short. Please set valid characters in Step 2.");
+            setWizardStep(2);
+            return;
+        }
+
+        // Underage age verification fail checks:
+        // "if there was no age input then the target reported user is deemed to have failed it"
+        const finalCategoryLabel = ACTIVE_REPORT.category || "";
+        if (finalCategoryLabel.includes("Underage")) {
+            const byVal = document.getElementById("birthyear-input")?.value?.trim() || "";
+            if (!byVal) {
+                // Deemed to have failed the age validation!
+                ACTIVE_REPORT.details = (ACTIVE_REPORT.details || "") + " (FAILED RULE AUDIT: User failed to provide birthyear input upon request)";
+                const detailInput = document.getElementById("evidence-details-input");
+                if (detailInput) {
+                    detailInput.value = ACTIVE_REPORT.details;
+                }
+                runAutomaticLocalRules();
+            }
+        }
+
+        // Deliver payloads to historic logs using preset dispatcher
+        await dispatchFastPresetEmbed();
+
+        // Stats cache updates
+        reportsCompletedCount += 1;
+        localStorage.setItem("reports_completed_count", reportsCompletedCount);
+
+        // Update counters in layout
+        const headerCount = document.getElementById("header-reports-count");
+        if (headerCount) {
+            headerCount.textContent = reportsCompletedCount;
+            // Trigger delightful visual pulse pop on the badge
+            const badgeContainer = headerCount.parentElement.parentElement;
+            if (badgeContainer) {
+                badgeContainer.classList.add("scale-[1.12]", "border-emerald-400", "bg-emerald-500/25");
+                setTimeout(() => {
+                    badgeContainer.classList.remove("scale-[1.12]", "border-emerald-400", "bg-emerald-500/25");
+                }, 550);
+            }
+        }
+
+        // Trigger nice fireworks/floating check success popup dialog
+        showCelebrationPopup();
+
+        // Push back to dashboard overlay lobby
+        setTimeout(() => {
+            showStartOverlay();
+        }, 1200);
+    }
+
+    function showCelebrationPopup() {
+        const popup = document.createElement("div");
+        popup.className = "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-900 border-2 border-emerald-500 rounded-3xl p-6 text-center shadow-2xl z-[150] space-y-3 transition-all duration-300 scale-90 opacity-0 max-w-sm w-full";
+        popup.innerHTML = `
+          <div class="flex flex-col items-center justify-center space-y-3">
+            <div class="h-14 w-14 bg-emerald-500/15 border-2 border-emerald-400 rounded-full flex items-center justify-center text-emerald-400 animate-bounce">
+              <i data-lucide="check-check" class="h-8 w-8"></i>
+            </div>
+            <div class="space-y-1">
+              <h3 class="text-base font-black text-white tracking-tight">Report Successfully Dispatched!</h3>
+              <p class="text-xs text-slate-400">Formal RecRoom record compiled & cached.</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 py-2 px-6 rounded-2xl w-full text-center">
+              <span class="text-2xl font-black text-[#10b981] font-mono tracking-tight">+1 Completed</span>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(popup);
+        lucide.createIcons();
+
+        // Simple scale transition helper
+        setTimeout(() => {
+            popup.classList.remove("scale-90", "opacity-0");
+            popup.classList.add("scale-100", "opacity-100");
+        }, 50);
+
+        setTimeout(() => {
+            popup.classList.remove("scale-100", "opacity-100");
+            popup.classList.add("scale-95", "opacity-0");
+            setTimeout(() => { popup.remove(); }, 300);
+        }, 1100);
+    }
 
     // Live keyboard command line listeners
     let activePresetCategory = "Underage";
@@ -888,6 +1212,30 @@
 
         const fieldDetails = document.getElementById("field-details");
         if (fieldDetails) fieldDetails.value = reasonExplanation || "(none)";
+
+        // Update Step 4 Review summary dynamically
+        const revUser = document.getElementById("review-reported-username");
+        if (revUser) revUser.textContent = targetClean;
+
+        const revCat = document.getElementById("review-category-text");
+        if (revCat) revCat.textContent = "CoC: " + classifiedCategory;
+
+        const revDet = document.getElementById("review-details-text");
+        if (revDet) revDet.textContent = reasonExplanation || "(none)";
+
+        const revEv = document.getElementById("review-evidence-count");
+        if (revEv) {
+            if (ACTIVE_REPORT.evidenceFileBase64) {
+                revEv.textContent = `${ACTIVE_REPORT.evidenceFileName || "Local File"}`;
+                revEv.className = "font-mono text-emerald-400 font-semibold";
+            } else if (ACTIVE_REPORT.evidenceUrl || evidenceUrlInput) {
+                revEv.textContent = "External Link URL";
+                revEv.className = "font-mono text-indigo-400 font-semibold text-right";
+            } else {
+                revEv.textContent = "No attachments (Optional)";
+                revEv.className = "font-sans text-slate-500 italic text-right";
+            }
+        }
 
         updateDiscordPreviewStyles();
     }
@@ -1777,5 +2125,61 @@
     }
 
 </script>
+
+<!-- Centered "Start Report" Lobby Overlay Screen -->
+<div
+        id="start-report-overlay"
+        class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center transition-all duration-500 text-center px-4"
+>
+    <!-- Deep glass card -->
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl relative overflow-hidden group space-y-6">
+        <!-- Ambient background aura shadow effects -->
+        <div class="absolute -top-24 -left-24 w-48 h-48 rounded-full bg-indigo-500/10 blur-3xl group-hover:bg-indigo-500/15 transition-all duration-500"></div>
+        <div class="absolute -bottom-24 -right-24 w-48 h-48 rounded-full bg-emerald-500/10 blur-3xl group-hover:bg-emerald-500/15 transition-all duration-500"></div>
+
+        <!-- Pulsating shield icon indicators -->
+        <div class="relative flex justify-center pb-2">
+            <div class="h-16 w-16 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 relative">
+                <div class="absolute inset-0 rounded-full bg-indigo-500/20 animate-ping opacity-40"></div>
+                <i data-lucide="shield-alert" class="h-8 w-8"></i>
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            <h2 class="text-xl font-black text-white tracking-tight">tactical report wizard</h2>
+            <p class="text-xs text-slate-400 leading-relaxed font-medium">
+                Welcome back, moderator. Launch our step-by-step assistant to automatically calculate CoC categories, upload screenshots, and compile formal evidence logs.
+            </p>
+        </div>
+
+        <!-- Session Counter Badge in Overlay Card -->
+        <div class="bg-indigo-950/40 border border-indigo-900/50 p-4 rounded-2xl flex items-center justify-between">
+            <div class="flex items-center gap-2 text-left">
+                <div class="bg-indigo-500/10 text-indigo-400 p-2 rounded-xl">
+                    <i data-lucide="award" class="h-5 w-5"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Session Dispatches</p>
+                    <p class="text-[#10b981] font-mono font-extrabold text-sm"><span id="overlay-reports-count">0</span> Completed</p>
+                </div>
+            </div>
+            <span class="text-[9px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-extrabold uppercase px-2 py-1 rounded-lg">
+            Active session
+          </span>
+        </div>
+
+        <button
+                onclick="startGuidedReport()"
+                class="w-full bg-[#10b981] hover:bg-emerald-500 text-white font-extrabold uppercase py-4 rounded-2xl text-xs tracking-wider transition-all duration-300 transform active:scale-[0.98] outline-none border border-emerald-400/30 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-900/20"
+        >
+            <i data-lucide="play" class="h-4 w-4"></i>
+            Start Guided Report
+        </button>
+
+        <p class="text-[10px] text-slate-500 font-mono tracking-wide">
+            Ready for Discord Embed Deployment
+        </p>
+    </div>
+</div>
 </body>
 </html>
