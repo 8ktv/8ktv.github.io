@@ -961,7 +961,7 @@
             const birthyearInput = document.getElementById("birthyear-input");
             const customInput = document.getElementById("evidence-details-input");
             const hasBirthyear = birthyearInput && birthyearInput.value.trim().length > 0;
-            const hasFailedCheck = customInput && customInput.value === 'junior account';
+            const hasFailedCheck = customInput && (customInput.value === 'junior account' || customInput.value.includes('fail the age check'));
 
             if (hasBirthyear) {
                 const currentYear = new Date().getFullYear();
@@ -971,17 +971,16 @@
                     if (birthyearInput) { birthyearInput.value = ""; onBirthyearChange(""); }
                     return;
                 }
-            }
-
-            if (!hasBirthyear && !hasFailedCheck) {
-                showNotification("error", "Underage check required. Please provide a birthyear or click 'Mark Junior' to confirm.");
-                if (birthyearInput) birthyearInput.focus();
-                return; // Stop here, so they can enter the value and dispatch
-            }
-
-            activePresetDetails = "junior account";
-            if (customInput && customInput.value.trim() === "") {
-                customInput.value = "junior account";
+                activePresetDetails = "junior account";
+                if (customInput && (customInput.value.trim() === "" || customInput.value === "Player is underage or using an improper account.")) {
+                    customInput.value = "junior account";
+                }
+            } else {
+                // If there was no age input then the target reported user is deemed to have failed it
+                activePresetDetails = "user has proven to fail the age check immediant junior account";
+                if (customInput) {
+                    customInput.value = "user has proven to fail the age check immediant junior account";
+                }
             }
             runAutomaticLocalRules(false);
         }
