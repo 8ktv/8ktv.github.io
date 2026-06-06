@@ -910,7 +910,7 @@
 
             // Clipboard sync
             if (CONFIG.autoCopy) {
-                const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${targetClean}\n:scroll: **Category**: CoC: ${activePresetCategory}\n:pencil: **Details**: ${activePresetDetails}\n:calendar_spiral: **Timestamp**: ${new Date().toLocaleString()}`;
+                const formattedRecord = `👤 **User**: ${targetClean} - 📜 **Category**: CoC: ${activePresetCategory} - 📝 **Details**: ${activePresetDetails}`;
                 await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Auto-copied ban record!";
             }
@@ -981,7 +981,7 @@
 
         // Auto-Copy Ban Record
         if (CONFIG.autoCopy) {
-            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName}\n:scroll: **Category**: ${finalReport.category}\n:pencil: **Details**: ${finalReport.details}\n:calendar_spiral: **Timestamp**: ${finalReport.timestamp}\n`;
+            const formattedRecord = `👤 **User**: ${finalReport.reportedName} - 📜 **Category**: ${finalReport.category} - 📝 **Details**: ${finalReport.details}`;
             await navigator.clipboard.writeText(formattedRecord);
             sMessage += " Banned line copied automatically!";
         }
@@ -1099,7 +1099,7 @@
 
         // Direct Clipboard push
         if (CONFIG.autoCopy) {
-            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalObj.reportedName}\n:scroll: **Category**: ${finalObj.category}\n:pencil: **Details**: ${finalObj.details}\n:calendar_spiral: **Timestamp**: ${new Date().toLocaleString()}\n`;
+            const formattedRecord = `👤 **User**: ${finalObj.reportedName} - 📜 **Category**: ${finalObj.category} - 📝 **Details**: ${finalObj.details}`;
             await navigator.clipboard.writeText(formattedRecord);
             successFeedback += " Clipboard record prepared!";
         }
@@ -1469,7 +1469,7 @@
 
             // Automation step 1: Auto-Copy Ban Record Format
             if (CONFIG.autoCopy) {
-                const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName || "@unknown"}\n:scroll: **Category**: ${finalReport.category || "General Violation"}\n:pencil: **Details**: ${finalReport.details || "(none)"}\n:calendar_spiral: **Timestamp**: ${new Date().toLocaleString()}`;
+                const formattedRecord = `👤 **User**: ${finalReport.reportedName || "@unknown"} - 📜 **Category**: ${finalReport.category || "General Violation"} - 📝 **Details**: ${finalReport.details || "(none)"}`;
 
                 await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Copied new RecRoom ban record to your clipboard automatically!";
@@ -1655,9 +1655,7 @@
             evidence = "(none)";
         }
 
-        const timestamp = item.timestamp || new Date().toLocaleString();
-
-        return `:bust_in_silhouette: **User**: ${user}\n:scroll: **Category**: ${reason}\n:pencil: **Details**: ${evidence}\n:calendar_spiral: **Timestamp**: ${timestamp}`;
+        return `👤 **User**: ${user} - 📜 **Category**: ${reason} - 📝 **Details**: ${evidence}`;
     }
 
     // Copy Single element to clipboard
@@ -1703,8 +1701,7 @@
         }
 
         const header = ":no_entry_sign: **BANNED USER RECORD**\n";
-        const bodyLines = CONFIG.history.map(item => getRecRoomRecordLine(item)).join("\n\n");
-        const fullOutputCombined = header + bodyLines;
+        const fullOutputCombined = header + CONFIG.history.map(item => getRecRoomRecordLine(item)).join("\n");
 
         navigator.clipboard.writeText(fullOutputCombined)
             .then(() => {
