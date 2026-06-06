@@ -44,57 +44,47 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #334155;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: #475569;
         }
     </style>
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="min-h-screen bg-gray-950 text-gray-100 selection:bg-indigo-500/20 selection:text-indigo-600 font-sans relative overflow-x-hidden">
-
-<!-- Decorative Ambient Glows -->
-<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#4f46e5]/5 animate-pulse-glow pointer-events-none"></div>
-<div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-violet-550/5 animate-pulse-glow pointer-events-none"></div>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased">
 
 <!-- Sticky Header -->
-<header class="border-b border-gray-800 bg-gray-900/85 backdrop-blur-md sticky top-0 z-50 transition-all shadow-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+<header class="border-b border-slate-900 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <div class="bg-[#4f46e5] p-2.5 rounded-xl shadow-lg shadow-indigo-600/20">
-                <i data-lucide="shield-alert" class="h-6 w-6 text-white"></i>
+            <div class="bg-indigo-650 p-2 rounded-lg text-white">
+                <i data-lucide="shield-alert" class="h-5 w-5"></i>
             </div>
             <div>
-                <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                    Report Dispatcher
-                    <span class="bg-indigo-900 text-indigo-300 text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">
-                Dispatcher
-              </span>
-                </h1>
-                <p class="text-xs text-gray-400 font-semibold">Moderation Report Parser</p>
+                <h1 class="text-base font-bold text-white tracking-tight">Report Dispatcher</h1>
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-4">
             <button
                     onclick="loadSampleData()"
-                    class="px-3.5 py-1.5 text-xs text-gray-300 hover:text-indigo-400 border-gray-700 hover:border-indigo-500 font-bold bg-gray-900 border rounded-xl hover:bg-gray-800 transition-all cursor-pointer shadow-xs whitespace-nowrap"
+                    class="text-sm text-slate-400 hover:text-white font-medium transition-colors"
             >
-                Load Sample Report
+                Load Sample
             </button>
-            <div class="text-xs text-indigo-300 bg-indigo-900/50 border border-indigo-700 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
-                <span class="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
-                Webhook Connected
+            <div class="text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-900/50 px-3 py-1 rounded-full font-medium flex items-center gap-1.5">
+                <div class="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+                Connected
             </div>
         </div>
     </div>
 </header>
 
 <!-- App Container -->
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+<main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 w-full">
 
     <!-- System Notification Banner -->
     <div id="alert-banner" class="hidden mb-6 p-4 rounded-xl border flex items-start gap-3 transition-all duration-300 shadow-sm">
@@ -111,32 +101,22 @@
     </div>
 
     <!-- Main Workspace Grid -->
-    <div class="flex flex-col gap-8 items-center max-w-2xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <!-- Console Panel -->
-        <div class="w-full">
-            <!-- 🎮 In-Game Fast-Command Console (Hands-Free Mode) -->
-            <div class="bg-slate-800 text-slate-100 rounded-3xl border border-slate-700 p-6 space-y-4 shadow-xl relative overflow-hidden">
-                <!-- Glow background style -->
-                <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-xl pointer-events-none"></div>
+        <!-- Left Column: Input and Control Console -->
+        <div class="lg:col-span-5 space-y-6">
+            <div id="console-panel" class="bg-slate-900 border border-slate-800/80 rounded-3xl p-6 space-y-6 shadow-xl relative">
 
-                <div class="flex items-center justify-between border-b border-slate-700 pb-3">
-                    <div class="flex items-center gap-2">
-                        <div class="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400">
-                            <i data-lucide="gamepad-2" class="h-4.5 w-4.5"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-extrabold text-white tracking-wide">Command Console</h3>
-                            <p class="text-[10px] text-slate-400">Fast-action command terminal</p>
-                        </div>
+                <!-- Console Header -->
+                <div class="flex items-center gap-3 border-b border-slate-800/60 pb-4 mb-2">
+                    <div class="p-2 rounded-xl bg-slate-950 text-indigo-400">
+                        <i data-lucide="terminal" class="h-5 w-5"></i>
                     </div>
-                    <span class="text-[9px] bg-red-500/10 border border-red-500/20 text-red-400 px-2 py-0.5 rounded font-extrabold uppercase tracking-widest animate-pulse">
-                In-Game Mode Available
-              </span>
+                    <div>
+                        <h3 class="text-base font-bold text-white tracking-tight">Command Console</h3>
+                        <p class="text-[11px] text-slate-500 font-medium">Dynamic dispatch controller</p>
+                    </div>
                 </div>
-
-
-                <!-- Step 1: Enter Violator Handle (Type first) -->
                 <div class="space-y-1.5 pt-2">
                     <div>
                 <span class="block text-[10px] uppercase font-extrabold text-[#10b981] tracking-wider mb-1.5 flex items-center gap-1">
@@ -305,6 +285,13 @@
                                             oninput="onBirthyearChange(this.value)"
                                     />
                                     <span id="age-result" class="text-xs text-slate-400 font-mono"></span>
+                                    <button
+                                            type="button"
+                                            onclick="triggerTargetPreset('Underage (100)', 'junior account')"
+                                            class="text-[9px] bg-emerald-950 text-emerald-300 px-2 py-1 rounded hover:bg-emerald-900 border border-emerald-800"
+                                    >
+                                        Mark Junior
+                                    </button>
                                 </div>
                             </div>
 
@@ -360,45 +347,28 @@
                             </div>
                         </div>
 
-                        <!-- Birthyear calculator for Underage -->
-                        <div id="underage-birthyear-box" class="hidden space-y-1 mt-2 w-full">
-                            <label class="block text-[9px] uppercase font-bold tracking-wider text-emerald-400">
-                                Verify Birthyear (Underage Check)
-                            </label>
-                            <div class="flex items-center gap-2">
-                                <input
-                                        type="number"
-                                        id="birthyear-input"
-                                        class="w-24 bg-slate-950 border border-emerald-900 rounded-2xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                                        placeholder="YYYY"
-                                        oninput="onBirthyearChange(this.value)"
-                                />
-                                <span id="age-result" class="text-xs text-slate-400 font-mono"></span>
-                            </div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Manual Backup / Config Override Dispatch -->
-                <div id="manual-dispatch-row" class="flex gap-2 items-center justify-between text-[11px] text-slate-400 bg-slate-950/40 p-2.5 rounded-2xl border border-slate-700/60">
+            <!-- Manual Backup / Config Override Dispatch -->
+            <div id="manual-dispatch-row" class="flex gap-2 items-center justify-between text-[11px] text-slate-400 bg-slate-950/40 p-2.5 rounded-2xl border border-slate-700/60">
               <span class="flex items-center gap-1 text-[10px]">
                 <i data-lucide="help-circle" class="h-3.5 w-3.5 text-indigo-400"></i>
                 Tip: Enter username first, then tap any macro to deliver instantly.
               </span>
-                    <button
-                            onclick="dispatchFastPresetEmbed()"
-                            class="text-[#10b981] hover:text-[#34d399] font-extrabold uppercase tracking-wide flex items-center gap-1 transition-colors cursor-pointer text-[10px]"
-                            title="Manually trigger preset send with current selections"
-                    >
-                        <i data-lucide="arrow-right-circle" class="h-3.5 w-3.5"></i>
-                        Force Deliver
-                    </button>
-                </div>
+                <button
+                        onclick="dispatchFastPresetEmbed()"
+                        class="text-[#10b981] hover:text-[#34d399] font-extrabold uppercase tracking-wide flex items-center gap-1 transition-colors cursor-pointer text-[10px]"
+                        title="Manually trigger preset send with current selections"
+                >
+                    <i data-lucide="arrow-right-circle" class="h-3.5 w-3.5"></i>
+                    Force Deliver
+                </button>
             </div>
         </div>
-
         <!-- RIGHT COLUMN: Discord Viewport Simulation -->
-        <div class="lg:col-span-6 space-y-6 lg:sticky lg:top-24">
+        <div class="lg:col-span-7 space-y-6 lg:sticky lg:top-8">
 
             <!-- Discord Dark Simulated Application -->
             <div class="bg-[#313338] text-[#dbdee1] rounded-2xl shadow-xl overflow-hidden font-sans border border-gray-800">
@@ -563,16 +533,16 @@
             </div>
 
             <!-- Dispatched Output History list log -->
-            <div class="bg-slate-800 rounded-3xl border border-slate-700 p-6 space-y-4 shadow-sm">
-                <div class="flex items-center justify-between border-b border-slate-700 pb-3 flex-wrap gap-2">
+            <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 space-y-4 shadow-xl">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <i data-lucide="file-text" class="text-indigo-400 h-4.5 w-4.5"></i>
-                        <h3 class="text-sm font-extrabold text-white">Dispatcher Log Output History</h3>
+                        <h3 class="text-sm font-bold text-slate-100">Dispatcher Log Output History</h3>
                     </div>
                     <div id="history-header-actions" class="hidden flex items-center gap-2 flex-wrap">
                         <button
                                 onclick="copyAllRecRoomFormat()"
-                                class="text-xs text-indigo-300 bg-indigo-900/50 hover:bg-indigo-900 border border-indigo-700 rounded-2xl px-3 py-1.5 transition-all cursor-pointer font-bold flex items-center gap-1 shadow-xs"
+                                class="text-xs text-indigo-300 bg-indigo-950/60 hover:bg-indigo-900/55 border border-indigo-900/50 rounded-2xl px-3 py-1.5 transition-all cursor-pointer font-bold flex items-center gap-1 shadow-xs"
                                 title="Copy all history records grouped as a combined Ban Record summary formatted for RecRoom"
                         >
                             <i data-lucide="clipboard" class="h-3 w-3"></i>
@@ -580,7 +550,7 @@
                         </button>
                         <button
                                 onclick="clearDispatchHistory()"
-                                class="text-xs text-gray-500 hover:text-red-400 hover:underline transition-all cursor-pointer font-bold pl-1"
+                                class="text-xs text-slate-500 hover:text-red-400 hover:underline transition-all cursor-pointer font-bold pl-1"
                         >
                             Clear history
                         </button>
@@ -588,12 +558,12 @@
                 </div>
 
                 <!-- Empty list fallback -->
-                <div id="history-empty" class="text-center py-6 text-gray-400 text-xs italic">
-                    No reports have been dispatched yet in this browser session. Select a report screenshot, scan layout variables, and dispatch to compile log lists here.
+                <div id="history-empty" class="text-center py-6 text-slate-500 text-xs italic">
+                    No reports have been dispatched yet in this browser session. Select a report screenshot, scan log variables, and dispatch to compile log lists here.
                 </div>
 
                 <!-- Active List content -->
-                <div id="history-list" class="hidden max-h-[300px] overflow-y-auto space-y-2.5 divide-y divide-slate-700 pr-2">
+                <div id="history-list" class="hidden max-h-[300px] overflow-y-auto space-y-2.5 divide-y divide-slate-800 pr-2">
                     <!-- Rendered via JS -->
                 </div>
             </div>
@@ -605,12 +575,12 @@
 </main>
 
 <!-- App Bottom Footer -->
-<footer class="mt-8 border-t border-gray-800 bg-gray-900/80 py-6 text-center text-xs text-gray-400">
+<footer class="mt-8 border-t border-slate-900 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
-        <p class="font-semibold">Report Dispatcher • Version 1.4.0</p>
+        <p class="font-semibold text-slate-400">Report Dispatcher • Version 1.4.0</p>
         <div class="flex gap-4 items-center">
-          <span class="flex items-center gap-1.5 text-emerald-600 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-150">
-            <span class="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+          <span class="flex items-center gap-1.5 text-emerald-400 font-bold bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-900/50">
+            <span class="h-1.5 w-1.5 bg-emerald-500 rounded-full"></span>
             Status: Ready
           </span>
         </div>
@@ -811,6 +781,16 @@
         // Live updates current reported target field based on preset overlay inputs
         const targetClean = val.startsWith("@") ? val : "@" + val;
         ACTIVE_REPORT.reportedName = val ? targetClean : "@violator_handle";
+
+        // Reset birthyear fields on new name
+        const bYearInput = document.getElementById("birthyear-input");
+        const ageResult = document.getElementById("age-result");
+        if (bYearInput) bYearInput.value = "";
+        if (ageResult) {
+            ageResult.textContent = "";
+            ageResult.classList.remove("text-red-500", "text-emerald-500");
+        }
+
         runAutomaticLocalRules();
     }
 
@@ -921,6 +901,7 @@
 
     function onBirthyearChange(birthyear) {
         const ageResult = document.getElementById("age-result");
+        const customInput = document.getElementById("evidence-details-input");
         if (!birthyear) {
             ageResult.textContent = "";
             return;
@@ -940,10 +921,18 @@
         if (age < 13) {
             ageResult.classList.add("text-emerald-500");
             ageResult.textContent += " (Underage confirmed)";
+            if (customInput && (!customInput.value.trim() || customInput.value === "Player is underage or using an improper account.")) {
+                customInput.value = "junior account";
+                runAutomaticLocalRules(true);
+            }
         } else {
             ageResult.classList.remove("text-emerald-500");
             ageResult.classList.add("text-red-500");
             ageResult.textContent += " (Not Underage)";
+            if (customInput && customInput.value === "junior account") {
+                customInput.value = "";
+                runAutomaticLocalRules(true);
+            }
         }
     }
 
@@ -1014,7 +1003,7 @@
             showNotification("success", `Preloaded preset hint for "${category}"! Enter a player username above to finish reasoning.`);
             document.getElementById("game-target-username").focus();
         } else {
-            // Still auto-dispatch if it was a preset, as that seems to be expected behavior
+            // Still auto-dispatch if it was a preset
             await dispatchFastPresetEmbed();
         }
     }
@@ -1025,6 +1014,37 @@
         if (!violatorInput || violatorInput === "@") {
             showNotification("error", "Provide the violator's username or target handle to use preset macro dispatch.");
             return;
+        }
+
+        if (activePresetCategory === "Underage (100)") {
+            const birthyearInput = document.getElementById("birthyear-input");
+            const customInput = document.getElementById("evidence-details-input");
+            const hasBirthyear = birthyearInput && birthyearInput.value.trim().length > 0;
+            const hasFailedCheck = customInput && customInput.value === 'junior account';
+
+            if (!hasBirthyear && !hasFailedCheck) {
+                showNotification("error", "Underage check required. Please provide a birthyear or click 'Mark Junior' to confirm.");
+                if (birthyearInput) birthyearInput.focus();
+                return; // Stop here, so they can enter the value and dispatch
+            }
+
+            if (hasBirthyear && !hasFailedCheck) {
+                const currentYear = new Date().getFullYear();
+                const age = currentYear - parseInt(birthyearInput.value.trim());
+                if (age >= 13) {
+                    showNotification("success", `User is ${age} years old and therefore not underage. Report skipped.`);
+                    // Optional: clear the birthyear 
+                    if (birthyearInput) { birthyearInput.value = ""; onBirthyearChange(""); }
+                    return;
+                } else {
+                    activePresetDetails = "junior account";
+                    if (customInput) customInput.value = "junior account";
+                    runAutomaticLocalRules(false);
+                }
+            } else if (hasFailedCheck) {
+                activePresetDetails = "junior account";
+                runAutomaticLocalRules(false);
+            }
         }
 
         const targetClean = violatorInput.startsWith("@") ? violatorInput : "@" + violatorInput;
@@ -1626,29 +1646,29 @@
             <div class="pt-2.5 first:pt-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
               <div class="space-y-0.5 min-w-0 flex-1">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="font-bold text-gray-800">${escapeHtml(item.reporter || "Unknown")}</span>
-                  <i data-lucide="chevron-right" class="h-3 w-3 text-gray-400"></i>
-                  <span class="font-extrabold text-[#4f46e5]">${escapeHtml(item.reported || "Unknown")}</span>
-                  <span class="text-[9px] bg-indigo-50 border border-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded font-bold max-w-xs truncate" title="${escapeHtml(item.category)}">
+                  <span class="font-bold text-slate-350">${escapeHtml(item.reporter || "Unknown")}</span>
+                  <i data-lucide="chevron-right" class="h-3 w-3 text-slate-600"></i>
+                  <span class="font-extrabold text-[#818cf8]">${escapeHtml(item.reported || "Unknown")}</span>
+                  <span class="text-[9px] bg-indigo-950/40 border border-indigo-900/30 text-indigo-300 px-1.5 py-0.2 rounded font-bold max-w-xs truncate" title="${escapeHtml(item.category)}">
                     ${escapeHtml(item.category)}
                   </span>
                 </div>
-                <p class="text-[10px] text-gray-400 font-medium">Dispatched: ${item.timestamp}</p>
+                <p class="text-[10px] text-slate-500 font-medium font-mono">Dispatched: ${item.timestamp}</p>
               </div>
 
               <!-- Button groupings -->
               <div class="flex items-center gap-1.5 flex-shrink-0">
                 <button
                   onclick="copySingleBannedRecord('${item.id}')"
-                  class="text-[9px] text-[#4f46e5] font-bold bg-indigo-50 hover:bg-indigo-100 px-2 py-1.5 rounded inline-flex items-center gap-1 border border-indigo-150 cursor-pointer transition-colors"
+                  class="text-[9px] text-indigo-350 bg-indigo-950/40 hover:bg-indigo-900/50 px-2 py-1.5 rounded inline-flex items-center gap-1 border border-indigo-900/50 cursor-pointer transition-colors font-medium text-indigo-300"
                   title="Copy this user record formatted for RecRoom Ban Board"
                 >
-                  <i data-lucide="clipboard" class="h-2.5 w-2.5"></i>
+                  <i data-lucide="clipboard" class="h-2.5 w-2.5 text-indigo-400"></i>
                   Copy RecRoom
                 </button>
                 <button
                   onclick="copySingleJsonPayload('${item.id}')"
-                  class="text-[9px] text-gray-500 font-bold bg-gray-50 hover:bg-gray-100 px-2 py-1.5 rounded inline-flex items-center gap-1 border border-gray-200 cursor-pointer transition-colors"
+                  class="text-[9px] text-slate-300 bg-slate-800 hover:bg-slate-700 px-2 py-1.5 rounded inline-flex items-center gap-1 border border-slate-700 cursor-pointer transition-colors font-medium text-slate-205"
                   title="Copy formatted Discord Webhook Embed Payload JSON"
                 >
                   Copy JSON Payload
@@ -1686,17 +1706,17 @@
         const errorIcon = document.getElementById("alert-icon-error");
         const messageContainer = document.getElementById("alert-message");
 
-        banner.classList.remove("hidden", "bg-emerald-50", "border-emerald-200", "text-emerald-800", "bg-red-50", "border-red-200", "text-red-800");
+        banner.classList.remove("hidden", "bg-emerald-950/30", "border-emerald-900/50", "text-emerald-300", "bg-red-950/30", "border-red-900/50", "text-red-300");
         successIcon.classList.add("hidden");
         errorIcon.classList.add("hidden");
 
         messageContainer.textContent = message;
 
         if (type === "success") {
-            banner.classList.add("bg-emerald-50", "border-emerald-200", "text-emerald-800");
+            banner.classList.add("bg-emerald-950/30", "border-emerald-900/50", "text-emerald-300");
             successIcon.classList.remove("hidden");
         } else {
-            banner.classList.add("bg-red-50", "border-red-200", "text-red-800");
+            banner.classList.add("bg-red-950/30", "border-red-900/50", "text-red-300");
             errorIcon.classList.remove("hidden");
         }
 
