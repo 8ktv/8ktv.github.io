@@ -359,6 +359,23 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Birthyear calculator for Underage -->
+                        <div id="underage-birthyear-box" class="hidden space-y-1 mt-2 w-full">
+                            <label class="block text-[9px] uppercase font-bold tracking-wider text-emerald-400">
+                                Verify Birthyear (Underage Check)
+                            </label>
+                            <div class="flex items-center gap-2">
+                                <input
+                                        type="number"
+                                        id="birthyear-input"
+                                        class="w-24 bg-slate-950 border border-emerald-900 rounded-2xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                                        placeholder="YYYY"
+                                        oninput="onBirthyearChange(this.value)"
+                                />
+                                <span id="age-result" class="text-xs text-slate-400 font-mono"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
