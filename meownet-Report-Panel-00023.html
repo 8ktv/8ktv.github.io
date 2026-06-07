@@ -1020,7 +1020,7 @@
                 if (currentReason.startsWith("Player is underage (Age:")) {
                     const idx = currentReason.indexOf(" - ");
                     if (idx !== -1) {
-                        currentReason = currentReason.substring(idx + 3);
+                        currentReason = currentReason.substring(idx + 3).trim();
                     }
                 }
                 const finalDetailsText = getUnderageDetailsText("Junior", currentReason);
@@ -1288,16 +1288,24 @@
     function getUnderageDetailsText(age, baseReason) {
         const ageStr = (age === 0 || age === "0" || age === "Junior") ? "Junior" : age;
         let reason = baseReason || "";
-        if (!reason ||
-            reason === "failed to verificate, automatic junior account." ||
-            reason === "junior account" ||
-            reason === "Players 12 and under must use a junior account." ||
-            reason === "Player has failed age check and must use a junior account") {
+        const trimmedReason = reason.trim();
+        const isDefaultReason = !trimmedReason ||
+            trimmedReason === "failed to verificate, automatic junior account." ||
+            trimmedReason === "junior account" ||
+            trimmedReason === "Players 12 and under must use a junior account." ||
+            trimmedReason === "Player has failed age check and must use a junior account" ||
+            trimmedReason === "Player admitted to being under age limit in game." ||
+            trimmedReason === "Player is underage or using an improper account." ||
+            trimmedReason === "user has proven to fail the age check immediant junior account";
+
+        if (isDefaultReason) {
             if (ageStr === "Junior" || ageStr === 0 || ageStr === "0") {
                 reason = "Player has failed age check and must use a junior account";
             } else {
                 reason = "Players 12 and under must use a junior account.";
             }
+        } else {
+            reason = trimmedReason;
         }
         return `Player is underage (Age: ${ageStr}) - ${reason}`;
     }
@@ -1364,7 +1372,7 @@
             if (v.startsWith("Player is underage (Age:")) {
                 const idx = v.indexOf(" - ");
                 if (idx !== -1) {
-                    baseReason = v.substring(idx + 3);
+                    baseReason = v.substring(idx + 3).trim();
                 }
             } else if (v === "failed to verificate, automatic junior account." || v === "junior account") {
                 baseReason = "Players 12 and under must use a junior account.";
@@ -1458,7 +1466,7 @@
                     if (v.startsWith("Player is underage (Age:")) {
                         const idx = v.indexOf(" - ");
                         if (idx !== -1) {
-                            baseReason = v.substring(idx + 3);
+                            baseReason = v.substring(idx + 3).trim();
                         }
                     } else if (v === "failed to verificate, automatic junior account." || v === "junior account") {
                         baseReason = ageStr === "Junior" ? "Player has failed age check and must use a junior account" : "Players 12 and under must use a junior account.";
@@ -1486,7 +1494,7 @@
                     if (v.startsWith("Player is underage (Age:")) {
                         const idx = v.indexOf(" - ");
                         if (idx !== -1) {
-                            baseReason = v.substring(idx + 3);
+                            baseReason = v.substring(idx + 3).trim();
                         }
                     } else if (v === "failed to verificate, automatic junior account." || v === "junior account") {
                         baseReason = "Player has failed age check and must use a junior account";
