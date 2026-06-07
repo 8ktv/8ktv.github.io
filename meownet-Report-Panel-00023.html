@@ -193,10 +193,10 @@
                     <div class="pt-2">
                         <button
                                 onclick="selectPresetAndAdvance('General Rule Violation', 'Be excellent to each other! General infraction of code of conduct guidelines.')"
-                                class="w-full bg-slate-950 hover:bg-slate-800 border border-slate-800/80 rounded-xl py-3 text-xs text-slate-400 hover:text-white font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
+                                class="w-full bg-slate-950 hover:bg-slate-800 border border-slate-800/80 rounded-xl py-3 text-xs text-slate-500 hover:text-white font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
                         >
                             <i data-lucide="help-circle" class="h-4 w-4"></i>
-                            Skip Pre-selection (General Violation)
+                            General Rule Violation (Default)
                         </button>
                     </div>
                 </div>
@@ -370,7 +370,8 @@
                             <span id="age-result" class="text-xs text-slate-300 font-mono font-bold"></span>
                             <button
                                     type="button"
-                                    onclick="triggerTargetPreset('Underage', 'junior account')"
+                                    id="mark-junior-btn"
+                                    onclick="toggleMarkJunior()"
                                     class="text-[9.5px] bg-[#10b981] hover:bg-emerald-600 text-white font-extrabold px-3 py-2 rounded-xl border border-emerald-500/50 cursor-pointer transition-all active:scale-95"
                             >
                                 Mark Junior
@@ -835,6 +836,7 @@
     // ✨ INTERACTIVE STEP-BY-STEP REPORT INFRASTRUCTURE ✨
     // ==========================================
     let currentStep = 1;
+    let userSelectedPresetCategory = "";
     let reportsCompletedCount = parseInt(localStorage.getItem("reports_completed_count") || "0");
 
     function startGuidedReport() {
@@ -848,6 +850,7 @@
         ACTIVE_REPORT.evidenceFileType = null;
         ACTIVE_REPORT.evidenceFileName = null;
         ACTIVE_REPORT.evidenceUrl = null;
+        userSelectedPresetCategory = "";
 
         const usernameInput = document.getElementById("game-target-username");
         if (usernameInput) usernameInput.value = "@";
@@ -882,6 +885,9 @@
 
     function setWizardStep(step) {
         currentStep = step;
+        if (step !== 4) {
+            window.underageBoxHasBeenShownThisReview = false;
+        }
 
         // Hide all steps
         document.getElementById("wizard-step-1").classList.add("hidden");
@@ -940,11 +946,11 @@
         if (!nextBtn) return;
 
         if (currentStep === 1) {
-            // Preset step is optional or advances automatically. Next button is active.
-            nextBtn.removeAttribute("disabled");
-            nextBtn.classList.remove("opacity-50", "pointer-events-none");
-            nextBtn.className = "bg-[#4f46e5] hover:bg-opacity-90 text-white font-extrabold px-5 py-2 rounded-xl transition-all text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-indigo-950/20";
-            nextBtn.innerHTML = `Skip <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>`;
+            // Preset step is fully mandatory. User must explicitly click a preset to proceed.
+            nextBtn.setAttribute("disabled", "true");
+            nextBtn.classList.add("opacity-50", "pointer-events-none");
+            nextBtn.className = "bg-slate-800 text-slate-500 font-extrabold px-5 py-2 rounded-xl text-xs flex items-center gap-1.5 pointer-events-none";
+            nextBtn.innerHTML = `Select a Preset <i data-lucide="lock" class="h-3.5 w-3.5"></i>`;
         } else if (currentStep === 2) {
             // Handle requirements validation
             const username = document.getElementById("game-target-username")?.value?.trim() || "";
@@ -972,6 +978,7 @@
     }
 
     function selectPresetAndAdvance(category, defaultDetails) {
+        userSelectedPresetCategory = category;
         // Clear custom detail textbox to trigger default override reason
         const detailsInput = document.getElementById("evidence-details-input");
         if (detailsInput) detailsInput.value = "";
@@ -1008,10 +1015,18 @@
             const byVal = document.getElementById("birthyear-input")?.value?.trim() || "";
             if (!byVal) {
                 // Deemed to have failed the age validation!
-                ACTIVE_REPORT.details = (ACTIVE_REPORT.details || "") + " (FAILED RULE AUDIT: User failed to provide birthyear input upon request)";
                 const detailInput = document.getElementById("evidence-details-input");
+                let currentReason = detailInput ? detailInput.value.trim() : "";
+                if (currentReason.startsWith("Player is underage (Age:")) {
+                    const idx = currentReason.indexOf(" - ");
+                    if (idx !== -1) {
+                        currentReason = currentReason.substring(idx + 3);
+                    }
+                }
+                const finalDetailsText = getUnderageDetailsText("Junior", currentReason);
+                ACTIVE_REPORT.details = finalDetailsText;
                 if (detailInput) {
-                    detailInput.value = ACTIVE_REPORT.details;
+                    detailInput.value = finalDetailsText;
                 }
                 runAutomaticLocalRules();
             }
@@ -1120,6 +1135,7 @@
             fullAnalysisText.includes("underage") ||
             fullAnalysisText.includes("12 and under") ||
             fullAnalysisText.includes("junior account") ||
+            fullAnalysisText.includes("failed to verificate") ||
             fullAnalysisText.includes("years old") ||
             fullAnalysisText.includes("yr old") ||
             fullAnalysisText.includes("age limit") ||
@@ -1175,7 +1191,14 @@
         }
 
         const birthyearBox = document.getElementById("underage-birthyear-box");
-        if (classifiedCategory === "Underage") {
+        const hasBirthyearValue = document.getElementById("birthyear-input")?.value?.trim() !== "";
+        let shouldShowBirthyear = (classifiedCategory === "Underage" || userSelectedPresetCategory === "Underage" || hasBirthyearValue);
+
+        if (currentStep === 4 && shouldShowBirthyear) {
+            window.underageBoxHasBeenShownThisReview = true;
+        }
+
+        if (shouldShowBirthyear || (currentStep === 4 && window.underageBoxHasBeenShownThisReview)) {
             birthyearBox.classList.remove("hidden");
         } else {
             birthyearBox.classList.add("hidden");
@@ -1198,7 +1221,13 @@
             const byVal = document.getElementById("birthyear-input")?.value?.trim();
             if (byVal) {
                 const currentYear = new Date().getFullYear();
-                calculatedAge = currentYear - parseInt(byVal);
+                if (byVal === "0" || parseInt(byVal) === 0) {
+                    calculatedAge = 0;
+                } else {
+                    calculatedAge = currentYear - parseInt(byVal);
+                }
+            } else if (rawReasonBox.includes("failed to verificate") || rawReasonBox.includes("junior account")) {
+                calculatedAge = 0;
             }
         }
         ACTIVE_REPORT.age = calculatedAge;
@@ -1240,15 +1269,87 @@
         updateDiscordPreviewStyles();
     }
 
+    function toggleMarkJunior() {
+        const birthyearInput = document.getElementById("birthyear-input");
+        if (!birthyearInput) return;
+
+        if (birthyearInput.value === "0") {
+            const prev = window.previousBirthyearValue || "";
+            birthyearInput.value = prev;
+            onBirthyearChange(prev);
+        } else {
+            window.previousBirthyearValue = birthyearInput.value;
+            birthyearInput.value = "0";
+            onBirthyearChange("0");
+        }
+    }
+    window.toggleMarkJunior = toggleMarkJunior;
+
+    function getUnderageDetailsText(age, baseReason) {
+        const ageStr = (age === 0 || age === "0" || age === "Junior") ? "Junior" : age;
+        let reason = baseReason || "";
+        if (!reason ||
+            reason === "failed to verificate, automatic junior account." ||
+            reason === "junior account" ||
+            reason === "Players 12 and under must use a junior account." ||
+            reason === "Player has failed age check and must use a junior account") {
+            if (ageStr === "Junior" || ageStr === 0 || ageStr === "0") {
+                reason = "Player has failed age check and must use a junior account";
+            } else {
+                reason = "Players 12 and under must use a junior account.";
+            }
+        }
+        return `Player is underage (Age: ${ageStr}) - ${reason}`;
+    }
+
     function onBirthyearChange(birthyear) {
         const ageResult = document.getElementById("age-result");
         const customInput = document.getElementById("evidence-details-input");
+        const markJuniorBtn = document.getElementById("mark-junior-btn");
+
+        const isDefault = customInput ? (
+            customInput.value.trim() === "" ||
+            customInput.value.trim() === "junior account" ||
+            customInput.value.trim() === "failed to verificate, automatic junior account." ||
+            customInput.value.trim() === "Player is underage or using an improper account." ||
+            customInput.value.trim() === "Player admitted to being under age limit in game." ||
+            customInput.value.trim() === "user has proven to fail the age check immediant junior account" ||
+            customInput.value.trim().startsWith("Player is underage (Age:")
+        ) : false;
+
         if (!birthyear) {
             ageResult.textContent = "";
+            if (markJuniorBtn) {
+                markJuniorBtn.classList.remove("bg-emerald-600/30", "text-emerald-350", "border-emerald-600");
+                markJuniorBtn.classList.add("bg-[#10b981]", "hover:bg-emerald-600");
+                markJuniorBtn.textContent = "Mark Junior";
+            }
+            if (customInput && isDefault) {
+                customInput.value = "Player is underage (Age: Junior) - Player has failed age check and must use a junior account";
+            }
+            runAutomaticLocalRules(true);
             return;
         }
+
+        const isJunior0 = birthyear === "0" || parseInt(birthyear) === 0;
+
+        if (markJuniorBtn) {
+            if (isJunior0) {
+                markJuniorBtn.classList.add("bg-emerald-600/30", "text-emerald-350", "border-emerald-600");
+                markJuniorBtn.classList.remove("bg-[#10b981]", "hover:bg-emerald-600");
+                markJuniorBtn.textContent = "Junior Toggled";
+            } else {
+                markJuniorBtn.classList.remove("bg-emerald-600/30", "text-emerald-350", "border-emerald-600");
+                markJuniorBtn.classList.add("bg-[#10b981]", "hover:bg-emerald-600");
+                markJuniorBtn.textContent = "Mark Junior";
+            }
+        }
+
         const currentYear = new Date().getFullYear();
-        const age = currentYear - parseInt(birthyear);
+        let age = currentYear - parseInt(birthyear);
+        if (isJunior0) {
+            age = 0;
+        }
 
         if (age < 0) {
             ageResult.textContent = "Invalid birthyear";
@@ -1256,20 +1357,41 @@
             return;
         }
 
+        // Extract baseReason before overwriting details
+        let baseReason = "Players 12 and under must use a junior account.";
+        if (customInput) {
+            const v = customInput.value.trim();
+            if (v.startsWith("Player is underage (Age:")) {
+                const idx = v.indexOf(" - ");
+                if (idx !== -1) {
+                    baseReason = v.substring(idx + 3);
+                }
+            } else if (v === "failed to verificate, automatic junior account." || v === "junior account") {
+                baseReason = "Players 12 and under must use a junior account.";
+            } else if (v !== "") {
+                baseReason = v;
+            }
+        }
+
         ageResult.classList.remove("text-red-500");
-        ageResult.textContent = `Age: ~${age} years old`;
+        if (isJunior0) {
+            ageResult.textContent = "Age: ~Junior Account";
+        } else {
+            ageResult.textContent = `Age: ~${age} years old`;
+        }
 
         if (age < 13) {
             ageResult.classList.add("text-emerald-500");
             ageResult.textContent += " (Underage confirmed)";
-            if (customInput && (!customInput.value.trim() || customInput.value === "Player is underage or using an improper account.")) {
-                customInput.value = "junior account";
+            if (customInput && isDefault) {
+                const ageStr = isJunior0 ? "Junior" : age;
+                customInput.value = getUnderageDetailsText(ageStr, baseReason);
             }
         } else {
             ageResult.classList.remove("text-emerald-500");
             ageResult.classList.add("text-red-500");
             ageResult.textContent += " (Not Underage)";
-            if (customInput && customInput.value === "junior account") {
+            if (customInput && isDefault) {
                 customInput.value = "";
             }
         }
@@ -1305,29 +1427,85 @@
         }
 
         let calculatedAge = null;
-        if (activePresetCategory === "Underage") {
+        if (activePresetCategory === "Underage" || activePresetCategory.includes("Underage")) {
             const birthyearInput = document.getElementById("birthyear-input");
             const customInput = document.getElementById("evidence-details-input");
             const hasBirthyear = birthyearInput && birthyearInput.value.trim().length > 0;
-            const hasFailedCheck = customInput && (customInput.value === 'junior account' || customInput.value.includes('fail the age check'));
+            const hasFailedCheck = customInput && (
+                customInput.value.includes('failed to verificate') ||
+                customInput.value.includes('junior account') ||
+                customInput.value.includes('fail the age check') ||
+                customInput.value.includes('failed age check') ||
+                customInput.value.includes('Age: Junior')
+            );
 
             if (hasBirthyear) {
+                const byValText = birthyearInput.value.trim();
+                const isJuniorZero = byValText === "0" || parseInt(byValText) === 0;
                 const currentYear = new Date().getFullYear();
-                calculatedAge = currentYear - parseInt(birthyearInput.value.trim());
-                if (calculatedAge >= 13 && !hasFailedCheck) {
+
+                calculatedAge = isJuniorZero ? 0 : (currentYear - parseInt(byValText));
+
+                if (!isJuniorZero && calculatedAge >= 13 && !hasFailedCheck) {
                     showNotification("success", `User is ${calculatedAge} years old and therefore not underage. Report skipped.`);
                     if (birthyearInput) { birthyearInput.value = ""; onBirthyearChange(""); }
                     return;
                 }
-                activePresetDetails = "junior account";
-                if (customInput && (customInput.value.trim() === "" || customInput.value === "Player is underage or using an improper account.")) {
-                    customInput.value = "junior account";
+                const ageStr = isJuniorZero ? "Junior" : calculatedAge;
+                let baseReason = ageStr === "Junior" ? "Player has failed age check and must use a junior account" : "Players 12 and under must use a junior account.";
+                if (customInput) {
+                    const v = customInput.value.trim();
+                    if (v.startsWith("Player is underage (Age:")) {
+                        const idx = v.indexOf(" - ");
+                        if (idx !== -1) {
+                            baseReason = v.substring(idx + 3);
+                        }
+                    } else if (v === "failed to verificate, automatic junior account." || v === "junior account") {
+                        baseReason = ageStr === "Junior" ? "Player has failed age check and must use a junior account" : "Players 12 and under must use a junior account.";
+                    } else if (v !== "") {
+                        baseReason = v;
+                    }
+                }
+                activePresetDetails = getUnderageDetailsText(ageStr, baseReason);
+                if (customInput && (
+                    customInput.value.trim() === "" ||
+                    customInput.value.trim() === "Player is underage or using an improper account." ||
+                    customInput.value.trim() === "Player admitted to being under age limit in game." ||
+                    customInput.value.trim() === "junior account" ||
+                    customInput.value.trim() === "user has proven to fail the age check immediant junior account" ||
+                    customInput.value.trim() === "failed to verificate, automatic junior account." ||
+                    customInput.value.trim().startsWith("Player is underage (Age:")
+                )) {
+                    customInput.value = activePresetDetails;
                 }
             } else {
                 // If there was no age input then the target reported user is deemed to have failed it
-                activePresetDetails = "user has proven to fail the age check immediant junior account";
+                let baseReason = "Player has failed age check and must use a junior account";
                 if (customInput) {
-                    customInput.value = "user has proven to fail the age check immediant junior account";
+                    const v = customInput.value.trim();
+                    if (v.startsWith("Player is underage (Age:")) {
+                        const idx = v.indexOf(" - ");
+                        if (idx !== -1) {
+                            baseReason = v.substring(idx + 3);
+                        }
+                    } else if (v === "failed to verificate, automatic junior account." || v === "junior account") {
+                        baseReason = "Player has failed age check and must use a junior account";
+                    } else if (v !== "") {
+                        baseReason = v;
+                    }
+                }
+                activePresetDetails = getUnderageDetailsText("Junior", baseReason);
+                calculatedAge = 0; // Deemed to have failed it -> Automatic Junior (Age 0)
+                if (customInput && (
+                    customInput.value.trim() === "" ||
+                    customInput.value.trim() === "Player is underage or using an improper account." ||
+                    customInput.value.trim() === "Player admitted to being under age limit in game." ||
+                    customInput.value.trim() === "junior account" ||
+                    customInput.value.trim() === "user has proven to fail the age check immediant junior account" ||
+                    customInput.value.trim() === "failed to verificate, automatic junior account." ||
+                    customInput.value.trim().startsWith("Player is underage (Age:")
+                )) {
+                    customInput.value = activePresetDetails;
                 }
             }
             runAutomaticLocalRules(false);
@@ -1343,7 +1521,7 @@
             reporterName: "@ModPurr",
             reportedName: targetClean,
             category: activePresetCategory.startsWith("CoC: ") ? activePresetCategory : "CoC: " + activePresetCategory,
-            age: calculatedAge || ACTIVE_REPORT.age,
+            age: (calculatedAge !== null ? calculatedAge : ACTIVE_REPORT.age),
             timestamp: "Today at " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             details: detailsToUse,
             evidenceUrl: ACTIVE_REPORT.evidenceUrl,
@@ -1358,11 +1536,18 @@
 
         // Auto-Copy Ban Record
         if (CONFIG.autoCopy) {
-            let reasonText = finalReport.category;
-            if (reasonText === "CoC: Underage" && finalReport.age) {
-                reasonText = `CoC: Underage (${finalReport.age})`;
+            let reasonText = finalReport.category || "";
+            if (reasonText === "CoC: Underage" || reasonText.includes("Underage")) {
+                if (finalReport.age !== null && finalReport.age !== undefined && finalReport.age !== "") {
+                    const ageStr = (finalReport.age === 0 || finalReport.age === "0" || finalReport.age === "Junior") ? "Junior" : finalReport.age;
+                    reasonText = `CoC: Underage (${ageStr})`;
+                }
             }
-            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${finalReport.details}`;
+            let detailsText = finalReport.details;
+            if (finalReport.evidenceUrl && !detailsText.includes(finalReport.evidenceUrl)) {
+                detailsText += " (" + finalReport.evidenceUrl + ")";
+            }
+            const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${detailsText}`;
             await navigator.clipboard.writeText(formattedRecord);
             sMessage += " Banned line copied automatically!";
         }
@@ -1480,9 +1665,12 @@
 
         // Direct Clipboard push
         if (CONFIG.autoCopy) {
-            let reasonText = finalObj.category;
-            if (reasonText === "CoC: Underage" && finalObj.age) {
-                reasonText = `CoC: Underage (${finalObj.age})`;
+            let reasonText = finalObj.category || "";
+            if (reasonText === "CoC: Underage" || reasonText.includes("Underage")) {
+                if (finalObj.age !== null && finalObj.age !== undefined && finalObj.age !== "") {
+                    const ageStr = (finalObj.age === 0 || finalObj.age === "0" || finalObj.age === "Junior") ? "Junior" : finalObj.age;
+                    reasonText = `CoC: Underage (${ageStr})`;
+                }
             }
             const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalObj.reportedName} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${finalObj.details}`;
             await navigator.clipboard.writeText(formattedRecord);
@@ -1856,10 +2044,19 @@
             // Automation step 1: Auto-Copy Ban Record Format
             if (CONFIG.autoCopy) {
                 let reasonText = finalReport.category || "General Violation";
-                if (reasonText === "CoC: Underage" && ACTIVE_REPORT.age) {
-                    reasonText = `CoC: Underage (${ACTIVE_REPORT.age})`;
+                if (reasonText === "CoC: Underage" || reasonText.includes("Underage")) {
+                    const targetAge = finalReport.age !== null && finalReport.age !== undefined && finalReport.age !== "" ? finalReport.age : ACTIVE_REPORT.age;
+                    if (targetAge !== null && targetAge !== undefined && targetAge !== "") {
+                        const ageStr = (targetAge === 0 || targetAge === "0" || targetAge === "Junior") ? "Junior" : targetAge;
+                        reasonText = `CoC: Underage (${ageStr})`;
+                    }
                 }
-                const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName || "@unknown"} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${finalReport.details || "(none)"}`;
+                let detailsText = finalReport.details || "(none)";
+                const urlToUse = finalReport.evidenceUrl || ACTIVE_REPORT.evidenceUrl;
+                if (urlToUse && !detailsText.includes(urlToUse)) {
+                    detailsText += " (" + urlToUse + ")";
+                }
+                const formattedRecord = `:no_entry_sign: **BANNED USER RECORD**\n:bust_in_silhouette: **User**: ${finalReport.reportedName || "@unknown"} - :scroll: **Category**: ${reasonText} - :pencil: **Details**: ${detailsText}`;
 
                 await navigator.clipboard.writeText(formattedRecord);
                 successMessage += " Copied new RecRoom ban record to your clipboard automatically!";
@@ -1908,7 +2105,8 @@
             reported: ACTIVE_REPORT.reportedName,
             category: ACTIVE_REPORT.category,
             details: ACTIVE_REPORT.details,
-            age: ACTIVE_REPORT.age
+            age: ACTIVE_REPORT.age,
+            evidenceUrl: ACTIVE_REPORT.evidenceUrl
         };
 
         CONFIG.history.unshift(newHistoryItem);
@@ -1943,13 +2141,16 @@
 
         historyList.innerHTML = CONFIG.history.map(item => {
             const detailsExcerpt = item.details || "(No evidence description)";
-            let cat = item.category;
-            if (cat === "CoC: Underage" && item.age) {
-                cat = `CoC: Underage (${item.age})`;
+            let cat = item.category || "";
+            if (cat === "CoC: Underage" || cat.includes("Underage")) {
+                if (item.age !== null && item.age !== undefined && item.age !== "") {
+                    const ageStr = (item.age === 0 || item.age === "0" || item.age === "Junior") ? "Junior" : item.age;
+                    cat = `CoC: Underage (${ageStr})`;
+                }
             }
             return `
-            <div class="pt-2.5 first:pt-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
-              <div class="space-y-0.5 min-w-0 flex-1">
+            <div class="pt-2.5 first:pt-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs border-b border-slate-900 pb-2.5 last:border-b-0">
+              <div class="space-y-1.5 min-w-0 flex-1">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <span class="font-bold text-slate-350">${escapeHtml(item.reporter || "Unknown")}</span>
                   <i data-lucide="chevron-right" class="h-3 w-3 text-slate-600"></i>
@@ -1958,7 +2159,12 @@
                     ${escapeHtml(cat)}
                   </span>
                 </div>
-                <p class="text-[10px] text-slate-500 font-medium font-mono">Dispatched: ${item.timestamp}</p>
+                <div class="space-y-0.5">
+                  <p class="text-[10px] text-slate-500 font-medium font-mono">Dispatched: ${item.timestamp}</p>
+                  <p class="text-[11px] text-slate-300 italic border-l-2 border-slate-700/60 pl-2 leading-relaxed">
+                    ${escapeHtml(detailsExcerpt)}
+                  </p>
+                </div>
               </div>
 
               <!-- Button groupings -->
@@ -2036,8 +2242,11 @@
     function getRecRoomRecordLine(item) {
         const user = item.reported || "@unknown";
         let reason = item.category || "General Violation";
-        if (reason === "CoC: Underage" && item.age) {
-            reason = `CoC: Underage (${item.age})`;
+        if (reason === "CoC: Underage" || reason.includes("Underage")) {
+            if (item.age !== null && item.age !== undefined && item.age !== "") {
+                const ageStr = (item.age === 0 || item.age === "0" || item.age === "Junior") ? "Junior" : item.age;
+                reason = `CoC: Underage (${ageStr})`;
+            }
         }
         let evidence = item.details || "";
 
@@ -2051,6 +2260,12 @@
 
         if (!evidence || evidence === "(none)") {
             evidence = "(none)";
+        }
+
+        // Dynamically append evidence URL if available
+        const urlToUse = item.evidenceUrl || (item.id === undefined ? ACTIVE_REPORT.evidenceUrl : null);
+        if (urlToUse && !evidence.includes(urlToUse)) {
+            evidence += " (" + urlToUse + ")";
         }
 
         return `:bust_in_silhouette: **User**: ${user} - :scroll: **Category**: ${reason} - :pencil: **Details**: ${evidence}`;
@@ -2177,7 +2392,7 @@
         </button>
 
         <p class="text-[10px] text-slate-500 font-mono tracking-wide">
-            Ready for Discord Chud Mod Deployment
+            Ready for Discord Embed Deployment
         </p>
     </div>
 </div>
