@@ -779,7 +779,7 @@
 
         if (copyScriptBtn) {
             copyScriptBtn.addEventListener("click", () => {
-                const codeToCopy = `-- meowijuana.lol\nrepeat task.wait() until game:IsLoaded() loadstring(game:HttpGet("https://raw.githubusercontent.com/hollyntt/PLWVRE-Roblox-Script/refs/heads/main/PLVSMVWVRE-RBLX/Meowijuana.Loader.lua"))()`;
+                const codeToCopy = `-- meowijuana.lol\nrepeat task.wait() until game:IsLoaded()\nloadstring(game:HttpGet("https://raw.githubusercontent.com/hollyntt/PLWVRE-Roblox-Script/refs/heads/main/PLVSMVWVRE-RBLX/Meowijuana.Loader.lua"))()`;
                 navigator.clipboard.writeText(codeToCopy).then(() => {
                     const originalText = copyScriptBtn.textContent;
                     copyScriptBtn.textContent = "COPIED";
