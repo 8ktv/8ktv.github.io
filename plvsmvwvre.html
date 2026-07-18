@@ -1,6 +1,6 @@
 ﻿<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PLVSMVWVRE</title>
@@ -10,481 +10,484 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Impact', 'Haettenschweiler', 'Arial Narrow Bold', 'sans-serif'],
-                    }
-                }
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Impact', 'Haettenschweiler', 'Arial Narrow Bold', 'sans-serif'],
             }
+          }
         }
+      }
     </script>
     <style>
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      .cursor-blink {
+        animation: blink 1s step-end infinite;
+      }
+      .premium-glow {
+        -webkit-text-stroke: 1.5px #000000;
+        text-shadow: 
+          -2px -2px 0 #000000,  
+           2px -2px 0 #000000,
+          -2px  2px 0 #000000,
+           2px  2px 0 #000000,
+           0 0 12px rgba(0, 0, 0, 0.85),
+           0 0 25px rgba(0, 0, 0, 0.95),
+           0 0 18px rgba(245, 245, 243, 0.22), 
+           0 0 35px rgba(245, 245, 243, 0.12), 
+           0 0 4px rgba(245, 245, 243, 0.08);
+      }
+      @keyframes breathe {
+        0%, 100% { opacity: 0.12; }
+        50% { opacity: 0.18; }
+      }
+      .breathing-opacity {
+        animation: breathe 8s ease-in-out infinite;
+        opacity: 0.15;
+      }
+      @keyframes spin {
+        from { transform: perspective(1500px) rotateY(0deg); }
+        to { transform: perspective(1500px) rotateY(360deg); }
+      }
+      .spinning-logo {
+        animation: spin 45s linear infinite;
+        transform-style: preserve-3d;
+      }
+      @keyframes vignette-pulse {
+        0%, 100% { opacity: 0.35; }
+        50% { opacity: 0.65; }
+      }
+      .vignette-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(circle, rgba(245, 245, 243, 0.06) 0%, rgba(0, 0, 0, 0) 85%);
+        z-index: 1;
+        animation: vignette-pulse 10s ease-in-out infinite;
+      }
+      @keyframes entry-fade-scale {
+        0% {
+          opacity: 0;
+          transform: scale(0.96);
         }
-        .cursor-blink {
-            animation: blink 1s step-end infinite;
+        100% {
+          opacity: 1;
+          transform: scale(1);
         }
-        .premium-glow {
-            -webkit-text-stroke: 1.5px #000000;
-            text-shadow:
-                    -2px -2px 0 #000000,
-                    2px -2px 0 #000000,
-                    -2px  2px 0 #000000,
-                    2px  2px 0 #000000,
-                    0 0 12px rgba(0, 0, 0, 0.85),
-                    0 0 25px rgba(0, 0, 0, 0.95),
-                    0 0 18px rgba(245, 245, 243, 0.22),
-                    0 0 35px rgba(245, 245, 243, 0.12),
-                    0 0 4px rgba(245, 245, 243, 0.08);
-        }
-        @keyframes breathe {
-            0%, 100% { opacity: 0.12; }
-            50% { opacity: 0.18; }
-        }
-        .breathing-opacity {
-            animation: breathe 8s ease-in-out infinite;
-            opacity: 0.15;
-        }
-        @keyframes spin {
-            from { transform: perspective(1500px) rotateY(0deg); }
-            to { transform: perspective(1500px) rotateY(360deg); }
-        }
-        .spinning-logo {
-            animation: spin 45s linear infinite;
-            transform-style: preserve-3d;
-        }
-        @keyframes vignette-pulse {
-            0%, 100% { opacity: 0.35; }
-            50% { opacity: 0.65; }
-        }
-        .vignette-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background: radial-gradient(circle, rgba(245, 245, 243, 0.06) 0%, rgba(0, 0, 0, 0) 85%);
-            z-index: 1;
-            animation: vignette-pulse 10s ease-in-out infinite;
-        }
-        @keyframes entry-fade-scale {
-            0% {
-                opacity: 0;
-                transform: scale(0.96);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        .entry-animate {
-            animation: entry-fade-scale 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .scanline-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background: linear-gradient(
-                    rgba(245, 245, 243, 0) 50%,
-                    rgba(0, 0, 0, 0.18) 50%
-            );
-            background-size: 100% 3.5px;
-            z-index: 5;
-            opacity: 0.35;
-        }
-        @keyframes noise-shift {
-            0% { transform: translate(0, 0); }
-            10% { transform: translate(-1%, -2%); }
-            20% { transform: translate(-3%, 1%); }
-            30% { transform: translate(2%, -1%); }
-            40% { transform: translate(-1%, 3%); }
-            50% { transform: translate(-2%, -3%); }
-            60% { transform: translate(3%, 1%); }
-            70% { transform: translate(1%, 2%); }
-            80% { transform: translate(-2%, -2%); }
-            90% { transform: translate(2%, 3%); }
-            100% { transform: translate(-1%, -1%); }
-        }
-        .grain-overlay {
-            position: fixed;
-            top: -10%;
-            left: -10%;
-            width: 120%;
-            height: 120%;
-            pointer-events: none;
-            z-index: 20;
-            opacity: 0.20;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            animation: noise-shift 0.12s infinite steps(2);
-        }
-        @keyframes eq-height {
-            0%, 100% { height: 3px; }
-            50% { height: 10px; }
-        }
-        .animate-eq1 { animation: eq-height 0.8s ease-in-out infinite; }
-        .animate-eq2 { animation: eq-height 1.2s ease-in-out infinite 0.2s; }
-        .animate-eq3 { animation: eq-height 1.0s ease-in-out infinite 0.4s; }
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(245, 245, 243, 0.15);
-            border-radius: 99px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(245, 245, 243, 0.3);
-        }
+      }
+      .entry-animate {
+        animation: entry-fade-scale 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .scanline-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          rgba(245, 245, 243, 0) 50%, 
+          rgba(0, 0, 0, 0.18) 50%
+        );
+        background-size: 100% 3.5px;
+        z-index: 5;
+        opacity: 0.35;
+      }
+      @keyframes noise-shift {
+        0% { transform: translate(0, 0); }
+        10% { transform: translate(-1%, -2%); }
+        20% { transform: translate(-3%, 1%); }
+        30% { transform: translate(2%, -1%); }
+        40% { transform: translate(-1%, 3%); }
+        50% { transform: translate(-2%, -3%); }
+        60% { transform: translate(3%, 1%); }
+        70% { transform: translate(1%, 2%); }
+        80% { transform: translate(-2%, -2%); }
+        90% { transform: translate(2%, 3%); }
+        100% { transform: translate(-1%, -1%); }
+      }
+      .grain-overlay {
+        position: fixed;
+        top: -10%;
+        left: -10%;
+        width: 120%;
+        height: 120%;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0.20;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        animation: noise-shift 0.12s infinite steps(2);
+      }
+      @keyframes eq-height {
+        0%, 100% { height: 3px; }
+        50% { height: 10px; }
+      }
+      .animate-eq1 { animation: eq-height 0.8s ease-in-out infinite; }
+      .animate-eq2 { animation: eq-height 1.2s ease-in-out infinite 0.2s; }
+      .animate-eq3 { animation: eq-height 1.0s ease-in-out infinite 0.4s; }
+      
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 3px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(245, 245, 243, 0.15);
+        border-radius: 99px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(245, 245, 243, 0.3);
+      }
     </style>
-</head>
-<body class="h-screen w-screen bg-black text-[#F5F5F3] selection:bg-[#F5F5F3] selection:text-black font-sans flex items-center justify-center overflow-hidden m-0 p-0 relative">
+  </head>
+  <body class="h-screen w-screen bg-black text-[#F5F5F3] selection:bg-[#F5F5F3] selection:text-black font-sans flex items-center justify-center overflow-hidden m-0 p-0 relative">
+    
+    <div class="scanline-overlay"></div>
+    <div class="grain-overlay"></div>
+    <div class="vignette-overlay"></div>
+    <div id="white-flash" class="fixed inset-0 bg-white pointer-events-none z-[100] opacity-0"></div>
 
-<div class="scanline-overlay"></div>
-<div class="grain-overlay"></div>
-<div class="vignette-overlay"></div>
-<div id="white-flash" class="fixed inset-0 bg-white pointer-events-none z-[100] opacity-0"></div>
-
-<div class="absolute bottom-6 right-6 z-50 flex flex-col items-end gap-2 font-mono">
-    <div id="spotify-panel" class="w-[330px] h-[400px] bg-black/75 border border-[#F5F5F3]/10 backdrop-blur-xl rounded-xl overflow-hidden shadow-2xl transition-all duration-300 transform translate-y-3 opacity-0 pointer-events-none flex flex-col p-2 gap-2">
+    <div class="absolute bottom-6 right-6 z-50 flex flex-col items-end gap-2 font-mono">
+      <div id="spotify-panel" class="w-[330px] h-[400px] bg-black/75 border border-[#F5F5F3]/10 backdrop-blur-xl rounded-xl overflow-hidden shadow-2xl transition-all duration-300 transform translate-y-3 opacity-0 pointer-events-none flex flex-col p-2 gap-2">
         <iframe id="spotify-iframe" class="opacity-90 hover:opacity-100 transition-opacity duration-300 rounded-lg shrink-0" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/axxturel/1-lucifer-batmobile&color=%23121212&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false" width="100%" height="120" frameBorder="no" scrolling="no" allow="autoplay" loading="lazy"></iframe>
-
+        
         <div class="flex flex-col gap-1 text-[10px] select-none font-mono mt-0.5 overflow-hidden flex-1">
-            <div class="text-[8px] tracking-[0.18em] text-[#F5F5F3]/40 uppercase px-1 pb-1 border-b border-[#F5F5F3]/5">
-                Select Track
-            </div>
-            <div class="flex flex-col gap-1 overflow-y-auto pr-0.5 custom-scrollbar pb-1">
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/1-lucifer-batmobile">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">1 - lucifer batmobile</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">01</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/sha666y/tweakin-w-4jay-prod-4jay">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">tweakin'</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">2shanez, 4Jay</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">02</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/devcapoo/dev-capo-chrome-gutz-p">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">Chrome Gutz</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">Dev Capo</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">03</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/close-my-eyes-w-bacleo">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">close My Eyes</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel, Bacleo</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">04</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/1006-anthem">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">1006 anthem</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">Luci4</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">05</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/3-lucifer-x-naamah-vampiric-assault-prod-deemo">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">3 - lucifer x naamah (vampiric assault)</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">06</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/noktifer-speaks">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">noktifer speaks</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">07</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/topsdollarsign/put-it-on-a-t-shirt-mono">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">put it on a t-shirt (mono)</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">topsdollarsign</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">08</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/siptilwedie/kult-w-hav7c-skecthers">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">kult w/ hav7c</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">skecthers</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">09</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/noid4l/still-flexin-still-steppin">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">still flexin still steppin</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">noid4l</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">10</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/noid4l/internet-gangsters">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">internet gangsters</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">noid4l</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">11</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/slimegetem/gears-of-wars">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">gears of wars</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">slimegetem</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">12</span>
-                </button>
-                <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/kinchwin/make-sum-shake-prod-333synx">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">make sum shake</span>
-                        <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">kinchwin</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">13</span>
-                </button>
-            </div>
+          <div class="text-[8px] tracking-[0.18em] text-[#F5F5F3]/40 uppercase px-1 pb-1 border-b border-[#F5F5F3]/5">
+            Select Track
+          </div>
+          <div class="flex flex-col gap-1 overflow-y-auto pr-0.5 custom-scrollbar pb-1">
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/1-lucifer-batmobile">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">1 - lucifer batmobile</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">01</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/sha666y/tweakin-w-4jay-prod-4jay">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">tweakin'</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">2shanez, 4Jay</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">02</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/devcapoo/dev-capo-chrome-gutz-p">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">Chrome Gutz</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">Dev Capo</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">03</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/close-my-eyes-w-bacleo">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">close My Eyes</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel, Bacleo</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">04</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/1006-anthem">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">1006 anthem</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">Luci4</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">05</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/3-lucifer-x-naamah-vampiric-assault-prod-deemo">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">3 - lucifer x naamah (vampiric assault)</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">06</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/axxturel/noktifer-speaks">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">noktifer speaks</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">axxturel</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">07</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/topsdollarsign/put-it-on-a-t-shirt-mono">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">put it on a t-shirt (mono)</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">topsdollarsign</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">08</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/siptilwedie/kult-w-hav7c-skecthers">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">kult w/ hav7c</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">skecthers</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">09</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/noid4l/still-flexin-still-steppin">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">still flexin still steppin</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">noid4l</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">10</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/noid4l/internet-gangsters">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">internet gangsters</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">noid4l</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">11</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/slimegetem/gears-of-wars">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">gears of wars</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">slimegetem</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">12</span>
+            </button>
+            <button class="track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer" data-url="https://soundcloud.com/kinchwin/make-sum-shake-prod-333synx">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium truncate text-[10px]">make sum shake</span>
+                <span class="text-[#F5F5F3]/40 text-[8px] truncate mt-0.5">kinchwin</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/40 shrink-0">13</span>
+            </button>
+          </div>
         </div>
-    </div>
-
-    <button id="soundtrack-toggle" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/25 transition-all duration-300 cursor-pointer backdrop-blur-md select-none text-[10px] tracking-widest uppercase text-[#F5F5F3]/80 hover:text-[#F5F5F3]">
+      </div>
+      
+      <button id="soundtrack-toggle" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/25 transition-all duration-300 cursor-pointer backdrop-blur-md select-none text-[10px] tracking-widest uppercase text-[#F5F5F3]/80 hover:text-[#F5F5F3]">
         <div class="flex items-end gap-[2px] h-[10px] w-[10px] mr-1">
-            <div class="w-[2px] bg-[#F5F5F3] animate-eq1" style="height: 3px;"></div>
-            <div class="w-[2px] bg-[#F5F5F3] animate-eq2" style="height: 3px;"></div>
-            <div class="w-[2px] bg-[#F5F5F3] animate-eq3" style="height: 3px;"></div>
+          <div class="w-[2px] bg-[#F5F5F3] animate-eq1" style="height: 3px;"></div>
+          <div class="w-[2px] bg-[#F5F5F3] animate-eq2" style="height: 3px;"></div>
+          <div class="w-[2px] bg-[#F5F5F3] animate-eq3" style="height: 3px;"></div>
         </div>
         <span id="soundtrack-text">Soundtrack</span>
-    </button>
-</div>
-
-<div class="entry-animate absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
-    <div id="logo-parallax" class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)">
-        <div id="logo-image-container" class="w-[45vw] h-[45vw] max-w-[320px] max-h-[320px] md:max-w-[400px] md:max-h-[400px]">
-            <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="w-full h-full object-contain breathing-opacity spinning-logo" referrerpolicy="no-referrer" />
-        </div>
+      </button>
     </div>
 
-    <div class="select-none px-6 text-center flex flex-col items-center justify-center gap-8 relative z-10 pointer-events-auto">
+    <div class="entry-animate absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+      <div id="logo-parallax" class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden transition-transform duration-[400ms] cubic-bezier(0.16, 1, 0.3, 1)">
+        <div id="logo-image-container" class="w-[45vw] h-[45vw] max-w-[320px] max-h-[320px] md:max-w-[400px] md:max-h-[400px]">
+          <img id="background-logo" src="https://raw.githubusercontent.com/8ktv/8ktv.github.io/d67edba4451c2c0d04edd4d5d79541fcd6d06d42/images/LogoPlasma2k25.png" alt="" class="w-full h-full object-contain breathing-opacity spinning-logo" referrerpolicy="no-referrer" />
+        </div>
+      </div>
+
+      <div class="select-none px-6 text-center flex flex-col items-center justify-center gap-8 relative z-10 pointer-events-auto">
         <div class="inline-flex items-center justify-center min-h-[5rem]">
-            <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em] premium-glow">
-                <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[5px] h-[0.9em] bg-[#F5F5F3] border border-black cursor-blink ml-1 align-middle"></span>
-            </h1>
+          <h1 class="text-4xl sm:text-5xl md:text-7xl font-sans font-black tracking-[0.43em] uppercase leading-none pl-[0.43em] premium-glow">
+            <span id="typewriter-target"></span><span id="typewriter-cursor" class="inline-block w-[5px] h-[0.9em] bg-[#F5F5F3] border border-black cursor-blink ml-1 align-middle"></span>
+          </h1>
         </div>
 
         <div class="flex flex-col items-center gap-3">
-            <div class="flex items-center justify-center gap-6 text-xs sm:text-sm tracking-[0.25em] uppercase text-[#F5F5F3]/60 font-mono">
-                <a href="https://discord.gg/kFseSHUgAE" id="community-link" target="_blank" rel="noopener noreferrer" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5">
-                    Community
-                </a>
-                <span class="text-[#F5F5F3]/25 select-none">||</span>
-                <button id="download-btn" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5 uppercase font-mono">
-                    Download
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="download-modal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[80] opacity-0 pointer-events-none flex items-center justify-center transition-all duration-300">
-    <div id="modal-background" class="absolute inset-0 z-0 opacity-30 pointer-events-none" style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2768430/header.jpg?t=1764521441'); background-size: cover; background-position: right top; -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0)); mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0));"></div>
-    <div class="relative w-full h-full bg-transparent border-none flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
-
-        <div class="flex items-center justify-between px-6 py-4 border-b border-[#F5F5F3]/10 shrink-0">
-            <div class="flex flex-col relative z-10">
-                <h2 class="font-mono text-[10px] tracking-[0.2em] text-[#F5F5F3] uppercase">Downlink Core</h2>
-                <p class="font-mono text-[8px] text-[#F5F5F3]/40 uppercase tracking-widest mt-0.5">Select target workspace build</p>
-            </div>
-            <button id="close-download-btn" class="font-mono text-[8px] tracking-widest uppercase px-3 py-1.5 rounded border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/5 transition-all text-[#F5F5F3]/60 hover:text-[#F5F5F3] cursor-pointer relative z-10">
-                Close [esc]
+          <div class="flex items-center justify-center gap-6 text-xs sm:text-sm tracking-[0.25em] uppercase text-[#F5F5F3]/60 font-mono">
+            <a href="https://discord.gg/kFseSHUgAE" id="community-link" target="_blank" rel="noopener noreferrer" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5">
+              Community
+            </a>
+            <span class="text-[#F5F5F3]/25 select-none">||</span>
+            <button id="download-btn" class="hover:text-[#F5F5F3] cursor-pointer transition-colors duration-200 border-b border-transparent hover:border-[#F5F5F3] pb-0.5 uppercase font-mono">
+              Download
             </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="download-modal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[80] opacity-0 pointer-events-none flex items-center justify-center transition-all duration-300">
+      <div id="modal-background" class="absolute inset-0 z-0 opacity-30 pointer-events-none" style="background-image: url('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2768430/header.jpg?t=1764521441'); background-size: cover; background-position: right top; -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0)); mask-image: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0));"></div>
+      <div class="relative w-full h-full bg-transparent border-none flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden">
+        
+        <div class="flex items-center justify-between px-6 py-4 border-b border-[#F5F5F3]/10 shrink-0">
+          <div class="flex flex-col relative z-10">
+            <h2 class="font-mono text-[10px] tracking-[0.2em] text-[#F5F5F3] uppercase">Downlink Core</h2>
+            <p class="font-mono text-[8px] text-[#F5F5F3]/40 uppercase tracking-widest mt-0.5">Select target workspace build</p>
+          </div>
+          <button id="close-download-btn" class="font-mono text-[8px] tracking-widest uppercase px-3 py-1.5 rounded border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/5 transition-all text-[#F5F5F3]/60 hover:text-[#F5F5F3] cursor-pointer relative z-10">
+            Close [esc]
+          </button>
         </div>
 
         <div class="flex flex-1 min-h-0 divide-y md:divide-y-0 md:divide-x divide-[#F5F5F3]/10 flex-col md:flex-row">
+          
+          <div class="w-full md:w-1/3 flex flex-col p-4 gap-2 overflow-y-auto custom-scrollbar shrink-0">
+            <div class="font-mono text-[8px] tracking-[0.15em] text-[#F5F5F3]/30 uppercase px-1 pb-1">
+              Select Modded Environment
+            </div>
+            
+            <button id="game-btn-atlyss" class="game-tab-btn active w-full flex items-center justify-between p-3 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 text-left transition-all duration-200 cursor-pointer">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3] font-medium text-[11px] uppercase tracking-wider">ATLYSS</span>
+                <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvre</span>
+              </div>
+              <span class="btn-status-badge font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
+            </button>
 
-            <div class="w-full md:w-1/3 flex flex-col p-4 gap-2 overflow-y-auto custom-scrollbar shrink-0">
-                <div class="font-mono text-[8px] tracking-[0.15em] text-[#F5F5F3]/30 uppercase px-1 pb-1">
-                    Select Modded Environment
+            <button id="game-btn-sbg" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider">Super Battle Golf</span>
+                <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvreSBG</span>
+              </div>
+              <span class="btn-status-badge font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
+            </button>
+
+            <button id="game-btn-roblox" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
+              <div class="flex flex-col min-w-0 pr-2">
+                <span class="text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider">Roblox Script</span>
+                <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">PLWVRE Roblox Tool</span>
+              </div>
+              <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/50 shrink-0 uppercase px-1.5 py-0.5 rounded border border-[#F5F5F3]/20 bg-[#F5F5F3]/5">Script</span>
+            </button>
+          </div>
+
+          <div class="flex-1 flex flex-col p-6 overflow-y-auto custom-scrollbar min-h-0 justify-between">
+            
+            <div id="content-atlyss" class="game-tab-content flex flex-col gap-6 relative">
+              
+              <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0 relative z-10">
+                <div class="flex flex-col gap-1">
+                  <h3 class="font-sans text-xl font-bold tracking-widest uppercase">ATLYSS Modded</h3>
+                  <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package</p>
+                </div>
+                <div class="content-status-badge flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Active - Version 3.1.2
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-5">
+                <div class="flex gap-4">
+                  <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">01</div>
+                  <div class="flex flex-col gap-2">
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Choose & Download a Mod Manager</span>
+                    <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Select your preferred Thunderstore-compatible manager to handle automatic or manual installations.</p>
+                    <div class="flex flex-wrap gap-2 mt-1">
+                      <a href="https://github.com/Kesomannen/gale/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Gale Mod Manager</a>
+                      <a href="https://github.com/ebkr/r2modmanPlus/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">r2modman (r2mm)</a>
+                      <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Thunderstore App</a>
+                    </div>
+                  </div>
                 </div>
 
-                <button id="game-btn-atlyss" class="game-tab-btn active w-full flex items-center justify-between p-3 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 text-left transition-all duration-200 cursor-pointer">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3] font-medium text-[11px] uppercase tracking-wider">ATLYSS</span>
-                        <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvre</span>
+                <div class="flex gap-4">
+                  <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">02</div>
+                  <div class="flex flex-col gap-2">
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
+                    <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvre</span> directly inside your mod manager or click below (mod file currently updating for the latest game build).</p>
+                    <div class="flex items-center gap-2 mt-1">
+                      <button id="atlyss-dl-btn" onclick="window.open('https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-3.1.2.zip', '_blank')" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                        Download meowijuana.lol-plvsmvwvre-3.1.2.zip
+                      </button>
                     </div>
-                    <span class="btn-status-badge font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
-                </button>
+                  </div>
+                </div>
 
-                <button id="game-btn-sbg" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider">Super Battle Golf</span>
-                        <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">meowijuana.lol-plvsmvwvreSBG</span>
-                    </div>
-                    <span class="btn-status-badge font-mono text-[8px] tracking-wider text-emerald-500 shrink-0 uppercase px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/5">Active</span>
-                </button>
-
-                <button id="game-btn-roblox" class="game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer">
-                    <div class="flex flex-col min-w-0 pr-2">
-                        <span class="text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider">Roblox Script</span>
-                        <span class="text-[#F5F5F3]/30 text-[8px] truncate mt-0.5 font-mono">PLWVRE Roblox Tool</span>
-                    </div>
-                    <span class="font-mono text-[8px] tracking-wider text-[#F5F5F3]/50 shrink-0 uppercase px-1.5 py-0.5 rounded border border-[#F5F5F3]/20 bg-[#F5F5F3]/5">Script</span>
-                </button>
+                <div class="flex gap-4">
+                  <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">03</div>
+                  <div class="flex flex-col gap-1">
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Import & Boot</span>
+                    <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Click "Install Mod" inside your manager or manually drag standard local zips directly to the launcher. Hit "Start Modded" from the launcher tool.</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="flex-1 flex flex-col p-6 overflow-y-auto custom-scrollbar min-h-0 justify-between">
+            <div id="content-sbg" class="game-tab-content hidden flex flex-col gap-6 relative">
+              
+              <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0 relative z-10">
+                <div class="flex flex-col gap-1">
+                  <h3 class="font-sans text-xl font-bold tracking-widest uppercase">Super Battle Golf</h3>
+                  <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package</p>
+                </div>
+                <div class="content-status-badge flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Active - Version 1.1.1
+                </div>
+              </div>
 
-                <div id="content-atlyss" class="game-tab-content flex flex-col gap-6 relative">
-
-                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0 relative z-10">
-                        <div class="flex flex-col gap-1">
-                            <h3 class="font-sans text-xl font-bold tracking-widest uppercase">ATLYSS Modded</h3>
-                            <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package</p>
-                        </div>
-                        <div class="content-status-badge flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Active - Version 3.1.2
-                        </div>
+              <div class="flex flex-col gap-5">
+                <div class="flex gap-4">
+                  <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">01</div>
+                  <div class="flex flex-col gap-2">
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Choose & Download a Mod Manager</span>
+                    <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Select your preferred Thunderstore-compatible manager to handle automatic or manual installations.</p>
+                    <div class="flex flex-wrap gap-2 mt-1">
+                      <a href="https://github.com/Kesomannen/gale/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Gale Mod Manager</a>
+                      <a href="https://github.com/ebkr/r2modmanPlus/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">r2modman (r2mm)</a>
+                      <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Thunderstore App</a>
                     </div>
-
-                    <div class="flex flex-col gap-5">
-                        <div class="flex gap-4">
-                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">01</div>
-                            <div class="flex flex-col gap-2">
-                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Choose & Download a Mod Manager</span>
-                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Select your preferred Thunderstore-compatible manager to handle automatic or manual installations.</p>
-                                <div class="flex flex-wrap gap-2 mt-1">
-                                    <a href="https://github.com/Kesomannen/gale/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Gale Mod Manager</a>
-                                    <a href="https://github.com/ebkr/r2modmanPlus/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">r2modman (r2mm)</a>
-                                    <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Thunderstore App</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-4">
-                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">02</div>
-                            <div class="flex flex-col gap-2">
-                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
-                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvre</span> directly inside your mod manager or click below (mod file currently updating for the latest game build).</p>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <button id="atlyss-dl-btn" onclick="window.open('https://8ktv.github.io/Assets/plvsmvwvre/Atlyss/meowijuana.lol-plvsmvwvre-3.1.2.zip', '_blank')" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
-                                        Download meowijuana.lol-plvsmvwvre-3.1.2.zip
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-4">
-                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">03</div>
-                            <div class="flex flex-col gap-1">
-                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Import & Boot</span>
-                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Click "Install Mod" inside your manager or manually drag standard local zips directly to the launcher. Hit "Start Modded" from the launcher tool.</p>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
 
-                <div id="content-sbg" class="game-tab-content hidden flex flex-col gap-6 relative">
-
-                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0 relative z-10">
-                        <div class="flex flex-col gap-1">
-                            <h3 class="font-sans text-xl font-bold tracking-widest uppercase">Super Battle Golf</h3>
-                            <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Thunderstore Mod Package</p>
-                        </div>
-                        <div class="content-status-badge flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Active - Version 1.1.1
-                        </div>
+                <div class="flex gap-4">
+                  <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">02</div>
+                  <div class="flex flex-col gap-2">
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
+                    <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvreSBG</span> directly inside your mod manager or click below.</p>
+                    <div class="flex items-center gap-2 mt-1">
+                      <a id="sbg-dl-btn" href="https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-1.1.1.zip" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
+                        Download meowijuana.lol-plvsmvwvreSBG-1.1.1.zip
+                      </a>
+                      <a href="https://github.com/8ktv/plvsmvwvre-SBG" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3]/5 text-[#F5F5F3] font-semibold hover:bg-[#F5F5F3]/10 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer border border-[#F5F5F3]/10">
+                        View Open Source
+                      </a>
                     </div>
-
-                    <div class="flex flex-col gap-5">
-                        <div class="flex gap-4">
-                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">01</div>
-                            <div class="flex flex-col gap-2">
-                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Choose & Download a Mod Manager</span>
-                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Select your preferred Thunderstore-compatible manager to handle automatic or manual installations.</p>
-                                <div class="flex flex-wrap gap-2 mt-1">
-                                    <a href="https://github.com/Kesomannen/gale/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Gale Mod Manager</a>
-                                    <a href="https://github.com/ebkr/r2modmanPlus/releases/latest" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">r2modman (r2mm)</a>
-                                    <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager" target="_blank" rel="noopener noreferrer" class="font-mono text-[9px] tracking-widest uppercase px-2.5 py-1.5 rounded bg-[#F5F5F3]/5 hover:bg-[#F5F5F3]/10 border border-[#F5F5F3]/10 hover:border-[#F5F5F3]/30 transition-all text-center">Thunderstore App</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-4">
-                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">02</div>
-                            <div class="flex flex-col gap-2">
-                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Acquire Mod Package</span>
-                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Search for <span class="font-mono text-[#F5F5F3]/90 bg-[#F5F5F3]/5 px-1 py-0.5 rounded border border-[#F5F5F3]/10">meowijuana.lol-plvsmvwvreSBG</span> directly inside your mod manager or click below.</p>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <a id="sbg-dl-btn" href="https://8ktv.github.io/Assets/plvsmvwvre/SBG/meowijuana.lol-plvsmvwvreSBG-1.1.1.zip" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-[9px] tracking-widest uppercase px-3 py-2 rounded bg-[#F5F5F3] text-black font-semibold hover:bg-[#F5F5F3]/90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer animate-pulse">
-                                        Download meowijuana.lol-plvsmvwvreSBG-1.1.1.zip
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-4">
-                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">03</div>
-                            <div class="flex flex-col gap-1">
-                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Import & Boot</span>
-                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Click "Install Mod" inside your manager or manually drag standard local zips directly to the launcher. Hit "Start Modded" from the launcher tool.</p>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
 
-                <div id="content-roblox" class="game-tab-content hidden flex flex-col gap-6">
-                    <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0">
-                        <div class="flex flex-col gap-1">
-                            <h3 class="font-sans text-xl font-bold tracking-widest uppercase">Roblox Executor Build</h3>
-                            <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Script Execution Payload</p>
-                        </div>
-                        <div class="flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Active Build Online
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-5">
-                        <div class="flex flex-col gap-2">
-                            <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Copy & Execute Script</span>
-                            <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Copy the execution code script below, paste it directly in your preferred script injection executor utility inside Roblox client during gameplay.</p>
-
-                            <div class="relative mt-2 border border-[#F5F5F3]/10 rounded-lg overflow-hidden bg-black/80">
-                                <div class="flex items-center justify-between px-3 py-1.5 bg-[#F5F5F3]/5 border-b border-[#F5F5F3]/10 select-none">
-                                    <span class="font-mono text-[8px] uppercase tracking-wider text-[#F5F5F3]/45">Execution script</span>
-                                    <button id="copy-script-btn" class="font-mono text-[8px] tracking-widest uppercase px-2 py-0.5 rounded border border-[#F5F5F3]/20 bg-transparent hover:bg-[#F5F5F3]/10 text-[#F5F5F3] transition-all cursor-pointer">
-                                        Copy to Clipboard
-                                    </button>
-                                </div>
-                                <div class="p-3 text-[9px] font-mono text-[#F5F5F3]/80 leading-normal overflow-x-auto select-text whitespace-pre-wrap select-all">repeat task.wait() until game:IsLoaded()
-                                    loadstring(game:HttpGet("https://raw.githubusercontent.com/hollyntt/PLWVRE-Roblox-Script/refs/heads/main/Meowijuana_Auth.lua"))()</div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-4">
-                            <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">i</div>
-                            <div class="flex flex-col gap-1">
-                                <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80 text-amber-500 font-semibold">Note</span>
-                                <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light font-sans">Make sure your Roblox environment is fully active and client-loaded before running the hook trigger executor sequence.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex gap-4">
+                  <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">03</div>
+                  <div class="flex flex-col gap-1">
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Import & Boot</span>
+                    <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Click "Install Mod" inside your manager or manually drag standard local zips directly to the launcher. Hit "Start Modded" from the launcher tool.</p>
+                  </div>
                 </div>
-
+              </div>
             </div>
+
+            <div id="content-roblox" class="game-tab-content hidden flex flex-col gap-6">
+              <div class="flex items-center justify-between border-b border-[#F5F5F3]/5 pb-4 shrink-0">
+                <div class="flex flex-col gap-1">
+                  <h3 class="font-sans text-xl font-bold tracking-widest uppercase">Roblox Executor Build</h3>
+                  <p class="font-mono text-[9px] text-[#F5F5F3]/40 uppercase tracking-widest">Script Execution Payload</p>
+                </div>
+                <div class="flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-wider px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-500">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Active Build Online
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-5">
+                <div class="flex flex-col gap-2">
+                  <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80">Copy & Execute Script</span>
+                  <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light">Copy the execution code script below, paste it directly in your preferred script injection executor utility inside Roblox client during gameplay.</p>
+                  
+                  <div class="relative mt-2 border border-[#F5F5F3]/10 rounded-lg overflow-hidden bg-black/80">
+                    <div class="flex items-center justify-between px-3 py-1.5 bg-[#F5F5F3]/5 border-b border-[#F5F5F3]/10 select-none">
+                      <span class="font-mono text-[8px] uppercase tracking-wider text-[#F5F5F3]/45">Execution script</span>
+                      <button id="copy-script-btn" class="font-mono text-[8px] tracking-widest uppercase px-2 py-0.5 rounded border border-[#F5F5F3]/20 bg-transparent hover:bg-[#F5F5F3]/10 text-[#F5F5F3] transition-all cursor-pointer">
+                        Copy to Clipboard
+                      </button>
+                    </div>
+                    <div class="p-3 text-[9px] font-mono text-[#F5F5F3]/80 leading-normal overflow-x-auto select-text whitespace-pre-wrap select-all">repeat task.wait() until game:IsLoaded()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/hollyntt/PLWVRE-Roblox-Script/refs/heads/main/Meowijuana_Auth.lua"))()</div>
+                  </div>
+                </div>
+
+                <div class="flex gap-4">
+                  <div class="font-mono text-xs text-[#F5F5F3]/20 shrink-0 w-6">i</div>
+                  <div class="flex flex-col gap-1">
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-[#F5F5F3]/80 text-amber-500 font-semibold">Note</span>
+                    <p class="text-[10px] text-[#F5F5F3]/50 leading-relaxed font-sans font-light font-sans">Make sure your Roblox environment is fully active and client-loaded before running the hook trigger executor sequence.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
+      </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
         const text = "PLVSMVWVRE";
         const target = document.getElementById("typewriter-target");
         const logoParallax = document.getElementById("logo-parallax");
@@ -493,27 +496,27 @@
         let isDeleting = false;
 
         function type() {
-            if (!isDeleting) {
-                if (index < text.length) {
-                    target.textContent += text.charAt(index);
-                    index++;
-                    const organicDelay = Math.floor(Math.random() * 100) + 80;
-                    setTimeout(type, organicDelay);
-                } else {
-                    isDeleting = true;
-                    setTimeout(type, 2000);
-                }
+          if (!isDeleting) {
+            if (index < text.length) {
+              target.textContent += text.charAt(index);
+              index++;
+              const organicDelay = Math.floor(Math.random() * 100) + 80;
+              setTimeout(type, organicDelay);
             } else {
-                if (index > 0) {
-                    target.textContent = text.substring(0, index - 1);
-                    index--;
-                    const organicDelay = Math.floor(Math.random() * 50) + 40;
-                    setTimeout(type, organicDelay);
-                } else {
-                    isDeleting = false;
-                    setTimeout(type, 800);
-                }
+              isDeleting = true;
+              setTimeout(type, 2000);
             }
+          } else {
+            if (index > 0) {
+              target.textContent = text.substring(0, index - 1);
+              index--;
+              const organicDelay = Math.floor(Math.random() * 50) + 40;
+              setTimeout(type, organicDelay);
+            } else {
+              isDeleting = false;
+              setTimeout(type, 800);
+            }
+          }
         }
 
         setTimeout(type, 800);
@@ -525,63 +528,63 @@
         let isAnimating = false;
 
         function triggerFlashAnimation(clickedElement, onPeak) {
-            if (isAnimating) return;
-            isAnimating = true;
+          if (isAnimating) return;
+          isAnimating = true;
 
-            const originalTransition = clickedElement.style.transition;
-            const originalTransform = clickedElement.style.transform;
-            const originalFilter = clickedElement.style.filter;
-            const originalColor = clickedElement.style.color;
+          const originalTransition = clickedElement.style.transition;
+          const originalTransform = clickedElement.style.transform;
+          const originalFilter = clickedElement.style.filter;
+          const originalColor = clickedElement.style.color;
 
-            clickedElement.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1), filter 400ms, color 400ms";
-            clickedElement.style.transform = "scale(18)";
-            clickedElement.style.filter = "brightness(10) blur(1px)";
-            clickedElement.style.color = "#ffffff";
-            clickedElement.style.zIndex = "50";
+          clickedElement.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1), filter 400ms, color 400ms";
+          clickedElement.style.transform = "scale(18)";
+          clickedElement.style.filter = "brightness(10) blur(1px)";
+          clickedElement.style.color = "#ffffff";
+          clickedElement.style.zIndex = "50";
 
-            if (logoImageContainer) {
-                logoImageContainer.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)";
-                logoImageContainer.style.transform = "scale(1.8)";
-            }
+          if (logoImageContainer) {
+            logoImageContainer.style.transition = "transform 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+            logoImageContainer.style.transform = "scale(1.8)";
+          }
 
-            whiteFlash.style.transition = "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1)";
-            whiteFlash.classList.remove("pointer-events-none");
-            whiteFlash.classList.remove("opacity-0");
-            whiteFlash.classList.add("opacity-100");
+          whiteFlash.style.transition = "opacity 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+          whiteFlash.classList.remove("pointer-events-none");
+          whiteFlash.classList.remove("opacity-0");
+          whiteFlash.classList.add("opacity-100");
+
+          setTimeout(() => {
+            if (onPeak) onPeak();
 
             setTimeout(() => {
-                if (onPeak) onPeak();
+              whiteFlash.style.transition = "opacity 850ms cubic-bezier(0.16, 1, 0.3, 1)";
+              whiteFlash.classList.remove("opacity-100");
+              whiteFlash.classList.add("opacity-0");
+              whiteFlash.classList.add("pointer-events-none");
 
-                setTimeout(() => {
-                    whiteFlash.style.transition = "opacity 850ms cubic-bezier(0.16, 1, 0.3, 1)";
-                    whiteFlash.classList.remove("opacity-100");
-                    whiteFlash.classList.add("opacity-0");
-                    whiteFlash.classList.add("pointer-events-none");
+              clickedElement.style.transition = "transform 850ms cubic-bezier(0.16, 1, 0.3, 1), filter 850ms, color 850ms";
+              clickedElement.style.transform = originalTransform || "scale(1)";
+              clickedElement.style.filter = originalFilter || "";
+              clickedElement.style.color = originalColor || "";
 
-                    clickedElement.style.transition = "transform 850ms cubic-bezier(0.16, 1, 0.3, 1), filter 850ms, color 850ms";
-                    clickedElement.style.transform = originalTransform || "scale(1)";
-                    clickedElement.style.filter = originalFilter || "";
-                    clickedElement.style.color = originalColor || "";
+              if (logoImageContainer) {
+                logoImageContainer.style.transition = "transform 850ms cubic-bezier(0.16, 1, 0.3, 1)";
+                logoImageContainer.style.transform = "scale(1)";
+              }
 
-                    if (logoImageContainer) {
-                        logoImageContainer.style.transition = "transform 850ms cubic-bezier(0.16, 1, 0.3, 1)";
-                        logoImageContainer.style.transform = "scale(1)";
-                    }
-
-                    setTimeout(() => {
-                        clickedElement.style.transition = originalTransition;
-                        clickedElement.style.zIndex = "";
-                        isAnimating = false;
-                    }, 850);
-                }, 100);
-            }, 400);
+              setTimeout(() => {
+                clickedElement.style.transition = originalTransition;
+                clickedElement.style.zIndex = "";
+                isAnimating = false;
+              }, 850);
+            }, 100);
+          }, 400);
         }
 
         communityLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            triggerFlashAnimation(communityLink, () => {
-                window.open(communityLink.href, "_blank");
-            });
+          e.preventDefault();
+          triggerFlashAnimation(communityLink, () => {
+            window.open(communityLink.href, "_blank");
+          });
         });
 
         const downloadModal = document.getElementById("download-modal");
@@ -591,23 +594,23 @@
         const copyScriptBtn = document.getElementById("copy-script-btn");
 
         downloadBtn.addEventListener("click", () => {
-            triggerFlashAnimation(downloadBtn, () => {
-                downloadModal.classList.remove("opacity-0", "pointer-events-none");
-                downloadModal.classList.add("opacity-100", "pointer-events-auto");
-            });
+          triggerFlashAnimation(downloadBtn, () => {
+            downloadModal.classList.remove("opacity-0", "pointer-events-none");
+            downloadModal.classList.add("opacity-100", "pointer-events-auto");
+          });
         });
 
         function closeDownloadModal() {
-            downloadModal.classList.remove("opacity-100", "pointer-events-auto");
-            downloadModal.classList.add("opacity-0", "pointer-events-none");
+          downloadModal.classList.remove("opacity-100", "pointer-events-auto");
+          downloadModal.classList.add("opacity-0", "pointer-events-none");
         }
 
         closeDownloadBtn.addEventListener("click", closeDownloadModal);
 
         window.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                closeDownloadModal();
-            }
+          if (e.key === "Escape") {
+            closeDownloadModal();
+          }
         });
 
         const gameBackgrounds = {
@@ -655,27 +658,27 @@
                         }
                     }
                 }
-
+                
                 if (!latestVersion) {
                     updateBadge(btnBadge, contentBadge, `Down`, 'red');
                     continue;
                 }
-
+                
                 const latestUrl = info.base.replace('{{version}}', latestVersion);
-
+                
                 // Update badge
                 updateBadge(btnBadge, contentBadge, `Active - Version ${latestVersion}`, 'emerald');
-
+                
                 // Update download button
                 if (dlBtn) {
-                    if (dlBtn.tagName === 'BUTTON') {
-                        dlBtn.onclick = () => window.open(latestUrl, "_blank");
-                        dlBtn.textContent = `Download meowijuana.lol-plvsmvwvre-${latestVersion}.zip`;
-                        if(key === 'sbg') dlBtn.textContent = dlBtn.textContent.replace('plvsmvwvre-', 'plvsmvwvreSBG-');
-                    } else {
-                        dlBtn.href = latestUrl;
-                        dlBtn.textContent = `Download ${latestUrl.split('/').pop()}`;
-                    }
+                     if (dlBtn.tagName === 'BUTTON') {
+                         dlBtn.onclick = () => window.open(latestUrl, "_blank");
+                         dlBtn.textContent = `Download meowijuana.lol-plvsmvwvre-${latestVersion}.zip`;
+                         if(key === 'sbg') dlBtn.textContent = dlBtn.textContent.replace('plvsmvwvre-', 'plvsmvwvreSBG-');
+                     } else {
+                         dlBtn.href = latestUrl;
+                         dlBtn.textContent = `Download ${latestUrl.split('/').pop()}`;
+                     }
                 }
             }
         }
@@ -686,10 +689,10 @@
                 red: 'text-red-500 border-red-500/20 bg-red-500/5',
                 amber: 'text-amber-500 border-amber-500/20 bg-amber-500/5'
             };
-
+            
             [btnBadge, contentBadge].forEach(b => {
                 if (!b) return;
-
+                
                 if (b.classList.contains('btn-status-badge')) {
                     b.textContent = text;
                 } else {
@@ -703,14 +706,14 @@
                 b.className = `${badgeClass} font-mono text-[8px] tracking-wider shrink-0 uppercase px-1.5 py-0.5 rounded border ${classes[color]}`;
             });
         }
-
+        
         updateGameStatus();
 
         window.checkAndDownload = async function(url, currentVersion) {
             console.log("Checking:", url);
             try {
                 const response = await fetch(url, { method: "HEAD" });
-
+            
                 if (response.ok) {
                     window.open(url, "_blank");
                     return;
@@ -718,18 +721,18 @@
             } catch (e) {
                 console.log("Direct check failed for current version.");
             }
-
+            
             let parts = currentVersion.split('.');
             let vPatch = parseInt(parts[2]);
-
+            
             for(let i=1; i<=5; i++) {
                 let nextVersion = `${parts[0]}.${parts[1]}.${vPatch + i}`;
                 let nextUrl = url.replace(currentVersion, nextVersion);
-
+                
                 try {
                     console.log("Checking:", nextUrl);
                     const nextResponse = await fetch(nextUrl, { method: "HEAD" });
-
+                
                     if (nextResponse.ok) {
                         window.open(nextUrl, "_blank");
                         return;
@@ -738,58 +741,58 @@
                     console.error("Direct check failed for version:", nextVersion);
                 }
             }
-
+            
             alert("Download link not found for current or newer versions. Please check back later.");
         }
 
 
         gameTabBtns.forEach((btn) => {
-            btn.addEventListener("click", () => {
-                gameTabBtns.forEach((b) => {
-                    b.className = "game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer";
-                    const titleNode = b.querySelector("span:first-child");
-                    if (titleNode) {
-                        titleNode.className = "text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider";
-                    }
-                });
-
-                btn.className = "game-tab-btn active w-full flex items-center justify-between p-3 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 text-left transition-all duration-200 cursor-pointer";
-                const currentTitleNode = btn.querySelector("span:first-child");
-                if (currentTitleNode) {
-                    currentTitleNode.className = "text-[#F5F5F3] font-medium text-[11px] uppercase tracking-wider";
-                }
-
-                gameTabContents.forEach((content) => {
-                    content.classList.add("hidden");
-                });
-
-                const targetId = btn.id.replace("game-btn-", "content-");
-                const targetContent = document.getElementById(targetId);
-                if (targetContent) {
-                    targetContent.classList.remove("hidden");
-                }
-
-                // Background change
-                const modalBackground = document.getElementById('modal-background');
-                if (modalBackground && gameBackgrounds[btn.id]) {
-                    modalBackground.style.backgroundImage = `url('${gameBackgrounds[btn.id]}')`;
-                }
+          btn.addEventListener("click", () => {
+            gameTabBtns.forEach((b) => {
+              b.className = "game-tab-btn w-full flex items-center justify-between p-3 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer";
+              const titleNode = b.querySelector("span:first-child");
+              if (titleNode) {
+                titleNode.className = "text-[#F5F5F3]/70 font-medium text-[11px] uppercase tracking-wider";
+              }
             });
+
+            btn.className = "game-tab-btn active w-full flex items-center justify-between p-3 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 text-left transition-all duration-200 cursor-pointer";
+            const currentTitleNode = btn.querySelector("span:first-child");
+            if (currentTitleNode) {
+              currentTitleNode.className = "text-[#F5F5F3] font-medium text-[11px] uppercase tracking-wider";
+            }
+
+            gameTabContents.forEach((content) => {
+              content.classList.add("hidden");
+            });
+
+            const targetId = btn.id.replace("game-btn-", "content-");
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+              targetContent.classList.remove("hidden");
+            }
+            
+            // Background change
+            const modalBackground = document.getElementById('modal-background');
+            if (modalBackground && gameBackgrounds[btn.id]) {
+                modalBackground.style.backgroundImage = `url('${gameBackgrounds[btn.id]}')`;
+            }
+          });
         });
 
         if (copyScriptBtn) {
-            copyScriptBtn.addEventListener("click", () => {
-                const codeToCopy = `-- meowijuana.lol\nrepeat task.wait() until game:IsLoaded()\nloadstring(game:HttpGet("https://raw.githubusercontent.com/hollyntt/PLWVRE-Roblox-Script/refs/heads/main/PLVSMVWVRE-RBLX/Meowijuana.Loader.lua"))()`;
-                navigator.clipboard.writeText(codeToCopy).then(() => {
-                    const originalText = copyScriptBtn.textContent;
-                    copyScriptBtn.textContent = "COPIED";
-                    copyScriptBtn.classList.add("bg-[#F5F5F3]/15");
-                    setTimeout(() => {
-                        copyScriptBtn.textContent = originalText;
-                        copyScriptBtn.classList.remove("bg-[#F5F5F3]/15");
-                    }, 2000);
-                });
+          copyScriptBtn.addEventListener("click", () => {
+            const codeToCopy = `repeat task.wait() until game:IsLoaded()\nloadstring(game:HttpGet("https://raw.githubusercontent.com/hollyntt/PLWVRE-Roblox-Script/refs/heads/main/Meowijuana_Auth.lua"))()`;
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+              const originalText = copyScriptBtn.textContent;
+              copyScriptBtn.textContent = "COPIED";
+              copyScriptBtn.classList.add("bg-[#F5F5F3]/15");
+              setTimeout(() => {
+                copyScriptBtn.textContent = originalText;
+                copyScriptBtn.classList.remove("bg-[#F5F5F3]/15");
+              }, 2000);
             });
+          });
         }
 
         const soundtrackToggle = document.getElementById("soundtrack-toggle");
@@ -801,88 +804,88 @@
         let widget = null;
 
         if (typeof SC !== "undefined" && SC.Widget) {
-            widget = SC.Widget(spotifyIframe);
-            widget.bind(SC.Widget.Events.FINISH, () => {
-                const nextIndex = (currentTrackIndex + 1) % trackItems.length;
-                playTrack(trackItems[nextIndex]);
-            });
+          widget = SC.Widget(spotifyIframe);
+          widget.bind(SC.Widget.Events.FINISH, () => {
+            const nextIndex = (currentTrackIndex + 1) % trackItems.length;
+            playTrack(trackItems[nextIndex]);
+          });
         }
 
         soundtrackToggle.addEventListener("click", () => {
-            isSpotifyOpen = !isSpotifyOpen;
-            if (isSpotifyOpen) {
-                spotifyPanel.classList.remove("translate-y-3", "opacity-0", "pointer-events-none");
-                spotifyPanel.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
-                soundtrackToggle.classList.add("bg-[#F5F5F3]/15", "border-[#F5F5F3]/40");
-            } else {
-                spotifyPanel.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
-                spotifyPanel.classList.add("translate-y-3", "opacity-0", "pointer-events-none");
-                soundtrackToggle.classList.remove("bg-[#F5F5F3]/15", "border-[#F5F5F3]/40");
-            }
+          isSpotifyOpen = !isSpotifyOpen;
+          if (isSpotifyOpen) {
+            spotifyPanel.classList.remove("translate-y-3", "opacity-0", "pointer-events-none");
+            spotifyPanel.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
+            soundtrackToggle.classList.add("bg-[#F5F5F3]/15", "border-[#F5F5F3]/40");
+          } else {
+            spotifyPanel.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
+            spotifyPanel.classList.add("translate-y-3", "opacity-0", "pointer-events-none");
+            soundtrackToggle.classList.remove("bg-[#F5F5F3]/15", "border-[#F5F5F3]/40");
+          }
         });
 
         function playTrack(btn) {
-            trackItems.forEach((item, idx) => {
-                if (item === btn) {
-                    currentTrackIndex = idx;
-                }
-            });
-
-            trackItems.forEach((item) => {
-                item.className = "track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer";
-                const titleSp = item.querySelector("span:first-child");
-                const artistSp = item.querySelector("span:nth-child(2)");
-                if (titleSp) titleSp.className = "text-[#F5F5F3]/70 font-medium truncate text-[10px]";
-                if (artistSp) artistSp.className = "text-[#F5F5F3]/40 text-[8px] truncate mt-0.5";
-            });
-
-            btn.className = "track-item active w-full flex items-center justify-between p-2 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/10 text-left transition-all duration-200 cursor-pointer";
-            const btnTitle = btn.querySelector("span:first-child");
-            const btnArtist = btn.querySelector("span:nth-child(2)");
-            if (btnTitle) btnTitle.className = "text-[#F5F5F3] font-medium truncate text-[10px]";
-            if (btnArtist) btnArtist.className = "text-[#F5F5F3]/50 text-[8px] truncate mt-0.5";
-
-            const soundtrackTextEle = document.getElementById("soundtrack-text");
-            if (soundtrackTextEle && btnTitle) {
-                soundtrackTextEle.textContent = `Now playing: ${btnTitle.textContent}`;
+          trackItems.forEach((item, idx) => {
+            if (item === btn) {
+              currentTrackIndex = idx;
             }
+          });
 
-            const rawUrl = btn.getAttribute("data-url");
-            if (widget) {
-                widget.load(rawUrl, {
-                    color: "121212",
-                    auto_play: true,
-                    hide_related: true,
-                    show_comments: false,
-                    show_user: false,
-                    show_reposts: false,
-                    show_teaser: false,
-                    visual: false
-                });
-            } else {
-                const encodedUrl = encodeURIComponent(rawUrl);
-                spotifyIframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23121212&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
-            }
+          trackItems.forEach((item) => {
+            item.className = "track-item w-full flex items-center justify-between p-2 rounded-lg bg-transparent border border-[#F5F5F3]/5 hover:border-[#F5F5F3]/15 hover:bg-[#F5F5F3]/5 text-left transition-all duration-200 cursor-pointer";
+            const titleSp = item.querySelector("span:first-child");
+            const artistSp = item.querySelector("span:nth-child(2)");
+            if (titleSp) titleSp.className = "text-[#F5F5F3]/70 font-medium truncate text-[10px]";
+            if (artistSp) artistSp.className = "text-[#F5F5F3]/40 text-[8px] truncate mt-0.5";
+          });
+
+          btn.className = "track-item active w-full flex items-center justify-between p-2 rounded-lg bg-[#F5F5F3]/5 border border-[#F5F5F3]/20 hover:border-[#F5F5F3]/30 hover:bg-[#F5F5F3]/10 text-left transition-all duration-200 cursor-pointer";
+          const btnTitle = btn.querySelector("span:first-child");
+          const btnArtist = btn.querySelector("span:nth-child(2)");
+          if (btnTitle) btnTitle.className = "text-[#F5F5F3] font-medium truncate text-[10px]";
+          if (btnArtist) btnArtist.className = "text-[#F5F5F3]/50 text-[8px] truncate mt-0.5";
+
+          const soundtrackTextEle = document.getElementById("soundtrack-text");
+          if (soundtrackTextEle && btnTitle) {
+            soundtrackTextEle.textContent = `Now playing: ${btnTitle.textContent}`;
+          }
+
+          const rawUrl = btn.getAttribute("data-url");
+          if (widget) {
+            widget.load(rawUrl, {
+              color: "121212",
+              auto_play: true,
+              hide_related: true,
+              show_comments: false,
+              show_user: false,
+              show_reposts: false,
+              show_teaser: false,
+              visual: false
+            });
+          } else {
+            const encodedUrl = encodeURIComponent(rawUrl);
+            spotifyIframe.src = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23121212&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`;
+          }
         }
 
         trackItems.forEach((btn) => {
-            btn.addEventListener("click", () => {
-                playTrack(btn);
-            });
+          btn.addEventListener("click", () => {
+            playTrack(btn);
+          });
         });
 
         if (trackItems.length > 0) {
-            const randomIndex = Math.floor(Math.random() * trackItems.length);
-            playTrack(trackItems[randomIndex]);
+          const randomIndex = Math.floor(Math.random() * trackItems.length);
+          playTrack(trackItems[randomIndex]);
         }
 
         document.addEventListener("mousemove", (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * -18;
-            const moveY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2) * -18;
-            logoParallax.style.transform = `translate(${moveX}px, ${moveY}px)`;
+          const moveX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * -18;
+          const moveY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2) * -18;
+          logoParallax.style.transform = `translate(${moveX}px, ${moveY}px)`;
         });
-    });
-</script>
+      });
+    </script>
 
-</body>
+  </body>
 </html>
